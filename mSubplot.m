@@ -1,12 +1,20 @@
-function mAxe = mSubplot(Fig, row, col, index, paddings, margins)
-    narginchk(4, 6);
+function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
+    narginchk(4, 7);
 
     if nargin == 4
+        nSize = [1, 1];
         paddings = 0.01 * ones(1, 4);
         margins = 0.01 * ones(1, 4);
     elseif nargin == 5
+        paddings = 0.01 * ones(1, 4);
         margins = 0.01 * ones(1, 4);
+    elseif nargin == 6
+        paddings = 0.01 * ones(1, 4);
     end
+
+    % nSize = [nX, nY]
+    nX = nSize(1);
+    nY = nSize(2);
 
     % paddings or margins is [Left, Right, Bottom, Top]
     divWidth = (1 - paddings(1) - paddings(2)) / col;
@@ -24,11 +32,11 @@ function mAxe = mSubplot(Fig, row, col, index, paddings, margins)
     end
 
     divX = paddings(1) + divWidth * (cIndex - 1);
-    divY = 1 - paddings(4) - divHeight * rIndex;
+    divY = 1 - paddings(4) - divHeight * (rIndex + nY - 1);
     axeX = divX + margins(1);
     axeY = divY + margins(3);
-    axeWidth = divWidth - (margins(1) + margins(2));
-    axeHeight = divHeight - (margins(3) + margins(4));
+    axeWidth = divWidth * nX - (margins(1) + margins(2));
+    axeHeight = divHeight * nY - (margins(3) + margins(4));
 
     % divAxe = axes(Fig, "Position", [divX, divY, divWidth, divHeight], "Box", "on");
     mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight], "Box", "on");
