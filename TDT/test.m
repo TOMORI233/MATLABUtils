@@ -60,12 +60,12 @@ plot(mysortSpikeTime, 7500 * ones(length(mysortSpikeTime), 1), 'r.');
 plot(kiloSpikeTime, 7000 * ones(length(kiloSpikeTime), 1), 'b.');
 
 %% 
-sortOpts.th = 1500;
+sortOpts.th = 1000;
 sortOpts.fs = fs;
 sortOpts.waveLength = 1.5e-3;
 sortOpts.scaleFactor = 1;
 sortOpts.CVCRThreshold = 0.9;
-sortOpts.KselectionMethod = "gap";
+sortOpts.KselectionMethod = "preview";
 KmeansOpts.KArray = 1:10;
 KmeansOpts.maxIteration = 100;
 KmeansOpts.maxRepeat = 3;
@@ -77,9 +77,9 @@ chan14spikeTime = chan14sort.spikeTimeAll(chan14sort.spikeTimeAll <= max(t));
 
 %% 
 figure;
-plot(kiloSpikeTime, 1.2 * ones(length(kiloSpikeTime), 1), 'b.', 'MarkerSize', 15, 'DisplayName', 'Kilosort');
+plot(kiloSpikeTime, ones(length(kiloSpikeTime), 1), 'b.', 'MarkerSize', 15, 'DisplayName', 'Kilosort');
 hold on;
 plot(mysortSpikeTime, ones(length(mysortSpikeTime), 1), 'ro', 'DisplayName', 'mysort (cut data)');
-plot(chan14spikeTime, 0.8 * ones(length(chan14spikeTime), 1), 'go', 'DisplayName', 'mysort (filtered data)');
+plot(chan14spikeTime, ones(length(chan14spikeTime), 1), 'go', 'DisplayName', 'mysort (filtered data)');
 legend;
 ylim([0 2]);
