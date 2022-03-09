@@ -40,12 +40,12 @@ KmeansOpts.maxRepeat = 3;
 KmeansOpts.plotIterationNum = 0;
 sortOpts.KmeansOpts = KmeansOpts;
 
-filteredDataSort = batchSorting(filteredWaveBinData, ch, sortOpts);
+filteredDataSort = batchSorting(filteredWaveBinData(ch, :), ch, sortOpts);
 filteredDataSpikeTime = filteredDataSort.spikeTimeAll(filteredDataSort.spikeTimeAll <= max(t));
 
 %% kilosort
 ks = kilosort;
-ks = mConfigFile(ks);
+ks.ops.nblocks = 0;
 
 for th2 = 3:10
     ks.ops.Th = [10 th2];

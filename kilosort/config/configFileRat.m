@@ -1,7 +1,4 @@
-function ks = mConfigFile(ks)
-ops = ks.ops;
-
-ops.chanMap = '.\chan32_1_kilosortChanMap.mat';
+ops.chanMap = 'D:\Education\Lab\kilosort files\Kilosort\configFiles\chan32_1_kilosortChanMap.mat';
 % ops.chanMap = 1:ops.Nchan; % treated as linear probe if no chanMap file
 
 % sample rate
@@ -14,7 +11,7 @@ ops.fshigh = 300;
 ops.minfr_goodchannels = 0.1; 
 
 % threshold on projections (like in Kilosort1, can be different for last pass like [10 4])
-ops.Th = [10 4];  
+ops.Th = [10 9];  
 
 % how important is the amplitude penalty (like in Kilosort1, 0 means not used, 10 is average, 50 is a lot) 
 ops.lam = 10;  
@@ -49,8 +46,3 @@ ops.nSkipCov            = 25; % compute whitening matrix from every N-th batch
 ops.scaleproc           = 200;   % int16 scaling of whitened data
 ops.nPCs                = 3; % how many PCs to project the spikes into
 ops.useRAM              = 0; % not yet available
-
-%%
-ks.ops = ops;
-return;
-end
