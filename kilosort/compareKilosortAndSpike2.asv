@@ -2,7 +2,7 @@ close all; clc; clear;
 
 ch = 24;
 fs = 12207.031250;
-t = 0:1 / fs:50;
+t = 0:1 / fs:10;
 BLOCKPATH = 'D:\Education\Lab\kilosort files\data\Block-3';
 
 %% Load Data
@@ -44,17 +44,16 @@ filteredDataSort = batchSorting(filteredWaveBinData(ch, :), ch, sortOpts);
 filteredDataSpikeTime = filteredDataSort.spikeTimeAll(filteredDataSort.spikeTimeAll <= max(t));
 
 %% kilosort
-run([fileparts(mfilename('fullpath')), '\config\configFileRat.m']);
+run('.\config\configFileRat.m');
 
 for th2 = 3:10
     ops.Th = [10 th2];
-    savePath = fullfile(BLOCKPATH, ['th2_', num2str(th2)]);
-    mKilosort(BLOCKPATH, ops, savePath);
+    mKilosort(BLOCKPATH, ops, )
 
-    cd(savePath);
+    cd([BLOCKPATH, '\th2_', num2str(th2)]);
     system('phy template-gui params.py');
 
-    NPYPATH = savePath;
+    NPYPATH = folderPath;
     kiloClusters = input(['Input clusters of channel ', num2str(ch), ': ']);
     [spikeIdx, clusterIdx, templates, spikeTemplateIdx] = parseNPY(NPYPATH);
     kiloSpikeTimeIdx = [];
@@ -79,6 +78,5 @@ for th2 = 3:10
     legend;
     xlabel('Time (sec)');
     ylabel('Voltage (V)');
-    xlim([0 10]);
 
 end
