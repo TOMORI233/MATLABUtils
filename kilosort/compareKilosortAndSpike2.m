@@ -1,56 +1,37 @@
-close all; clc;
-
-% clearvars -except data
+close all; clc; clear;
 
 ch = 24;
 fs = 12207.031250;
+t = 0:1 / fs:10;
+BLOCKPATH = 'D:\Education\Lab\kilosort files\data\Block-3';
 
 %% Load Data
-trialAll = WaveExport_para_behavior('D:\Education\Lab\kilosort files\data\Block-3');%  behavior
-trialAll = TDT2binAA('D:\Education\Lab\kilosort files\data\Block-3', trialAll, [-0.7 0.3]);
+trialAll = WaveExport_para_behavior(BLOCKPATH); %  behavior
+trialAll = TDT2binAA(BLOCKPATH, trialAll, [-0.7 0.3]);
 wave = [trialAll.wave];
-
-%% kilosort
-% kilosort;
-
-ROOTPATH = 'D:\Education\Lab\kilosort files\data\Block-3';
-[spikeIdx, clusterIdx, templates, spikeTemplateIdx] = parseSpikeNPY(ROOTPATH);
 
 %% mysort
 data.streams.Wave.data = wave;
 data.streams.Wave.fs = fs; % Hz
 sortResult = mysort(data, ch, "reselect", "preview");
-
-%% plot
-t = 0:1/fs:10;
-kiloClusters = 27;
-kiloSpikeTimeIdx = [];
-for index = 1:length(kiloClusters)
-    kiloSpikeTimeIdx = [kiloSpikeTimeIdx; spikeIdx(clusterIdx == kiloClusters(index))];
-end
-
-kiloSpikeTimeIdx = kiloSpikeTimeIdx(kiloSpikeTimeIdx <= max(t) * fs);
-kiloSpikeTime = double(kiloSpikeTimeIdx - 1) / fs;
-
 mysortSpikeTime = sortResult.spikeTimeAll(sortResult.clusterIdx == 1);
 mysortSpikeTime = mysortSpikeTime(mysortSpikeTime <= max(t));
 
-%% 
-fid = fopen('D:\Education\Lab\kilosort files\data\Block-3\temp_wh.dat', 'r');
+%% Filtered data sort
+fid = fopen([BLOCKPATH, '\temp_wh.dat'], 'r');
 nChannels = 32;
 filteredWaveBinData = fread(fid, [nChannels inf], 'int16');
 fclose(fid);
 
-%%
-fid = fopen('D:\Education\Lab\kilosort files\data\Block-3\Wave.bin', 'r');
-waveBinData = fread(fid, [nChannels inf], 'int16');
-fclose(fid);
+figure;
+y = filteredWaveBinData(ch, 1:length(t));
+plot(t, y, 'r');
+title('Filtered Data');
 
-%% 
-sortOpts.th = 900;
+sortOpts.th = 1250;
 sortOpts.fs = fs;
 sortOpts.waveLength = 1.5e-3;
-sortOpts.scaleFactor = 1;
+sortOpts.scaleFactor = 0.01;
 sortOpts.CVCRThreshold = 0.9;
 sortOpts.KselectionMethod = "preview";
 KmeansOpts.KArray = 1:10;
@@ -59,28 +40,50 @@ KmeansOpts.maxRepeat = 3;
 KmeansOpts.plotIterationNum = 0;
 sortOpts.KmeansOpts = KmeansOpts;
 
-filteredDataSort = batchSorting(filteredWaveBinData, 14, sortOpts);
+filteredDataSort = batchSorting(filteredWaveBinData, ch, sortOpts);
 filteredDataSpikeTime = filteredDataSort.spikeTimeAll(filteredDataSort.spikeTimeAll <= max(t));
 
-%% 
-figure;
-y = wave(ch, 1:length(t));
-plot(t, y, 'b', 'DisplayName', 'Raw Wave');
+%% kilosort
+ks = kilosort;
+ks = mConfigFile(ks);
 
-% figure;
-% y = filteredWaveBinData(ch, 1:length(t));
-% plot(t, y, 'r');
-hold on;
-% plot(filteredDataSpikeTime, 3e-4 * ones(length(filteredDataSpikeTime), 1), 'b.', 'DisplayName', 'filtered Data sort');
-plot(mysortSpikeTime, 2.5e-4 * ones(length(mysortSpikeTime), 1), 'r.', 'DisplayName', 'raw wave sort');
-plot(kiloSpikeTime, 3e-4 * ones(length(kiloSpikeTime), 1), 'g.', 'DisplayName', 'kilosort');
-legend;
+for th2 = 3:10
+    ks.ops.Th = [10 th2];
+    folderPath = [BLOCKPATH, '\th2_', num2str(th2)];
+    mkdir(folderPath);
+    ks.H.settings.ChooseOutputEdt.String = folderPath;
+    ks.H.settings.ChooseTempdirEdt.String = folderPath;
+    ks.ops.fproc = [BLOCKPATH, '\temp_wh.dat'];
 
-%% 
-figure;
-plot(kiloSpikeTime, ones(length(kiloSpikeTime), 1), 'b.', 'MarkerSize', 15, 'DisplayName', 'Kilosort');
-hold on;
-plot(mysortSpikeTime, ones(length(mysortSpikeTime), 1), 'ro', 'DisplayName', 'mysort (cut data)');
-plot(filteredDataSpikeTime, ones(length(filteredDataSpikeTime), 1), 'go', 'DisplayName', 'mysort (filtered data)');
-legend;
-ylim([0.5 3.5]);
+    ks.runAll;
+
+    cd([BLOCKPATH, '\th2_', num2str(th2)]);
+    system('phy template-gui params.py');
+
+    NPYPATH = folderPath;
+    kiloClusters = input(['Input clusters of channel ', num2str(ch), ': ']);
+    [spikeIdx, clusterIdx, templates, spikeTemplateIdx] = parseNPY(NPYPATH);
+    kiloSpikeTimeIdx = [];
+
+    for index = 1:length(kiloClusters)
+        kiloSpikeTimeIdx = [kiloSpikeTimeIdx; spikeIdx(clusterIdx == kiloClusters(index))];
+    end
+
+    kiloSpikeTimeIdx = kiloSpikeTimeIdx(kiloSpikeTimeIdx <= max(t) * fs);
+    kiloSpikeTime = double(kiloSpikeTimeIdx - 1) / fs;
+
+    %% Plot
+    Fig = figure;
+    maximizeFig(Fig);
+    y = wave(ch, 1:length(t));
+    plot(t, y, 'b', 'DisplayName', 'Raw Wave');
+    hold on;
+    plot(filteredDataSpikeTime, 3.5e-4 * ones(length(filteredDataSpikeTime), 1), 'b.', 'MarkerSize', 10, 'DisplayName', 'mysort (filtered data)');
+    plot(mysortSpikeTime, 2.5e-4 * ones(length(mysortSpikeTime), 1), 'r.', 'MarkerSize', 10, 'DisplayName', 'mysort (raw data)');
+    plot(kiloSpikeTime, 3e-4 * ones(length(kiloSpikeTime), 1), 'g.', 'MarkerSize', 10, 'DisplayName', 'kilosort');
+    title(['Channel ', num2str(ch), ' | Cluster ', num2str(kiloClusters), ' | Th [10, ', num2str(th2), ']']);
+    legend;
+    xlabel('Time (sec)');
+    ylabel('Voltage (V)');
+
+end

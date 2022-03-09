@@ -10,7 +10,8 @@ function [spikeIdx, clusterIdx, templates, spikeTemplateIdx] = parseNPY(ROOTPATH
 %     nTemplates = size(templates, 1);
 % 
 %     for cIndex = 1:nChannels
-%         figure;
+%         Fig = figure;
+%         maximizeFig(Fig);
 % 
 %         for tIndex = 1:nTemplates
 %             subplot(8, ceil(nTemplates / 8), tIndex);
