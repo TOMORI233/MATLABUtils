@@ -28,7 +28,7 @@ y = filteredWaveBinData(ch, 1:length(t));
 plot(t, y, 'r');
 title('Filtered Data');
 
-sortOpts.th = 1250;
+sortOpts.th = input('Input th for filtered data sorting: ');
 sortOpts.fs = fs;
 sortOpts.waveLength = 1.5e-3;
 sortOpts.scaleFactor = 0.01;
@@ -40,11 +40,12 @@ KmeansOpts.maxRepeat = 3;
 KmeansOpts.plotIterationNum = 0;
 sortOpts.KmeansOpts = KmeansOpts;
 
-filteredDataSort = batchSorting(filteredWaveBinData(ch, :), ch, sortOpts);
+filteredDataSort = batchSorting(filteredWaveBinData, ch, sortOpts);
 filteredDataSpikeTime = filteredDataSort.spikeTimeAll(filteredDataSort.spikeTimeAll <= max(t));
 
 %% kilosort
 run([fileparts(mfilename('fullpath')), '\config\configFileRat.m']);
+ops.chanMap = [fileparts(mfilename('fullpath')), 'chan32_1_kilosortChanMap.m'];
 
 for th2 = 3:10
     ops.Th = [10 th2];
@@ -56,7 +57,7 @@ for th2 = 3:10
 
     NPYPATH = savePath;
     kiloClusters = input(['Input clusters of channel ', num2str(ch), ': ']);
-    [spikeIdx, clusterIdx, templates, spikeTemplateIdx] = parseNPY(NPYPATH);
+    [spikeIdx, clusterIdx, ~, ~] = parseNPY(NPYPATH);
     kiloSpikeTimeIdx = [];
 
     for index = 1:length(kiloClusters)
