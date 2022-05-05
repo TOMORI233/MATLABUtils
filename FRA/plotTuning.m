@@ -26,7 +26,7 @@ function Fig = plotTuning(cellData, visibilityOpt)
             end
 
             ylim([0, tIndex + 1]);
-%             xlim([0, max([100, window(2)]) * 1.1]);
+            % xlim([0, max([100, window(2)]) * 1.1]);
             xlim([0, window(2) * 1.1])
 
             set(gca, 'YTickLabel', '');

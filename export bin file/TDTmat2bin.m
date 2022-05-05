@@ -14,7 +14,8 @@ function TDTmat2bin(data, STOREPATH, CHANNEL, FORMAT, SCALE_FACTOR)
     end
 
     % If STOREPATH does not exist, it will be created
-    mkdir(STOREPATH);
+    [filepath, filename, ext] = fileparts(STOREPATH);
+    mkdir(filepath);
 
     if nargin == 2
         CHANNEL = 1:size(data.streams.Wave.data, 1);
@@ -46,7 +47,12 @@ function TDTmat2bin(data, STOREPATH, CHANNEL, FORMAT, SCALE_FACTOR)
             deltaIndex = tIndex2 - tIndex1;
     
             thisStore = fff{ii};
-            OUTFILE = fullfile(STOREPATH, [thisStore '.bin']);
+
+            if isempty(filename)
+                OUTFILE = fullfile(STOREPATH, [thisStore '.bin']);
+            elseif ~isempty(filename) && strcmp(ext, ".bin")
+                OUTFILE = STOREPATH;
+            end
     
             fid = fopen(OUTFILE, 'wb');
     

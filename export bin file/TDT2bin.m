@@ -48,49 +48,47 @@ function TDT2bin(BLOCKPATH, CHANNEL, FORMAT, SCALE_FACTOR)
 
     %%
     % Loop through all the streams and save them to disk in 10 second chunks
-    fff = fields(data.streams);
+    fff = 'Wave';
     TIME_DELTA = 10;
 
-    for ii = 1:numel(fff)
-        T1 = 0;
-        T2 = T1 + TIME_DELTA;
+    T1 = 0;
+    T2 = T1 + TIME_DELTA;
 
-        thisStore = fff{ii};
-        OUTFILE = fullfile(BLOCKPATH, [thisStore '.bin']);
+    thisStore = fff;
+    OUTFILE = fullfile(BLOCKPATH, [thisStore '.bin']);
 
-        fid = fopen(OUTFILE, 'wb');
+    fid = fopen(OUTFILE, 'wb');
 
-        data = TDTbin2mat(BLOCKPATH, 'STORE', fff{ii}, 'T1', T1, 'T2', T2);
-        data.streams.Wave.data = data.streams.Wave.data(CHANNEL, :);
+    data = TDTbin2mat(BLOCKPATH, 'STORE', fff, 'T1', T1, 'T2', T2);
+    data.streams.Wave.data = data.streams.Wave.data(CHANNEL, :);
 
-        % loop through data in 10 second increments
-        while ~isempty(data.streams.(thisStore).data)
+    % loop through data in 10 second increments
+    while ~isempty(data.streams.(thisStore).data)
 
-            if strcmpi(FORMAT, 'i16')
-                fwrite(fid, SCALE_FACTOR * reshape(data.streams.(thisStore).data, 1, []), 'integer*2');
-            elseif strcmpi(FORMAT, 'f32')
-                fwrite(fid, SCALE_FACTOR * reshape(data.streams.(thisStore).data, 1, []), 'single');
-            else
-                warning('Format %s not recognized. Use i16 or f32', FORMAT);
-                break;
-            end
-
-            T1 = T2;
-            T2 = T2 + TIME_DELTA;
-
-            try
-                data = TDTbin2mat(BLOCKPATH, 'STORE', fff{ii}, 'T1', T1, 'T2', T2);
-                data.streams.Wave.data = data.streams.Wave.data(CHANNEL, :);
-            catch
-                data.streams.(thisStore).data = [];
-            end
-
+        if strcmpi(FORMAT, 'i16')
+            fwrite(fid, SCALE_FACTOR * reshape(data.streams.(thisStore).data, 1, []), 'integer*2');
+        elseif strcmpi(FORMAT, 'f32')
+            fwrite(fid, SCALE_FACTOR * reshape(data.streams.(thisStore).data, 1, []), 'single');
+        else
+            warning('Format %s not recognized. Use i16 or f32', FORMAT);
+            break;
         end
 
-        fprintf('Wrote %s to output file %s\n', thisStore, OUTFILE);
-        fprintf('Sampling Rate: %.6f Hz\n', data.streams.(thisStore).fs);
-        fprintf('Num Channels: %d\n', size(data.streams.(thisStore).data, 1));
-        fclose(fid);
+        T1 = T2;
+        T2 = T2 + TIME_DELTA;
+
+        try
+            data = TDTbin2mat(BLOCKPATH, 'STORE', fff, 'T1', T1, 'T2', T2);
+            data.streams.Wave.data = data.streams.Wave.data(CHANNEL, :);
+        catch
+            data.streams.(thisStore).data = [];
+        end
+
     end
+
+    fprintf('Wrote %s to output file %s\n', thisStore, OUTFILE);
+    fprintf('Sampling Rate: %.6f Hz\n', data.streams.(thisStore).fs);
+    fprintf('Num Channels: %d\n', size(data.streams.(thisStore).data, 1));
+    fclose(fid);
 
 end

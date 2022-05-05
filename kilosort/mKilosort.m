@@ -1,9 +1,9 @@
-function mKilosort(dataPath, ops, savePath)
+function mKilosort(binFullPath, ops, savePath)
     % Description: Run kilosort with code
     % Input:
-    %    - dataPath: Wave.bin & temp_wh.dat are in this folder
+    %    - dataPath: full path of *.bin
     %    - ops: parameters for kilosort
-    %    - savePath: output file path
+    %    - savePath: output folder path
     % Example:
     % Th = [10, 6]; % specify Th
     % run('.\config\configFileRat.m'); % this returns ops
@@ -13,11 +13,11 @@ function mKilosort(dataPath, ops, savePath)
     narginchk(2, 3);
 
     if nargin < 3
-        savePath = fullfile(dataPath, 'kilosort');
+        savePath = fileparts(binFullPath);
     end
 
-    ops.fproc = fullfile(dataPath, 'temp_wh.dat'); % proc file on a fast SSD
-    ops.fbinary = fullfile(dataPath, 'Wave.bin');
+    ops.fproc = fullfile(fileparts(binFullPath), 'temp_wh.dat'); % proc file on a fast SSD
+    ops.fbinary = binFullPath;
 
     %% this block runs all the steps of the algorithm
     rez = preprocessDataSub(ops);

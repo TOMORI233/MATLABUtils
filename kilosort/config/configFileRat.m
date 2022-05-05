@@ -9,6 +9,9 @@ ops.NchanTOT = 32;
 % sample rate, Hz
 ops.fs = 12207.03125;
 
+% waveform length
+ops.nt0 = 61;
+
 % time range to sort
 ops.trange = [0 Inf];
 

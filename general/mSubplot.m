@@ -1,14 +1,15 @@
 function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
     narginchk(4, 7);
 
-    if nargin == 4
+    if nargin < 5
         nSize = [1, 1];
-        paddings = 0.01 * ones(1, 4);
+    end
+
+    if nargin < 6
         margins = 0.01 * ones(1, 4);
-    elseif nargin == 5
-        paddings = 0.01 * ones(1, 4);
-        margins = 0.01 * ones(1, 4);
-    elseif nargin == 6
+    end
+
+    if nargin < 7
         paddings = 0.01 * ones(1, 4);
     end
 

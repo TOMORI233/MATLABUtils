@@ -44,8 +44,7 @@ filteredDataSort = batchSorting(filteredWaveBinData, ch, sortOpts);
 filteredDataSpikeTime = filteredDataSort.spikeTimeAll(filteredDataSort.spikeTimeAll <= max(t));
 
 %% kilosort
-run([fileparts(mfilename('fullpath')), '\config\configFileRat.m']);
-ops.chanMap = [fileparts(mfilename('fullpath')), 'chan32_1_kilosortChanMap.m'];
+run('D:\Education\Lab\MATLAB Utils\kilosort\config\configFileRat.m');
 
 for th2 = 3:10
     ops.Th = [10 th2];

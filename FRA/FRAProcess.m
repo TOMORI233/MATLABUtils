@@ -1,19 +1,21 @@
-function result = FRAProcess(data, windowParams, sortData, cIndex)
-    narginchk(2, 4);
+function [result, windowParams, normalizationSettings] = FRAProcess(data, windowParams, normalizationSettings, sortData, cIndex)
+    narginchk(3, 5);
 
     %% Parameter settings
-    window = windowParams.window; % ms
+    windowParams.window = getOr(windowParams, 'window', [0, 100]); % ms
+    window = windowParams.window;
 
     %% Information extraction
     onsetTimeAll = data.epocs.Swep.onset * 1000; % ms
-    spikeTimeAll = data.snips.eNeu.ts * 1000; % ms
     freqAll = data.epocs.vair.data; % Hz
     attAll = data.epocs.var2.data; % absolute attenuation, dB
 
     if nargin == 3
-        spikeTimeAll = sortData.spikeTimeAll * 1000; % ms
+        spikeTimeAll = data.snips.eNeu.ts * 1000; % ms
     elseif nargin == 4
-        spikeTimeAll = sortData.spikeTimeAll(sortData.clusterIdx == cIndex) * 1000; % ms
+        spikeTimeAll = sortData.spikeTimeAll * 1000; % ms
+    elseif nargin == 5
+        spikeTimeAll = sortData.spikeTimeAll(ismember(sortData.clusterIdx, cIndex)) * 1000; % ms
     end
 
     %% Categorizations
