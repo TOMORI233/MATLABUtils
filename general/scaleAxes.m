@@ -1,8 +1,10 @@
-function scaleAxes(FigOrAxes, axisName, axisRange)
+function axisRange = scaleAxes(FigOrAxes, axisName, axisRange)
     % Description: apply the same scale settings to all subplots in one figure
     % Input: 
     %     FigOrAxes: figure object or target axes object array
     %     axisName: axis name - "x", "y" or "z"
+    %     axisRange: axis lim
+    % Output:
     %     axisRange: axis lim
 
     narginchk(1, 3);
@@ -52,4 +54,5 @@ function scaleAxes(FigOrAxes, axisName, axisRange)
         set(allAxes(aIndex), axisLimStr, axisRange);
     end
     
+    return;
 end
