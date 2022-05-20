@@ -19,6 +19,8 @@ function axisRange = scaleAxes(FigOrAxes, axisName, axisRange)
         axisLimStr = "ylim";
     elseif strcmpi(axisName, "z")
         axisLimStr = "zlim";
+    elseif strcmpi(axisName, "c")
+        axisLimStr = "clim";
     else
         error("Wrong axis name input");
     end
