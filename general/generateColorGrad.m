@@ -1,8 +1,9 @@
-function [colorOutput, colorGrad] = generateColorGrad(n,varargin)
+function [colorOutput, colorGrad] = generateColorGrad(n,method,varargin)
 
-% if only one input n, the colorOutput will include all color types, for
+% if only one input n and method, the colorOutput will include all color types, for
 % each color type, the color gradation if continuous. 
 % for example: res = generateColorGrad(16).
+% method: 'rgb' or 'hex'
 
 % you can give more input, varargin can be 'blue','red', etc, followed by index, 
 % for example: generateColorGrad(16,'orange',[1:5]),
@@ -13,8 +14,8 @@ function [colorOutput, colorGrad] = generateColorGrad(n,varargin)
 % https://blog.csdn.net/qq_38882446/article/details/100886087
 
 % to test, run following code:
-% res = generateColorGrad(16);
-% res2 = generateColorGrad(16,'blue',[1:6],'red',[7:10],'black',[11:16]);
+% res = generateColorGrad(16,'rgb');
+% res2 = generateColorGrad(16,'rgb','blue',[1:6],'red',[7:10],'black',[11:16]);
 % figure
 % subplot(1,2,1)
 % for i = 1:16
@@ -24,23 +25,34 @@ function [colorOutput, colorGrad] = generateColorGrad(n,varargin)
 % for i = 1:16
 %     plot([1:10],i+[1:10],'color',res2{i},'linestyle','-','linewidth',3); hold on
 % end
-
 %% set color pool
 blueGrad = {'#0000FF','#1E90FF','#87CEEB','#4682B4','#6A5ACD','#40E0D0'};
 greenGrad = {'#00FF00','#32CD32','#9ACD32','#228B22','#006400','#556B2F'};
 orangeGrad = {'#FFA500','#FF7F50','#FF6347','#A52A2A','#D2691E','#D2B48C'};
 redGrad = {'#FF0000','#FF69B4','#FF1493','#FFC0CB','#DB7093','#B03060'};
 blackGrad = {'#000000','#222222','#444444','#666666','#888888','#AAAAAA'};
-colorGrad = easyStruct({'blueGrad','redGrad','orangeGrad','greenGrad','blackGrad'},[blueGrad ; redGrad ; orangeGrad ; greenGrad; blackGrad]');
+
 colorBuffer = [blueGrad;greenGrad;orangeGrad;redGrad;blackGrad];
+if ~any(strcmp(method,{'rgb','hex'}))
+    error('error method input! Please use ''rgb'' or ''hex''');
+end
+
+if strcmp(method,'rgb')
+    % convert hex style to rgb style
+    colorBuffer = cellfun(@(x) [hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
+end
+
+colorGrad = easyStruct({'blueGrad','greenGrad','orangeGrad','redGrad','blackGrad'},colorBuffer');
+
+
 [colorType colorNum] = size(colorBuffer);
 
 %% 
-if mod(nargin,2) == 0 
+if mod(nargin,2) == 1
     error('the number of input is incorrect!');
 elseif n > numel(colorBuffer)
     error(['the input exceeds color pool size!']);
-elseif nargin < 2
+elseif nargin < 3
      sz = size(colorBuffer);
      Idx = [];
      for N = 1:colorType
