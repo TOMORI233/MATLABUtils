@@ -1,7 +1,7 @@
-function axisRange = scaleAxes(FigOrAxes, axisName, axisRange)
-    % Description: apply the same scale settings to all subplots in one figure
+function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange)
+    % Description: apply the same scale settings to all subplots in figures
     % Input: 
-    %     FigOrAxes: figure object or target axes object array
+    %     FigsOrAxes: figure object or target axes object array
     %     axisName: axis name - "x", "y" or "z"
     %     axisRange: axis lim
     % Output:
@@ -25,10 +25,10 @@ function axisRange = scaleAxes(FigOrAxes, axisName, axisRange)
         error("Wrong axis name input");
     end
 
-    if strcmp(class(FigOrAxes), "matlab.ui.Figure")
-        allAxes = findobj(FigOrAxes, "Type", "axes");
+    if strcmp(class(FigsOrAxes), "matlab.ui.Figure")
+        allAxes = findobj(FigsOrAxes, "Type", "axes");
     else
-        allAxes = FigOrAxes;
+        allAxes = FigsOrAxes;
     end
 
     if nargin < 3
