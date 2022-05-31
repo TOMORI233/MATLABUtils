@@ -1,13 +1,17 @@
-function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange)
+function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange)
     % Description: apply the same scale settings to all subplots in figures
     % Input: 
-    %     FigsOrAxes: figure object or target axes object array
-    %     axisName: axis name - "x", "y" or "z"
-    %     axisRange: axis lim
+    %     FigsOrAxes: figure object array or axis object array
+    %     axisName: axis name - "x", "y", "z" or "c"
+    %     axisRange: axis limits, specified as a two-element vector. If
+    %                given value -Inf or Inf, or left empty, the best range
+    %                will be used.
+    %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
+    %                  replaced by cutoffRange.
     % Output:
-    %     axisRange: axis lim
+    %     axisRange: axis limits applied
 
-    narginchk(1, 3);
+    narginchk(1, 4);
 
     if nargin < 2
         axisName = "y";
@@ -32,24 +36,54 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange)
     end
 
     if nargin < 3
-        axisLim = get(allAxes(1), axisLimStr);
-        axisLimMin = axisLim(1);
-        axisLimMax = axisLim(2);
+        axisRange = [];
+    end
 
-        for aIndex = 2:length(allAxes)
-            axisLim = get(allAxes(aIndex), axisLimStr);
-            
-            if axisLim(1) < axisLimMin
-                axisLimMin = axisLim(1);
-            end
+    %% Find best range
+    axisLim = get(allAxes(1), axisLimStr);
+    axisLimMin = axisLim(1);
+    axisLimMax = axisLim(2);
 
-            if axisLim(2) > axisLimMax
-                axisLimMax = axisLim(2);
-            end
+    for aIndex = 2:length(allAxes)
+        axisLim = get(allAxes(aIndex), axisLimStr);
+        
+        if axisLim(1) < axisLimMin
+            axisLimMin = axisLim(1);
+        end
 
+        if axisLim(2) > axisLimMax
+            axisLimMax = axisLim(2);
+        end
+
+    end
+
+    bestRange = [axisLimMin, axisLimMax];
+
+    %% Set axis range
+    if isempty(axisRange)
+        axisRange = bestRange;
+    else
+
+        if axisRange(1) == -inf
+            axisRange(1) = bestRange(1);
         end
     
-        axisRange = [axisLimMin, axisLimMax];
+        if axisRange(2) == inf
+            axisRange(2) = bestRange(2);
+        end
+
+    end
+
+    if nargin < 4
+        cutoffRange = [-inf, inf];
+    end
+
+    if axisRange(1) < cutoffRange(1)
+        axisRange(1) = cutoffRange(1);
+    end
+
+    if axisRange(2) > cutoffRange(2)
+        axisRange(2) = cutoffRange(2);
     end
 
     for aIndex = 1:length(allAxes)

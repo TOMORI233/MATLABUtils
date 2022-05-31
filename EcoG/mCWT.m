@@ -1,4 +1,4 @@
-function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs)
+function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs, freqLimits)
     % Description: downsampling and apply cwt to data
     % Input:
     %     data: a 1*n vector
@@ -11,7 +11,7 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs)
     %     CData: spectrogram mapped in t-f domain
     %     coi: cone of influence along t
 
-    narginchk(2, 4);
+    narginchk(2, 5);
 
     if nargin < 3
         cwtMethod = 'morlet';
@@ -21,16 +21,20 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs)
         fs = 300;
     end
 
+    if nargin < 5
+        freqLimits = [0, 128];
+    end
+
     [P, Q] = rat(fs / fs0);
     dataResample = resample(data, P, Q);
 
     switch cwtMethod
         case 'morse'
-            [wt, f, coi] =cwt(dataResample, 'morse', fs);
+            [wt, f, coi] =cwt(dataResample, 'morse', fs, 'FequencyLimits', freqLimits);
         case 'morlet'
-            [wt, f, coi] =cwt(dataResample, 'amor', fs);
+            [wt, f, coi] =cwt(dataResample, 'amor', fs, 'FequencyLimits', freqLimits);
         case 'bump'
-            [wt, f, coi] =cwt(dataResample, 'bump', fs);   
+            [wt, f, coi] =cwt(dataResample, 'bump', fs, 'FequencyLimits', freqLimits);   
         case 'STFT'
             spectrogram
         otherwise
