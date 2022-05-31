@@ -1,4 +1,4 @@
-function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange)
+function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, symOpts)
     % Description: apply the same scale settings to all subplots in figures
     % Input: 
     %     FigsOrAxes: figure object array or axis object array
@@ -8,10 +8,11 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange)
     %                will be used.
     %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
     %                  replaced by cutoffRange.
+    %     symOpts: "min" or "max"
     % Output:
     %     axisRange: axis limits applied
 
-    narginchk(1, 4);
+    narginchk(1, 5);
 
     if nargin < 2
         axisName = "y";
@@ -74,7 +75,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange)
 
     end
 
-    if nargin < 4
+    if nargin < 4 || isempty(cutoffRange)
         cutoffRange = [-inf, inf];
     end
 
@@ -84,6 +85,18 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange)
 
     if axisRange(2) > cutoffRange(2)
         axisRange(2) = cutoffRange(2);
+    end
+
+    if nargin >= 5
+        switch symOpts
+            case "min"
+                temp = min(abs(axisRange));
+            case "max"
+                temp = max(abs(axisRange));
+            otherwise
+                error("Invalid symmetrical option input");
+        end
+        axisRange = [-temp, temp];
     end
 
     for aIndex = 1:length(allAxes)
