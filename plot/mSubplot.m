@@ -1,4 +1,13 @@
 function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
+    % Description: extension of function subplot
+    % Input:
+    %     Fig: figure to place subplot
+    %     row/col/index: same usage of function subplot
+    %     nSize: [nX, nY] specifies size of subplot (default: [1, 1])
+    %     margins/paddings: same definition in CSS
+    % Output:
+    %     mAxe: subplot axe object
+
     narginchk(4, 7);
 
     if nargin < 5
@@ -44,7 +53,7 @@ function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
     axeWidth = (1 - margins(1) - margins(2)) * divWidth * nX;
     axeHeight = (1 - margins(3) - margins(4)) * divHeight * nY;
 
-%     divAxe = axes(Fig, "Position", [divX, divY, divWidth * nX, divHeight * nY], "Box", "on");
+    % divAxe = axes(Fig, "Position", [divX, divY, divWidth * nX, divHeight * nY], "Box", "on");
     mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight], "Box", "on");
 
     return;
