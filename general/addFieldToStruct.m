@@ -1,4 +1,4 @@
-function resStruct = addFieldToStruct(struct,fieldVal,fieldName)
+function resStruct = addFieldToStruct(struct,fieldName,fieldVal)
 if ~iscell(fieldName)
     fieldName = cellstr(fieldName);
 end
