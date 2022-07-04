@@ -1,0 +1,41 @@
+------------------------------------------------------------------------------------------------------
+----------------------------------------ABOUT THE AUTHOR ---------------------------------------------
+------------------------------------------------------------------------------------------------------
+- Hi there!                                                                                          -
+-                                                                                                    -
+- My name is Alessandro Scoccia Pappagallo and at the moment I am a student at University of Sussex. -
+-                                                                                                    -
+- I wrote this toolbox for personal use, as part of my Master of Research dissertation; feel free to -
+- use it, change it and share it. If you have questions (or if you find a bug), please write me. :)  -
+-                                                                                                    -
+- My personal email: alessandro.scoccia.pappagallo@gmail.com                                         -
+- My academic email: ap415@sussex.ac.uk                                                              -
+- My work email: alessandroS@square-enix.com                                                         -
+-                                                                                                    -
+- Farewell!                                                                                          -
+-                                                                                                    -
+------------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------
+-------------------------------------- ABOUT THE TOOLBOX ---------------------------------------------
+------------------------------------------------------------------------------------------------------
+- Before you use this small toolbox I strongly encourage you to read the original paper on the       -
+- gap statistic algorithm by Tibshirani, Walther & Hastie (2001). Also, you can find a great         -
+- summary on Edwin Chen blog, here: http://blog.echen.me/2011/03/19/counting-clusters/               -                                                                         -
+-                                                                                                    -
+- The only file you need to run is gap_statistics; that function will call the other two functions.  -
+-                                                                                                    -
+- All the files are commented, so you shouldn't have any problems understanding how they work. The   -
+- function was written to be run in parallel, in case you have the Parallel Computing Toolbox. If    -
+- you don't have it, that's not a problem: just leave the fourth argument blank.                     -
+-                                                                                                    -
+- I have also included some fabricated data, in case you want to test the toolbox.                   -
+-                                                                                                    -
+- Just try: [opt_k, gaps] = gap_statistic(test_me, 1:10, 10);                                       -
+-                                                                                                    -
+- (By the way the correct answer is 4.)                                                              -
+-                                                                                                    -
+- Have fun!                                                                                          -
+-                                                                                                    -
+------------------------------------------------------------------------------------------------------

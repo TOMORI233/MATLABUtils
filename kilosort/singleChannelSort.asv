@@ -1,0 +1,26 @@
+
+
+path = 'E:\clickTrain\AC\AC\RatA\20220412\Block-9'; %处理别的数据的时候把这条注释掉，用下面的！！！
+%% raw wave comparison
+selectChs = input('Input selected channels:');
+waveData = TDTbin2mat(path,'TYPE',{'streams'},'CHANNEL',selectChs);
+fs = waveData.streams.Wave.fs;
+waveRaw = waveData.streams.Wave.data;
+t = 0:1/fs:10;
+Fig = figure;
+maximizeFig(Fig);
+for ch = 1 : size(selectChs,1)
+    subplot(3,1,ch)
+    plot(t,waveRaw(:,1:length(t)),'r-'); hold on;
+    title()
+    plot(t)
+%% sort
+% 
+% clusters = input('Input cluster numbers:');
+% for ch = 1:length(selectChs)
+%     waveData = TDTbin2mat(path,'TYPE',{'streams'},'CHANNEL',selectChs(ch));
+%     sortRes{selectChs(ch)} = mysort(waveData,[],'reselect',clusters(ch));
+% end
+
+
+ 

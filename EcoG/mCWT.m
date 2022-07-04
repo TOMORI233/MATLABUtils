@@ -22,7 +22,7 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs, freqLimits)
     end
 
     if nargin < 5
-        freqLimits = [0, 128];
+        freqLimits = [0, 256];
     end
 
     [P, Q] = rat(fs / fs0);
