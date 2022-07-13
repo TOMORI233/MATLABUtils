@@ -10,6 +10,7 @@ function addLines2Axes(FigsOrAxes, lines)
     %            If not specified, line color will be black.
     %            If not specified, line width will be 1.
     %            If not specified, line style will be dash line("--").
+    %            If not specified, line legend will not be shown.
     % Example:
     %     % Example 1: Draw lines to mark stimuli oneset and offset at t=0, t=1000 ms
     %     lines(1).X = 0;

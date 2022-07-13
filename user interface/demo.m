@@ -15,6 +15,7 @@ for index = 1:3
     info.block = ['Block-', num2str(index)];
     plot(mAxe, dataAll(index, :), "DeleteFcn", {@mDeleteFcn, Fig}, "UserData", info, "ButtonDownFcn", @mBtnDownFcn);
     hold on;
+    grid on;
 end
 
 %% test
