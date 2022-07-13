@@ -8,7 +8,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
     %                will be used.
     %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
     %                  replaced by cutoffRange.
-    %     symOpts: "min" or "max"
+    %     symOpts: symmetrical option - "min" or "max"
     % Output:
     %     axisRange: axis limits applied
 
@@ -40,7 +40,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         axisRange = [];
     end
 
-    %% Find best range
+    %% Best axis range
     axisLim = get(allAxes(1), axisLimStr);
     axisLimMin = axisLim(1);
     axisLimMax = axisLim(2);
@@ -60,7 +60,6 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
 
     bestRange = [axisLimMin, axisLimMax];
 
-    %% Set axis range
     if isempty(axisRange)
         axisRange = bestRange;
     else
@@ -75,6 +74,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
 
     end
 
+    %% Cutoff axis range
     if nargin < 4 || isempty(cutoffRange)
         cutoffRange = [-inf, inf];
     end
@@ -87,7 +87,9 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         axisRange(2) = cutoffRange(2);
     end
 
+    %% Symmetrical axis range
     if nargin >= 5
+
         switch symOpts
             case "min"
                 temp = min(abs(axisRange));
@@ -96,9 +98,11 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
             otherwise
                 error("Invalid symmetrical option input");
         end
+
         axisRange = [-temp, temp];
     end
 
+    %% Set axis range
     for aIndex = 1:length(allAxes)
         set(allAxes(aIndex), axisLimStr, axisRange);
     end

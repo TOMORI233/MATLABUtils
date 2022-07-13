@@ -1,4 +1,4 @@
-function resStruct = addFieldToStruct(struct,fieldName,fieldVal)
+function resStruct = addFieldToStruct(struct,fieldVal,fieldName)
 if ~iscell(fieldName)
     fieldName = cellstr(fieldName);
 end
@@ -6,10 +6,15 @@ end
     structLength = length(struct);
     oldFields = fields(struct);
     %% convert struct to cell
-    oldCell = struct2cell(struct); 
+    oldCell = table2cell(struct2table(struct)); 
+
     %% check if oldCell is column director, otherwise ,invert
     [m n] = size(oldCell); 
-    if n == structLength
+    if n == structLength 
+        oldCell = oldCell';
+    end
+
+    if ~isCellByCol(oldCell)
         oldCell = oldCell';
     end
     %% check if new cell to add is the same length with structure
