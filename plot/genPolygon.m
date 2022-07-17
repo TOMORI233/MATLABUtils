@@ -1,7 +1,8 @@
-function [xv, yv] = genPolygon(mAxe)
+function [xv, yv, lines] = genPolygon(mAxe)
     xv = [];
     yv = [];
     lines = [];
+    hold(mAxe, "on");
     
     while 1
         [x, y, btn] = ginput(1);
@@ -33,6 +34,7 @@ function [xv, yv] = genPolygon(mAxe)
     
         else
             ltemp = plot(mAxe, [xv(end), xv(1)], [yv(end), yv(1)], "k.-", "LineWidth", 1);
+            lines = [lines, ltemp];
             set(get(get(ltemp, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
             break;
         end
