@@ -22,7 +22,7 @@ function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
         paddings = 0.01 * ones(1, 4);
     end
 
-    % nSize = [nX, nY]
+     % nSize = [nX, nY]
     nX = nSize(1);
 
     if length(nSize) == 1

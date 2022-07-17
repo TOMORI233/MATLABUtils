@@ -8,7 +8,7 @@ if length(fieldN) ~= length(fieldName)
         if sum(strcmp(fieldName,fieldN{i})) > 1
             idx = find(strcmp(fieldName,fieldN{i}));
             reserveIdx = max(find(strcmp(fieldName,fieldN{i})));
-            deleteIdx = [deleteIdx ; idx(idx~=reserveIdx)]'
+            deleteIdx = [deleteIdx ; idx(idx~=reserveIdx)];
         end
     end
 end

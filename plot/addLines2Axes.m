@@ -64,7 +64,6 @@ function addLines2Axes(FigsOrAxes, lines)
             else
                 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
             end
-
             hold on;
         end
 
