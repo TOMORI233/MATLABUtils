@@ -1,4 +1,8 @@
 function [xv, yv, lines] = genPolygon(mAxe)
+    % Description: draw a polygon in the axes. Return its endpoint
+    %              coordinates and borderlines. It only works with 2-D
+    %              axes.
+
     xv = [];
     yv = [];
     lines = [];
