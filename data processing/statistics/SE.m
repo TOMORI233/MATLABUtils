@@ -2,17 +2,24 @@ function y = SE(x, dim)
     narginchk(1, 2);
 
     if nargin < 2
-        dim = 1;
+
+        if isvector(x)
+            y = std(x) / sqrt(length(x));
+            return;
+        else
+            dim = 1;
+        end
+
     end
 
-    [a, b, c] = size(x);
-
-    if b == 1 && c == 1
-        nX = a;
-    else
+    if isa(dim, "double")
         nX = size(x, dim);
+    elseif strcmp(dim, "all")
+        nX = numel(x);
+    else
+        error("Invalid dim input");
     end
 
-    y = std(x, 0, dim) / sqrt(nX);
+    y = std(x, [], dim) / sqrt(nX);
     return;
 end

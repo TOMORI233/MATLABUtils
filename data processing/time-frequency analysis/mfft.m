@@ -5,7 +5,7 @@ function [A, f, Aoi] = mfft(X, fs, N, dim, foi)
     %     fs: sampling frequency
     %     N: N-point fft
     %     dim: 1-along column, 2-along row
-    %     foi: frequency band of interest, one- or two element vector
+    %     foi: frequency range of interest, one- or two element vector
     % Output:
     %     A: single-sided amplitude spectrum
     %     f: frequency vector of N-point single-sided fft
@@ -48,7 +48,7 @@ function [A, f, Aoi] = mfft(X, fs, N, dim, foi)
             end
 
         elseif numel(foi) == 2
-            idx = find(f >= foi(1), 1):find(f <= foi(2), 1, "last");
+            idx = find(f > foi(2), 1, "last") + 1:find(f < foi(1), 1) - 1;
 
             if ~isempty(idx)
                 Aoi = mean(A(:, idx), 2);

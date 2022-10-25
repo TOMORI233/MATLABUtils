@@ -7,6 +7,7 @@ function v = validateInput(validType, prompt, dataLen, dataRange)
     %     dataLen: [dataLenMin, dataLenMax] (including upper and lower boundaries)
     %              Empty for no limitation.
     %     dataRange: [dataMin, dataMax] (including upper and lower boundaries)
+    %                For string, you can specify [dataRange] as valid strings.
     %                Empty for no limitation.
     %     prompt: hint of input
     % Output:
@@ -37,7 +38,12 @@ function v = validateInput(validType, prompt, dataLen, dataRange)
 
     while nPass < nTotal
         nPass = 0;
-        v = input(prompt);
+
+        if all(contains(validType, "string"))
+            v = input(prompt, "s");
+        else
+            v = input(prompt);
+        end
 
         if isempty(v)
             disp('The input should not be empty');
@@ -78,6 +84,12 @@ function v = validateInput(validType, prompt, dataLen, dataRange)
                 end
 
             elseif isstring(v) || ischar(v)
+
+                if ~isempty(dataRange) && ~any(contains(dataRange, v))
+                    disp(strcat('The input string/char should be one of these: ', join(reshape(dataRange, [1, numel(dataRange)]), ', ')))
+                    break;
+                end
+                
                 nPass = nPass + 1;
             end
 
