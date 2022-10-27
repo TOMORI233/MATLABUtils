@@ -3,8 +3,10 @@ function trueOrFalse = isCellByCol(data)
         trueOrFalse = false;
         return
     else
+
         [row, col] = size(data);
         temp = cellfun(@class, data', 'UniformOutput', false);
+        temp = cellfun(@(x) strrep(x, 'single', 'double'), temp, "UniformOutput", false);
         if length(unique(temp)) == 1
             trueOrFalse = true;
         else

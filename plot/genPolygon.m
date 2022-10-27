@@ -1,4 +1,8 @@
 function [xv, yv] = genPolygon(mAxe)
+% figure
+% plot([1 2 3], [4 5 4]); hold on;
+% [x, y] = genPolygon(gca);
+% fill(x,y, 'red');
     xv = [];
     yv = [];
     lines = [];

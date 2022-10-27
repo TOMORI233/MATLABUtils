@@ -27,7 +27,7 @@ function addLines2Axes(FigsOrAxes, lines)
         lines.Y = [];
     end
 
-    if strcmp(class(FigsOrAxes), "matlab.ui.Figure")
+    if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
         allAxes = findobj(FigsOrAxes, "Type", "axes");
     else
         allAxes = FigsOrAxes;
@@ -65,6 +65,8 @@ function addLines2Axes(FigsOrAxes, lines)
                 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
             end
             hold on;
+            cLine = get(gca, "Children");
+            set(gca,'Children',[cLine(2:end); cLine(1)]);
         end
 
     end
