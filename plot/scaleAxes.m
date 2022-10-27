@@ -30,7 +30,9 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         error("Wrong axis name input");
     end
 
-    if strcmp(class(FigsOrAxes), "matlab.ui.Figure")|| strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
+
+    if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
+
         allAxes = findobj(FigsOrAxes, "Type", "axes");
     else
         allAxes = FigsOrAxes;

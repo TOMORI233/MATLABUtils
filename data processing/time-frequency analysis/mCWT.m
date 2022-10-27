@@ -27,15 +27,20 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs, freqLimits)
     end
 
     if nargin < 4
-        fs = 300;
+        fs = [];
     end
 
     if nargin < 5
         freqLimits = [0, 256];
     end
 
-    [P, Q] = rat(fs / fs0);
-    dataResample = resample(data, P, Q);
+    if ~isempty(fs)
+        [P, Q] = rat(fs / fs0);
+        dataResample = resample(data, P, Q);
+    else
+        fs = fs0;
+        dataResample = data;
+    end
 
     switch cwtMethod
         case 'morse'

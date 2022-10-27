@@ -1,11 +1,6 @@
-function res = changeCellRowNum(data)
-    nChs = size(data{1}, 1);
-    temp = cell2mat(reshape(data, [length(data), 1]));
-    res = cell(nChs, 1);
-    
-    for index = 1:nChs
-        res{index} = temp(index:nChs:size(temp, 1), :);
-    end
-
+function res = changeCellRowNum(cellData)
+    cellData = reshape(cellData, [numel(cellData), 1]);
+    row = size(cellData{1}, 1);
+    res = cellfun(@(r) cell2mat(cellfun(@(x) x(r, :), cellData, "UniformOutput", false)), mat2cell((1:row)', ones(row, 1)), "UniformOutput", false);
     return;
 end
