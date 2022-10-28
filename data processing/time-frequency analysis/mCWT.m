@@ -1,10 +1,10 @@
-function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs, freqLimits)
+function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
     % Description: downsampling and apply cwt to data
     % Input:
     %     data: a 1*n vector
     %     fs0: sample rate of data, in Hz
     %     cwtMethod: 'morse', 'morlet', 'bump' or 'STFT'
-    %     fs: downsample rate, in Hz
+    %     fsD: downsample rate, in Hz
     %     freqLimits: frequency range of cwt (restrict f)
     % Output:
     %     t: time vector, in sec
@@ -27,35 +27,35 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fs, freqLimits)
     end
 
     if nargin < 4
-        fs = [];
+        fsD = [];
     end
 
     if nargin < 5
         freqLimits = [0, 256];
     end
 
-    if ~isempty(fs)
-        [P, Q] = rat(fs / fs0);
+    if ~isempty(fsD)
+        [P, Q] = rat(fsD / fs0);
         dataResample = resample(data, P, Q);
     else
-        fs = fs0;
+        fsD = fs0;
         dataResample = data;
     end
 
     switch cwtMethod
         case 'morse'
-            [wt, f, coi] =cwt(dataResample, 'morse', fs, 'FequencyLimits', freqLimits);
+            [wt, f, coi] =cwt(dataResample, 'morse', fsD, 'FequencyLimits', freqLimits);
         case 'morlet'
-            [wt, f, coi] =cwt(dataResample, 'amor', fs, 'FequencyLimits', freqLimits);
+            [wt, f, coi] =cwt(dataResample, 'amor', fsD, 'FequencyLimits', freqLimits);
         case 'bump'
-            [wt, f, coi] =cwt(dataResample, 'bump', fs, 'FequencyLimits', freqLimits);   
+            [wt, f, coi] =cwt(dataResample, 'bump', fsD, 'FequencyLimits', freqLimits);   
         case 'STFT'
             spectrogram
         otherwise
             error('Invalid cwt method');
     end
     
-    t = (1:length(dataResample)) / fs;
+    t = (1:length(dataResample)) / fsD;
     CData = abs(wt);
 
     return;

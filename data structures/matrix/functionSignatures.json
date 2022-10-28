@@ -1,0 +1,12 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "rowFcn": {
+        "inputs": [
+            {"name": "fcn", "kind": "required", "type": ["function_handle"]},
+            {"name": "A", "kind": "required", "type": ["2d"]},
+            {"name": "B", "kind": "ordered", "type": ["2d"]},
+            {"name": "UniformOutput", "kind": "namevalue", "type": ["logical", "scalar"]}
+        ]
+    }
+}
