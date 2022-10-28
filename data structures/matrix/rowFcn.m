@@ -18,12 +18,11 @@ function varargout = rowFcn(fcn, A, varargin)
     end
 
     mInputParser.addParameter("UniformOutput", true, @islogical);
-    mInputParser.parse(fcn, A, varargin{~cellfun(@isinteger, varargin)});
+    mInputParser.parse(fcn, A, varargin{:});
 
-    Bs = varargin(cellfun(@isnumeric, varargin));
     singleRowFcnHandle = @(fcn, A, varargin) @(row) fcn(A(row, :), varargin{:}(row, :));
     rowFcnHandle = @(fcn, A, varargin) arrayfun(singleRowFcnHandle(fcn, A, varargin{:}), 1:size(A, 1), "UniformOutput", mInputParser.Results.UniformOutput);
-    [varargout{1:nargout}] = rowFcnHandle(fcn, A, Bs{:});
+    [varargout{1:nargout}] = rowFcnHandle(fcn, A, varargin{cellfun(@isnumeric, varargin)});
     varargout = cellfun(@(x) x', varargout, "UniformOutput", false);
     return;
 end
