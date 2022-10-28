@@ -1,5 +1,5 @@
 function varargout = rowFcn(fcn, A, varargin)
-    % Description: apply fcn to each row of matrix
+    % Description: apply fcn to each row of matrix (based on cellfun)
     % Input:
     %     fcn: function handle, function to apply to each row
     %     A: a 2-D matrix or a vector
@@ -8,22 +8,22 @@ function varargout = rowFcn(fcn, A, varargin)
     % Output:
     %     Ouputs of fcn with nRows=size(A, 1)
 
+    %% Validation
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'numel', 1}));
     mIp.addRequired("A", @(x) validateattributes(x, 'numeric', {'2d'}));
-
-    for n = 1:sum(cellfun(@isnumeric, varargin))
-        eval(['B', num2str(n), '=varargin{', num2str(n), '};']);
-        mIp.addOptional(eval(['"B', num2str(n), '"']), [], @(x) validateattributes(x, 'numeric', {'size', [size(A, 1), NaN]}));
+    bIdx = find(cellfun(@isnumeric, varargin));
+    for n = 1:length(bIdx)
+        eval(['B', num2str(bIdx(n)), '=varargin{', num2str(bIdx(n)), '};']);
+        mIp.addOptional(eval(['"B', num2str(bIdx(n)), '"']), [], @(x) validateattributes(x, 'numeric', {'size', [size(A, 1), NaN]}));
     end
-
     mIp.addParameter("UniformOutput", true, @islogical);
     mIp.parse(fcn, A, varargin{:});
 
-    commaSeparateIndexing = @(C, idx) struct("output", cellfun(@(x) x(idx, :), C, "UniformOutput", false));
-    singleRowFcnHandle = @(fcn, A, varargin) @(row) fcn(A(row, :), commaSeparateIndexing(varargin, row).output);
-    rowFcnHandle = @(fcn, A, varargin) arrayfun(singleRowFcnHandle(fcn, A, varargin{:}), 1:size(A, 1), "UniformOutput", mIp.Results.UniformOutput);
-    [varargout{1:nargout}] = rowFcnHandle(fcn, A, varargin{cellfun(@isnumeric, varargin)});
-    varargout = cellfun(@(x) x', varargout, "UniformOutput", false);
+    %% Impl
+    sepIdx = ones(size(A, 1), 1);
+    A = mat2cell(A, sepIdx);
+    varargin(bIdx) = cellfun(@(x) mat2cell(x, sepIdx), varargin(bIdx), "UniformOutput", false);
+    [varargout{1:nargout}] = cellfun(fcn, A, varargin{bIdx}, "UniformOutput", mIp.Results.UniformOutput);
     return;
 end
