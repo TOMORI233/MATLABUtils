@@ -1,0 +1,11 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "validateInput": {
+        "inputs": [
+            {"name": "prompt", "kind": "ordered", "type": ["string", "char"]},
+            {"name": "validateFcn", "kind": "ordered", "type": ["function_handle"]},
+            {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
+        ]
+    }
+}
