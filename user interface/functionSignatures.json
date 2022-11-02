@@ -3,7 +3,7 @@
 
     "validateInput": {
         "inputs": [
-            {"name": "prompt", "kind": "ordered", "type": ["string", "char"]},
+            {"name": "prompt", "kind": "required", "type": ["string", "char"]},
             {"name": "validateFcn", "kind": "ordered", "type": ["function_handle"]},
             {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
         ]

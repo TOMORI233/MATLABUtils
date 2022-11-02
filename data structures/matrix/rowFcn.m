@@ -21,9 +21,9 @@ function varargout = rowFcn(fcn, A, varargin)
     mIp.parse(fcn, A, varargin{:});
 
     %% Impl
-    sepIdx = ones(size(A, 1), 1);
-    A = mat2cell(A, sepIdx);
-    varargin(bIdx) = cellfun(@(x) mat2cell(x, sepIdx), varargin(bIdx), "UniformOutput", false);
+    segIdx = ones(size(A, 1), 1);
+    A = mat2cell(A, segIdx);
+    varargin(bIdx) = cellfun(@(x) mat2cell(x, segIdx), varargin(bIdx), "UniformOutput", false);
     [varargout{1:nargout}] = cellfun(fcn, A, varargin{bIdx}, "UniformOutput", mIp.Results.UniformOutput);
     return;
 end

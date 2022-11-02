@@ -1,4 +1,4 @@
-function v = validateInput(varargin)
+function v = validateInput(prompt, varargin)
     % Description: loop input until validation pass
     % Input:
     %     prompt: hint of input
@@ -13,35 +13,51 @@ function v = validateInput(varargin)
     %                       {'numel', 1, 'positive', 'integer'}));
     %     % 2. str input
     %     nameList = {'Mike', 'John', 'Penny'};
-    %     s = validateInput('Input a name from the list: ', @(x) validatestring(x, nameList), 's');
+    %     s = validateInput('Input a name from the list: ', @(x) any(validatestring(x, nameList)), 's');
 
     mIp = inputParser;
-    mIp.addOptional("prompt", '', @isstr); %#ok<*DISSTR>
-    mIp.addOptional("validateFcn", [], @(x) isa(x, 'function_handle'));
+    mIp.addRequired("prompt", @isstr); %#ok<*DISSTR>
+    mIp.addOptional("arg2", [], @(x) isa(x, 'function_handle') || any(validatestring(x, {'s'})));
     mIp.addOptional("sInput", [], @(x) validatestring(x, {'s'}));
-    mIp.parse(varargin{:});
+    mIp.parse(prompt, varargin{:});
 
-    prompt = mIp.Results.prompt;
-    validateFcn = mIp.Results.validateFcn;
-    sInput = mIp.Results.sInput;
+    arg2 = mIp.Results.arg2;
 
-    e.message = 'error';
+    switch class(arg2)
+        case 'function_handle'
+            validateFcn = arg2;
+            sInput = mIp.Results.sInput;
+        case 'char'
+            validateFcn = [];
+            sInput = arg2;
+        case 'string'
+            validateFcn = [];
+            sInput = arg2;
+    end
 
-    while ~isempty(e)
+    pass = false;
+
+    while  ~pass
 
         try
             
             if ~isempty(sInput)
                 v = input(prompt, "s");
+
+                if ~isempty(validateFcn)
+                    pass = validateFcn(v);
+                end
+
             else
                 v = input(prompt);
+
+                if ~isempty(validateFcn)
+                    validateFcn(v);
+                end
+
+                pass = true;
             end
     
-            if ~isempty(validateFcn)
-                validateFcn(v);
-            end
-
-            e = [];
         catch e
             disp(e.message);
         end
