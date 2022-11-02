@@ -35,29 +35,23 @@ function v = validateInput(prompt, varargin)
             sInput = arg2;
     end
 
-    pass = false;
+    e.message = 'error';
 
-    while  ~pass
+    while ~isempty(e)
 
         try
             
             if ~isempty(sInput)
                 v = input(prompt, "s");
-
-                if ~isempty(validateFcn)
-                    pass = validateFcn(v);
-                end
-
             else
                 v = input(prompt);
+            end
 
-                if ~isempty(validateFcn)
-                    validateFcn(v);
-                end
-
-                pass = true;
+            if ~isempty(validateFcn)
+                validateFcn(v);
             end
     
+            e = [];
         catch e
             disp(e.message);
         end
