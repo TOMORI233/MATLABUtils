@@ -1,0 +1,10 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "findPeakTrough": {
+        "inputs": [
+            {"name": "data", "kind": "required", "type": ["numeric", "2d"]},
+            {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={2, 1}"]}
+        ]
+    }
+}
