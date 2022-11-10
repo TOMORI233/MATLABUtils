@@ -18,7 +18,7 @@ function axisValue = setAxes(FigOrAxes, axisParams, axisValue)
     if nargin < 3
         axisValue = get(allAxes(1), axisParams);
     end
-
+    
     for aIndex = 1:length(allAxes)
         set(allAxes(aIndex), axisParams, axisValue);
     end

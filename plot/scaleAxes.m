@@ -42,6 +42,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         axisRange = [];
     end
 
+    
     %% Best axis range
     axisLim = get(allAxes(1), axisLimStr);
     axisLimMin = axisLim(1);

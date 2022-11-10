@@ -13,8 +13,8 @@ else
 end
 
 for aIndex = 1:length(allAxes)
-
-    lineObj = get(allAxes(aIndex),'Children');
+    otherObj = findobj(allAxes(aIndex), '-not', "Type", "axes", '-not', "Type", "line");
+    lineObj = findobj(allAxes(aIndex), "Type", "line");
     childField = fields(lineObj);
     if ~ismember(string(searchParams), string(childField))
         continue
@@ -27,13 +27,13 @@ for aIndex = 1:length(allAxes)
     temp = 1 : length(lineObj);
     temp(tIndex) = [];
     if string(order) == "bottom"
-        reOrder = [temp, tIndex];
+        reOrdObj = [lineObj(temp'); otherObj; lineObj(tIndex)];
     elseif string(order) == "top"
-        reOrder = [tIndex, temp];
+        reOrdObj = [lineObj(tIndex); otherObj; lineObj(temp')];
     else
         error("error order input!");
     end
-    reOrdObj = lineObj(reOrder);
+    
     set(allAxes(aIndex), 'Children', reOrdObj);
 end
 

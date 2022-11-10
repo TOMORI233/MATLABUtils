@@ -39,7 +39,7 @@ end
 
 if strcmp(method,'rgb')
     % convert hex style to rgb style
-    colorBuffer = cellfun(@(x) [hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
+    colorBuffer = cellfun(@(x) roundn([hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, -2), cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
 end
 
 colorGrad = easyStruct({'blueGrad','greenGrad','orangeGrad','redGrad','blackGrad'},colorBuffer');

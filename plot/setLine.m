@@ -17,14 +17,22 @@ if nargin == 4
 end
 
 lineObj = findobj(FigOrAxes, "type", "line");
-   if ~isnumeric(searchValue)
-        tIndex = find(string({lineObj.(searchParams)}') == string(searchValue));
-    else
-        tIndex = find(cell2mat(cellfun(@(x) isequal(x, searchValue), {lineObj.(searchParams)}', "UniformOutput", false)));
-    end
+if ~isnumeric(searchValue)
+    tIndex = find(string({lineObj.(searchParams)}') == string(searchValue));
+else
+    tIndex = find(cell2mat(cellfun(@(x) isequal(x, searchValue), {lineObj.(searchParams)}', "UniformOutput", false)));
+end
 
 for cIndex = 1 : length(tIndex)
+    if strcmpi(setParams, "XLim")
+        X = lineObj(tIndex(cIndex)).XData;
+        XNew = findWithinInterval(X, setValue);
+        temp = lineObj(tIndex(cIndex)).YData;
+        lineObj(tIndex(cIndex)).YData = temp(ismember(X, XNew));
+        lineObj(tIndex(cIndex)).XData = XNew;
+    else
     lineObj(tIndex(cIndex)).(setParams) = setValue;
+    end
 end
 
 % for aIndex = 1:length(allAxes)

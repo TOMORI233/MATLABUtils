@@ -65,13 +65,15 @@ function addLines2Axes(FigsOrAxes, lines)
                 h = plot(allAxes(aIndex), X, Y, "Color", color, "Marker", marker, "LineStyle", "none");
             end
             
-            if ~isempty(legendStr)
-                set(h, "DisplayName", legendStr);
-                legend(h, "show");
-            else
-                set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+            for hIndex = 1 : length(h)
+                if ~isempty(legendStr)
+                    set(h(hIndex), "DisplayName", legendStr);
+                    legend(h, "show");
+                else
+                    set(get(get(h(hIndex), 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+                end
             end
-            
+
         end
 
     end
