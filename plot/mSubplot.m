@@ -25,7 +25,7 @@ function mAxe = mSubplot(Fig, row, col, index, nSize, margins, paddings)
      % nSize = [nX, nY]
     nX = nSize(1);
 
-    if length(nSize) == 1
+    if numel(nSize) == 1
         nY = 1;
     else
         nY = nSize(2);

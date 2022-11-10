@@ -1,98 +1,59 @@
-function v = validateInput(validType, prompt, dataLen, dataRange)
+function v = validateInput(prompt, varargin)
     % Description: loop input until validation pass
     % Input:
-    %     validType: string array of valid input data types, including
-    %                integer, decimal, string (both string and char), positive,
-    %                negative, non-positive, non-negative, odd, even
-    %     dataLen: [dataLenMin, dataLenMax] (including upper and lower boundaries)
-    %              Empty for no limitation.
-    %     dataRange: [dataMin, dataMax] (including upper and lower boundaries)
-    %                For string, you can specify [dataRange] as valid strings.
-    %                Empty for no limitation.
     %     prompt: hint of input
+    %     validateFcn: validate function handle
+    %     sInput: input type, "s" or 's' for str input and left empty for other type input
     % Output:
-    %     inputContent: valid input content
+    %     v: valid input content
+    % Example:
+    %     % 1. numeric input
+    %     k = validateInput('Input a k for kmeans: ', ...
+    %                       @(x) validateattributes(x, 'numeric', ...
+    %                       {'numel', 1, 'positive', 'integer'}));
+    %     % 2. str input
+    %     nameList = {'Mike', 'John', 'Penny'};
+    %     s = validateInput('Input a name from the list: ', @(x) any(validatestring(x, nameList)), 's');
 
-    narginchk(1, 4);
+    mIp = inputParser;
+    mIp.addRequired("prompt", @isstr); %#ok<*DISSTR>
+    mIp.addOptional("arg2", [], @(x) isa(x, 'function_handle') || any(validatestring(x, {'s'})));
+    mIp.addOptional("sInput", [], @(x) validatestring(x, {'s'}));
+    mIp.parse(prompt, varargin{:});
 
-    if nargin < 2
-        prompt = 'Input data: ';
+    arg2 = mIp.Results.arg2;
+
+    switch class(arg2)
+        case 'function_handle'
+            validateFcn = arg2;
+            sInput = mIp.Results.sInput;
+        case 'char'
+            validateFcn = [];
+            sInput = arg2;
+        case 'string'
+            validateFcn = [];
+            sInput = arg2;
     end
 
-    if nargin < 3
-        dataLen = [];
-    end
+    e.message = 'error';
 
-    if nargin < 4
-        dataRange = [];
-    end
+    while ~isempty(e)
 
-    allType = ["integer", "decimal", "string", "positive", "negative",...
-               "non-positive", "non-negative", "odd", "even"];
-    nTotal = length(validType);
-    nPass = 0;
-
-    if nTotal ~= length(find(ismember(validType, allType)))
-        error("No matched validation");
-    end
-
-    while nPass < nTotal
-        nPass = 0;
-
-        if all(contains(validType, "string"))
-            v = input(prompt, "s");
-        else
-            v = input(prompt);
-        end
-
-        if isempty(v)
-            disp('The input should not be empty');
-            continue;
-        end
-
-        for index = 1:nTotal
-
-            if isa(v, "double")
-
-                if ~isempty(dataLen) && ~(length(v) >= dataLen(1) && length(v) <= dataLen(2))
-                    disp(['The input data length should be [', num2str(dataLen(1)), ', ', num2str(dataLen(2)), ']']);
-                    break;
-                end
-
-                if ~isempty(dataRange) && ~(all(v >= dataRange(1)) && all(v <= dataRange(2)))
-                    disp(['The input data range should be within [', num2str(dataRange(1)), ', ', num2str(dataRange(2)), ']']);
-                    break;
-                end
-
-                switch validType(index)
-                    case "integer"
-                        nPass = nPass + ~isempty(find(v == fix(v), 1));
-                    case "decimal"
-                        nPass = nPass + ~isempty(find(v ~= fix(v), 1));
-                    case "positive"
-                        nPass = nPass + ~isempty(find(v > 0, 1));
-                    case "negative"
-                        nPass = nPass + ~isempty(find(v < 0, 1));
-                    case "non-positive"
-                        nPass = nPass + ~isempty(find(v <= 0, 1));
-                    case "non-negative"
-                        nPass = nPass + ~isempty(find(v >= 0, 1));
-                    case "odd"
-                        nPass = nPass + ~isempty(find(mod(v, 2) ~= 0, 1));
-                    case "even"
-                        nPass = nPass + ~isempty(find(mod(v, 2) == 0, 1));
-                end
-
-            elseif isstring(v) || ischar(v)
-
-                if ~isempty(dataRange) && ~any(contains(dataRange, v))
-                    disp(strcat('The input string/char should be one of these: ', join(reshape(dataRange, [1, numel(dataRange)]), ', ')))
-                    break;
-                end
-                
-                nPass = nPass + 1;
+        try
+            
+            if ~isempty(sInput)
+                v = input(prompt, "s");
+            else
+                v = input(prompt);
             end
 
+            if ~isempty(validateFcn)
+                validateFcn(v);
+            end
+    
+            e = [];
+        catch e
+            disp(e.message);
         end
 
     end

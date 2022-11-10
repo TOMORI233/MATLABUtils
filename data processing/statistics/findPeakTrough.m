@@ -1,25 +1,31 @@
-function [peakIdx, troughIdx] = findPeakTrough(data, dim)
-    narginchk(1, 2);
+function [peakIdx, troughIdx] = findPeakTrough(data, varargin)
+    % Description: find indexes of peak and trough of waves
+    % Input:
+    %     data: a vector or 2-D matrix
+    %     dim: 1 for data of [nSample, nCh], 2 for data of [nCh, nSample] (default: 2)
+    % Output:
+    %     peakIdx/troughIdx: logical [nCh, nSample]
 
-    if nargin < 2
-        dim = 2;
-    end
-
+    mIp = inputParser;
+    mIp.addRequired("data", @(x) validateattributes(x, 'numeric', '2d'));
+    mIp.addOptional("dim", 2, @(x) ismember(x, [1, 2]));
+    mIp.parse(data, varargin{:});
+    
+    dim = mIp.Results.dim;
     data = permute(data, [3 - dim, dim]);
-    [nCh, nSample] = size(data);
-    
-    peakIdx = false(nCh, nSample);
-    troughIdx = false(nCh, nSample);
-    
-    for cIndex = 1:nCh
-        temp = false(1, nSample);
-        temp(find(diff(sign(diff(data(cIndex, :)))) == -2) + 1) = true;
-        peakIdx(cIndex, :) = temp;
-        
-        temp = false(1, nSample);
-        temp(find(diff(sign(diff(data(cIndex, :)))) == 2) + 1) = true;
-        troughIdx(cIndex, :) = temp;
-    end
+    peakIdx = cell2mat(rowFcn(@ispeak, data, "UniformOutput", false));
+    troughIdx = cell2mat(rowFcn(@istrough, data, "UniformOutput", false));
+    return;
+end
 
+function y = ispeak(data)
+    y = false(1, length(data));
+    y(find(diff(sign(diff(data))) == -2) + 1) = true;
+    return;
+end
+
+function y = istrough(data)
+    y = false(1, length(data));
+    y(find(diff(sign(diff(data))) == 2) + 1) = true;
     return;
 end
