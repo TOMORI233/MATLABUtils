@@ -7,6 +7,8 @@ else
 end
 
 lineObj = findobj(FigOrAxes, "type", "line");
-delete(lineObj((string({lineObj.(searchParams)}') == searchValue)));
+
+delete(lineObj(cell2mat(cellfun(@(x) isequal(x, searchValue), {lineObj.(searchParams)}', "UniformOutput", false))));
 
 end
+

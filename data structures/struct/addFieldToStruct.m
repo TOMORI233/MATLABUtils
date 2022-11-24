@@ -14,7 +14,7 @@ end
     end
 
     %% check if oldCell is column director, otherwise ,invert
-    [m n] = size(oldCell); 
+    [m, n] = size(oldCell); 
     if n == structLength 
         oldCell = oldCell';
     end
@@ -23,7 +23,7 @@ end
         oldCell = oldCell';
     end
     %% check if new cell to add is the same length with structure
-    [mm nn] = size(fieldVal);
+    [mm, nn] = size(fieldVal);
     if mm ~= structLength 
         error('the length of new cell is not suitable with the structrue');
     end
