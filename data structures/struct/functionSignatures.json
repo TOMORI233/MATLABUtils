@@ -8,6 +8,7 @@
                 {"name": "fieldname", "kind": "required", "type": ["string"]},
                 {"name": "validatefcn", "kind": "required", "type": ["function_handle"]}
             ], "repeating": true}
-        ]
+        ],
+        "purpose": "校验结构体数组"
     }
 }
