@@ -5,7 +5,7 @@
         "inputs": [
             {"name": "s", "kind": "required", "type": ["struct"]},
             {"tuple": [
-                {"name": "fieldname", "kind": "required", "type": ["string"]},
+                {"name": "fieldname", "kind": "required", "type": [["char"], ["string"]]},
                 {"name": "validatefcn", "kind": "required", "type": ["function_handle"]}
             ], "repeating": true}
         ],

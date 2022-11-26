@@ -16,6 +16,7 @@
                     {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
                 ]
             ]}
-        ]
+        ],
+        "purpose": "带校验的输入"
     }
 }
