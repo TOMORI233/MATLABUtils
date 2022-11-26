@@ -1,25 +1,6 @@
 {
     "_schemaVersion": "1.0.0",
 
-    "validateInput": {
-        "inputs": [
-            {"name": "prompt", "kind": "required", "type": ["string", "char"]},
-            {"mutuallyExclusiveGroup": [
-                [
-                    {"name": "validateFcn", "kind": "ordered", "type": ["function_handle"]},
-                    {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
-                ],
-                [
-                    {"name": "validateFcn", "kind": "ordered", "type": ["function_handle"]}
-                ],
-                [
-                    {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
-                ]
-            ]}
-        ],
-        "description": "带校验的输入"
-    },
-
     "mSubplot": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
