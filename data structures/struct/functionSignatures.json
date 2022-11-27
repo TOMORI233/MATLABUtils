@@ -1,0 +1,14 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "validatestruct": {
+        "inputs": [
+            {"name": "s", "kind": "required", "type": ["struct"]},
+            {"tuple": [
+                {"name": "fieldname", "kind": "required", "type": [["char"], ["string"]]},
+                {"name": "validatefcn", "kind": "required", "type": ["function_handle"]}
+            ], "repeating": true}
+        ],
+        "purpose": "校验结构体数组"
+    }
+}

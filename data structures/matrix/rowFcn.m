@@ -7,6 +7,8 @@ function varargout = rowFcn(fcn, A, varargin)
     %     "UniformOutput": true/false
     % Output:
     %     Ouputs of fcn with nRows=size(A, 1)
+    % Example:
+    %     C = rowFcn(@mFcn, A, B, "UniformOutput", false);
 
     %% Validation
     mIp = inputParser;

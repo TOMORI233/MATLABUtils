@@ -1,0 +1,35 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "mSubplot": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+                    {"name": "row", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "col", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "index", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
+                    {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right'}"]}
+                ],
+                [
+                    {"name": "row", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "col", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "index", "kind": "required", "type": ["scalar", "positive", "integer"]},
+                    {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
+                    {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right'}"]}
+                ]
+            ]}
+        ]
+    }
+}
