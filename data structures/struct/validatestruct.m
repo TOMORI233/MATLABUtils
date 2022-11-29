@@ -15,21 +15,23 @@ function [pass, msg] = validatestruct(s, varargin)
     for sIndex = 1:length(s)
 
         for n = 1:length(fIdx)
-    
+
             try
                 varargin{fIdx(n) + 1}(s(sIndex).(varargin{fIdx(n)}));
             catch e
                 msg = [msg, newline, num2str(sIndex), ' - ', char(varargin{fIdx(n)}), ': ', char(e.message)];
                 pass = false;
             end
-    
+
         end
 
     end
 
     if ~pass
         disp(msg);
+    else
+        msg = 'Validation passed';
     end
-    
+
     return;
 end

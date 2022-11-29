@@ -13,10 +13,12 @@ function varargout = rowFcn_beta(fcn, A, varargin)
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'numel', 1}));
     mIp.addRequired("A", @(x) validateattributes(x, 'numeric', {'2d'}));
+
     for n = 1:sum(cellfun(@isnumeric, varargin))
         eval(['B', num2str(n), '=varargin{', num2str(n), '};']);
         mIp.addOptional(eval(['"B', num2str(n), '"']), [], @(x) validateattributes(x, 'numeric', {'size', [size(A, 1), NaN]}));
     end
+
     mIp.addParameter("UniformOutput", true, @islogical);
     mIp.parse(fcn, A, varargin{:});
 

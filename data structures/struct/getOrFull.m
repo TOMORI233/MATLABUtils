@@ -1,5 +1,5 @@
 function v = getOrFull(s, default)
-    % Description: Complete [s] with [default]. [default] is specified as 
+    % Description: Complete [s] with [default]. [default] is specified as
     %              the struct containing all fields of [s] with default values.
 
     if ~isa(default, "struct")
@@ -14,12 +14,12 @@ function v = getOrFull(s, default)
 
     if ~isempty(s)
         fieldNamesS = fieldnames(s);
-    
+
         for fIndex = 1:length(fieldNamesS)
             v.(fieldNamesS{fIndex}) = s.(fieldNamesS{fIndex});
         end
 
     end
-    
+
     return;
 end

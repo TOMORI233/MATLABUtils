@@ -1,6 +1,6 @@
-function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, symOpts)
+function axisRange = scaleAxes(varargin)
     % Description: apply the same scale settings to all subplots in figures
-    % Input: 
+    % Input:
     %     FigsOrAxes: figure object array or axis object array
     %     axisName: axis name - "x", "y", "z" or "c"
     %     axisRange: axis limits, specified as a two-element vector. If
@@ -12,12 +12,26 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
     % Output:
     %     axisRange: axis limits applied
 
-    narginchk(1, 5);
-
-    if nargin < 2
-        axisName = "y";
+    if isgraphics(varargin{1})
+        FigsOrAxes = varargin{1};
+        varargin = varargin(2:end);
+    else
+        FigsOrAxes = gcf;
     end
-    
+
+    mIp = inputParser;
+    mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
+    mIp.addOptional("axisName", "y", @(x) any(validatestring(x, {'x', 'y', 'z', 'c'})));
+    mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
+    mIp.addOptional("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
+    mIp.addOptional("symOpts", [], @(x) any(validatestring(x, {'min', 'max'})));
+    mIp.parse(FigsOrAxes, varargin{:});
+
+    axisName = mIp.Results.axisName;
+    axisRange = mIp.Results.axisRange;
+    cutoffRange = mIp.Results.cutoffRange;
+    symOpts = mIp.Results.symOpts;
+
     if strcmpi(axisName, "x")
         axisLimStr = "xlim";
     elseif strcmpi(axisName, "y")
@@ -36,10 +50,6 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         allAxes = FigsOrAxes;
     end
 
-    if nargin < 3
-        axisRange = [];
-    end
-
     %% Best axis range
     axisLim = get(allAxes(1), axisLimStr);
     axisLimMin = axisLim(1);
@@ -47,7 +57,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
 
     for aIndex = 2:length(allAxes)
         axisLim = get(allAxes(aIndex), axisLimStr);
-        
+
         if axisLim(1) < axisLimMin
             axisLimMin = axisLim(1);
         end
@@ -67,7 +77,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
         if axisRange(1) == -inf
             axisRange(1) = bestRange(1);
         end
-    
+
         if axisRange(2) == inf
             axisRange(2) = bestRange(2);
         end
@@ -75,7 +85,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
     end
 
     %% Cutoff axis range
-    if nargin < 4 || isempty(cutoffRange)
+    if isempty(cutoffRange)
         cutoffRange = [-inf, inf];
     end
 
@@ -88,7 +98,7 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
     end
 
     %% Symmetrical axis range
-    if nargin >= 5
+    if ~isempty(symOpts)
 
         switch symOpts
             case "min"
@@ -106,6 +116,6 @@ function axisRange = scaleAxes(FigsOrAxes, axisName, axisRange, cutoffRange, sym
     for aIndex = 1:length(allAxes)
         set(allAxes(aIndex), axisLimStr, axisRange);
     end
-    
+
     return;
 end
