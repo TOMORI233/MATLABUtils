@@ -13,7 +13,6 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
                     {"name": "row", "kind": "required", "type": ["scalar", "positive", "integer"]},
                     {"name": "col", "kind": "required", "type": ["scalar", "positive", "integer"]},
                     {"name": "index", "kind": "required", "type": ["scalar", "positive", "integer"]},
@@ -23,9 +22,10 @@
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right'}"]}
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
                 ],
                 [
+                    {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "row", "kind": "required", "type": ["scalar", "positive", "integer"]},
                     {"name": "col", "kind": "required", "type": ["scalar", "positive", "integer"]},
                     {"name": "index", "kind": "required", "type": ["scalar", "positive", "integer"]},
@@ -35,7 +35,27 @@
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right'}"]}
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
+                ]
+            ]}
+        ]
+    },
+
+    "scaleAxes": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
+                    {"name": "axisRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
+                ],
+                [
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+                    {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
+                    {"name": "axisRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
                 ]
             ]}
         ]

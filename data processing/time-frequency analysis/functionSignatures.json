@@ -5,9 +5,9 @@
         "inputs": [
             {"name": "X", "kind": "required", "type": ["numeric", "2d"], "purpose": "data"},
             {"name": "fs", "kind": "required", "type": ["numeric"], "purpose": "sample rate"},
-            {"name": "N", "kind": "ordered", "type": ["numeric"]},
+            {"name": "N", "kind": "ordered", "type": ["numeric"], "purpose": "N-point fft"},
             {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={2, 1}"]},
-            {"name": "foi", "kind": "ordered", "type": ["numeric", "2d"]}
+            {"name": "foi", "kind": "ordered", "type": ["numeric", "2d"], "purpose": "frequency of interest"}
         ]
     }
 }
