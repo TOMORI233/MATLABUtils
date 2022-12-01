@@ -6,9 +6,16 @@ function mAxe = mSubplot(varargin)
     %     nSize: [nX, nY] specifies size of subplot (default: [1, 1])
     %     margins: margins of subplot
     %     paddings: paddings of 
-    %     alignment: name-value with options 'top-left'(default), 'top-right', 'bottom-left',
-    %                'bottom-right', 'center-left', 'center-right', 'top-center', 'bottom-center',
-    %                'center'. (RECOMMEND: use with [nSize])
+    %     alignment: (RECOMMEND: use with [nSize]) name-value with options:
+    %                'top-left'(default),
+    %                'top-right',
+    %                'bottom-left',
+    %                'bottom-right',
+    %                'center-left',
+    %                'center-right',
+    %                'top-center',
+    %                'bottom-center',
+    %                'center'.
     % Output:
     %     mAxe: subplot axes object
 

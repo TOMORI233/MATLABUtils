@@ -1,7 +1,7 @@
 function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
     % Description: downsampling and apply cwt to data
     % Input:
-    %     data: a 1*n vector
+    %     data: 1*n double vector
     %     fs0: sample rate of data, in Hz
     %     cwtMethod: 'morse', 'morlet', 'bump' or 'STFT'
     %     fsD: downsample rate, in Hz
@@ -13,14 +13,18 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
     %     coi: cone of influence along t
     % Example:
     %     % Plot color map and coi of cwt
-    %     [t, f, CData, coi] = mCWT(data, fs0, 'morlet', fs, [0, 256]);
+    %     [T, F, CData, coi] = mCWT(data, fs0, 'morlet', fs, [0, 256]);
     %     figure;
-    %     imagesc('XData', t * 1000, 'YData', f, 'CData', CData);
+    %     imagesc('XData', T * 1000, 'YData', F, 'CData', CData);
     %     colormap("jet");
     %     hold on;
-    %     plot(t * 1000, coi, 'w--', 'LineWidth', 0.6);
+    %     plot(T * 1000, coi, 'w--', 'LineWidth', 0.6);
 
     narginchk(2, 5);
+
+    if ~(isrow(data) && isa(data, "double"))
+        error("Input data should be a double row vector");
+    end
 
     if nargin < 3
         cwtMethod = 'morlet';
