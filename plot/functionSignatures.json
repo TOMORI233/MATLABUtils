@@ -4,8 +4,45 @@
     "reOrganizeFig": {
         "inputs": [
             {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
-            {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
-            {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]}
+            {"name": "legendStr", "kind": "required", "type": ["string"]},
+            {"name": "legendSize", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "legendPos", "kind": "required", "type": ["choices = {'left', 'right', 'top', 'bottom'}"]}
+        ]
+    },
+
+    "orderLine": {
+        "inputs": [
+            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
+            {"name": "searchValue", "kind": "required"},
+            {"name": "order", "kind": "required", "type": ["choices = {'top','bottom'}"]}
+        ]
+    },
+
+    "getLine": {
+        "inputs": [
+            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "getParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
+            {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
+            {"name": "searchValue", "kind": "required"}  
+        ]
+    },
+
+    "deleteLine": {
+        "inputs": [
+            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
+            {"name": "searchValue", "kind": "required"}  
+        ]
+    },
+
+    "setLine": {
+        "inputs": [
+            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "setParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
+            {"name": "setValue", "kind": "required"},
+            {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
+            {"name": "searchValue", "kind": "required"}  
         ]
     },
 
