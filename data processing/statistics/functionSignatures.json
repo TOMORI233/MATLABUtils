@@ -6,5 +6,19 @@
             {"name": "data", "kind": "required", "type": ["numeric", "2d"]},
             {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={2, 1}"]}
         ]
+    },
+
+    "SE": {
+        "inputs": [
+            {"name": "x", "kind": "required", "type": ["numeric", "2d"]},
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={1, 2}"]}
+                ],
+                [
+                    {"name": "dim", "kind": "ordered", "type": ["char", "string", "choices={'all'}"]}
+                ]
+            ]}
+        ]
     }
 }
