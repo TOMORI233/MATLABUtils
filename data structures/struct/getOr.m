@@ -16,16 +16,17 @@ if nargin < 4
     emptyOpt = false;
 end
 
+field = string(field);
 fieldExists = isfield(s, field);
 
 if any(fieldExists)
     if ~emptyOpt
-        v = s.(field{find(fieldExists, 1)});
+        v = s.(field(find(fieldExists, 1)));
     else
         if all(cellfun(@isempty, {s.(field)}))
             v = default;
         else
-            v = s.(field{find(fieldExists, 1)});
+            v = s.(field(find(fieldExists, 1)));
         end
     end
 else

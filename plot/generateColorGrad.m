@@ -29,7 +29,7 @@ redGrad = {'#FF0000','#FF69B4','#FF1493','#FFC0CB','#DB7093','#B03060'};
 orangeGrad = {'#FFA500','#FF7F50','#FF6347','#A52A2A','#D2691E','#D2B48C'};
 greenGrad = {'#00FF00','#32CD32','#9ACD32','#228B22','#006400','#556B2F'};
 blueGrad = {'#0000FF','#1E90FF','#87CEEB','#4682B4','#6A5ACD','#40E0D0'};
-blackGrad = {'#000000','#222222','#444444','#666666','#888888','#AAAAAA'};
+blackGrad = {'#000000','#444444','#888888','#AAAAAA','#CCCCCC','#EEEEEE'};
 
 colorBuffer = [redGrad; orangeGrad; greenGrad ;blueGrad; blackGrad];
 if ~any(strcmp(method,{'rgb','hex'}))

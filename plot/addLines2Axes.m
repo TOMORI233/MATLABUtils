@@ -61,28 +61,12 @@ for lIndex = 1:length(lines)
             Y = Y * ones(1, 2);
         end
 
-<<<<<<< HEAD
             if isempty(marker)
                 h = plot(allAxes(aIndex), X, Y, "Color", color, "LineWidth", lineWidth, "LineStyle", lineStyle);
             else
                 h = plot(allAxes(aIndex), X, Y, "Color", color, "Marker", marker, "LineStyle", "none");
             end
             
-            for hIndex = 1 : length(h)
-                if ~isempty(legendStr)
-                    set(h(hIndex), "DisplayName", legendStr);
-                    legend(h, "show");
-                else
-                    set(get(get(h(hIndex), 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-                end
-            end
-=======
-        if isempty(marker)
-            h = plot(allAxes(aIndex), X, Y, "Color", color, "LineWidth", lineWidth, "LineStyle", lineStyle);
-        else
-            h = plot(allAxes(aIndex), X, Y, "Color", color, "Marker", marker, "LineStyle", "none");
-        end
->>>>>>> aa846cdeb6aa6413f9addf72911ddc5cc1b97da3
 
         if ~isempty(legendStr)
             set(h, "DisplayName", legendStr);
