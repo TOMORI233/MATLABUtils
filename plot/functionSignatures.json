@@ -42,16 +42,30 @@
             {"mutuallyExclusiveGroup": [
                 [
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
-                    {"name": "axisRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
-                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
+                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
                 ],
                 [
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) isgraphics(args)"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
-                    {"name": "axisRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
-                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric", "vector", "numel=2"]},
+                    {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
+                    {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
+                ]
+            ]}
+        ]
+    },
+
+    "addLines2Axes": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "lines", "kind": "ordered", "type": ["struct"]}
+                ],
+                [
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+                    {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ]
             ]}
         ]

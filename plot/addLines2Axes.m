@@ -1,4 +1,5 @@
-function addLines2Axes(FigsOrAxes, lines)
+function addLines2Axes(varargin)
+% function addLines2Axes(FigsOrAxes, lines)
     % Description: add lines to all subplots in figures
     % Input:
     %     FigsOrAxes: figure object array or axes object array
@@ -22,14 +23,26 @@ function addLines2Axes(FigsOrAxes, lines)
     %     % Example 2: Draw a dividing line y=x for ROC
     %     addLines2Axes(Fig);
 
-    narginchk(1, 2);
+    if nargin > 1 && all(isgraphics(varargin{1}))
+        FigsOrAxes = varargin{1};
+        varargin = varargin(2);
+    else
+        FigsOrAxes = gcf;
+    end
 
-    if nargin < 2
+    mIp = inputParser;
+    mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
+    mIp.addOptional("lines", [], @(x) isstruct(x));
+    mIp.parse(FigsOrAxes, varargin{:});
+
+    lines = mIp.Results.lines;
+
+    if isempty(lines)
         lines.X = [];
         lines.Y = [];
     end
 
-    if strcmp(class(FigsOrAxes), "matlab.ui.Figure")
+    if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
         allAxes = findobj(FigsOrAxes, "Type", "axes");
     else
         allAxes = FigsOrAxes;
@@ -68,7 +81,7 @@ function addLines2Axes(FigsOrAxes, lines)
 
             if ~isempty(legendStr)
                 set(h, "DisplayName", legendStr);
-                legend(h, "show");
+                legend;
             else
                 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
             end
