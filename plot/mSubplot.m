@@ -6,7 +6,8 @@ function varargout = mSubplot(varargin)
     %     nSize: [nX, nY] specifies size of subplot (default: [1, 1])
     %     margins: margins of subplot
     %     paddings: paddings of subplot
-    %     shape: 'auto'(default), 'square-min', 'square-max'
+    %     shape: 'auto'(default), 'square-min', 'square-max', 'fill'
+    %            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
     %     alignment: (RECOMMEND: use with [nSize]) name-value with options:
     %                'top-left',
     %                'top-right',
@@ -35,11 +36,11 @@ function varargout = mSubplot(varargin)
     mIp.addOptional("nSize0", [], @(x) validateattributes(x, 'numeric', {'vector'}));
     mIp.addOptional("margins0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addOptional("paddings0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
-    mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', 'square-min', 'square-max'})));
+    mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
     mIp.addParameter("nSize", [1, 1], @(x) validateattributes(x, 'numeric', {'vector'}));
     mIp.addParameter("margins", [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addParameter("paddings", [0.03, 0.03, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
-    mIp.addParameter("shape", "auto", @(x) any(validatestring(x, {'auto', 'square-min', 'square-max'})));
+    mIp.addParameter("shape", "auto", @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
     mIp.addParameter("alignment", 'center', @(x) any(validatestring(x, {'top-left', ...
                                                                           'top-right', ...
                                                                           'bottom-left', ...
@@ -107,6 +108,14 @@ function varargout = mSubplot(varargin)
         case 'square-max'
             axeWidth  = borderMax * adjIdx;
             axeHeight = borderMax;
+        case 'fill'
+            mAxe = axes(Fig, "Position", [divX, divY, divWidth, divHeight]);
+
+            if nargout == 1
+                varargout{1} = mAxe;
+            end
+
+            return;
         otherwise
             error('Invalid shape input');
     end

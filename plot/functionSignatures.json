@@ -11,11 +11,11 @@
                     {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max'}"]},
+                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max'}"]},
+                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
                 ],
                 [
@@ -26,11 +26,11 @@
                     {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max'}"]},
+                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max'}"]},
+                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
                 ]
             ]}
