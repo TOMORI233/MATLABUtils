@@ -1,13 +1,15 @@
-function mAxe = mSubplot(varargin)
+function varargout = mSubplot(varargin)
     % Description: extension of function subplot
     % Input:
     %     Fig: figure to place subplot
     %     row/col/index: same usage of function subplot
     %     nSize: [nX, nY] specifies size of subplot (default: [1, 1])
     %     margins: margins of subplot
-    %     paddings: paddings of 
+    %     paddings: paddings of subplot
+    %     shape: 'auto', 'square-min', 'square-max', 'fill'
+    %            (NOTICE: 'fill' option is prior to [nSize] option)
     %     alignment: (RECOMMEND: use with [nSize]) name-value with options:
-    %                'top-left'(default),
+    %                'top-left',
     %                'top-right',
     %                'bottom-left',
     %                'bottom-right',
@@ -15,7 +17,7 @@ function mAxe = mSubplot(varargin)
     %                'center-right',
     %                'top-center',
     %                'bottom-center',
-    %                'center'.
+    %                'center'(default).
     % Output:
     %     mAxe: subplot axes object
 
@@ -34,10 +36,12 @@ function mAxe = mSubplot(varargin)
     mIp.addOptional("nSize0", [], @(x) validateattributes(x, 'numeric', {'vector'}));
     mIp.addOptional("margins0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addOptional("paddings0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
+    mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
     mIp.addParameter("nSize", [1, 1], @(x) validateattributes(x, 'numeric', {'vector'}));
     mIp.addParameter("margins", [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addParameter("paddings", [0.03, 0.03, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
-    mIp.addParameter("alignment", 'top-left', @(x) any(validatestring(x, {'top-left', ...
+    mIp.addParameter("shape", "auto", @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
+    mIp.addParameter("alignment", 'center', @(x) any(validatestring(x, {'top-left', ...
                                                                           'top-right', ...
                                                                           'bottom-left', ...
                                                                           'bottom-right', ...
@@ -56,6 +60,7 @@ function mAxe = mSubplot(varargin)
     nSize = getOr(mIp.Results, "nSize0", mIp.Results.nSize, true);
     margins = getOr(mIp.Results, "margins0", mIp.Results.margins, true);
     paddings = getOr(mIp.Results, "paddings0", mIp.Results.paddings, true);
+    shape = getOr(mIp.Results, "shape0", mIp.Results.shape, true);
 
     % nSize = [nX, nY]
     nX = nSize(1);
@@ -69,7 +74,7 @@ function mAxe = mSubplot(varargin)
     end
 
     % paddings or margins is [Left, Right, Bottom, Top]
-    divWidth = (1 - paddings(1) - paddings(2)) / col;
+    divWidth  = (1 - paddings(1) - paddings(2)) / col;
     divHeight = (1 - paddings(3) - paddings(4)) / row;
     rIndex = ceil(index / col);
 
@@ -83,34 +88,69 @@ function mAxe = mSubplot(varargin)
         cIndex = col;
     end
 
-    divX = paddings(1) + divWidth * (cIndex - 1);
-    divY = 1 - paddings(4) - divHeight * (rIndex + nY - 1);
-    axeWidth = (1 - margins(1) - margins(2)) * divWidth * nX;
+    divX = paddings(1) + divWidth  * (cIndex - 1);
+    divY = paddings(3) + divHeight * (row - rIndex);
+    axeWidth  = (1 - margins(1) - margins(2)) * divWidth  * nX;
     axeHeight = (1 - margins(3) - margins(4)) * divHeight * nY;
-    axeX = divX + margins(1) * divWidth * nX;
-    axeY = divY + margins(3) * divHeight * nY;
+    borderMin = min([axeWidth, axeHeight]);
+    borderMax = max([axeWidth, axeHeight]);
+
+    FigSize = get(0, "screensize"); % for maximized figure size
+    % FigSize = get(Fig, "OuterPosition"); % for original figure size
+    adjIdx = FigSize(4) / FigSize(3);
+
+    switch shape
+        case 'auto'
+            % default: without adjustment
+        case 'square-min'
+            axeWidth  = borderMin * adjIdx;
+            axeHeight = borderMin;
+        case 'square-max'
+            axeWidth  = borderMax * adjIdx;
+            axeHeight = borderMax;
+        case 'fill'
+            axeWidth  = divWidth  * (1 - margins(1) - margins(2));
+            axeHeight = divHeight * (1 - margins(3) - margins(4));
+        otherwise
+            error('Invalid shape input');
+    end
 
     switch alignment
         case 'bottom-left'
-            mAxe = axes(Fig, "Position", [axeX, axeY - (divHeight - axeHeight), axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth;
+            axeY = divY + margins(3) * divHeight;
         case 'bottom-right'
-            mAxe = axes(Fig, "Position", [axeX + divWidth - axeWidth, axeY - (divHeight - axeHeight), axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
+            axeY = divY + margins(3) * divHeight;
         case 'top-left'
-            mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth;
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
         case 'top-right'
-            mAxe = axes(Fig, "Position", [axeX + divWidth - axeWidth, axeY, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
         case 'center-left'
-            mAxe = axes(Fig, "Position", [axeX, axeY - (divHeight - axeHeight) / 2, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth;
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
         case 'center-right'
-            mAxe = axes(Fig, "Position", [axeX + divWidth - axeWidth, axeY - (divHeight - axeHeight) / 2, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
         case 'top-center'
-            mAxe = axes(Fig, "Position", [axeX + (divWidth - axeWidth) / 2, axeY, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
         case 'bottom-center'
-            mAxe = axes(Fig, "Position", [axeX + (divWidth - axeWidth) / 2, axeY - (divHeight - axeHeight), axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
+            axeY = divY + margins(3) * divHeight;
         case 'center'
-            mAxe = axes(Fig, "Position", [axeX + (divWidth - axeWidth) / 2, axeY - (divHeight - axeHeight) / 2, axeWidth, axeHeight]);
+            axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
+            axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
         otherwise
             error('Invalid alignment input');
+    end
+
+    mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight]);
+
+    if nargout == 1
+        varargout{1} = mAxe;
     end
 
     return;
