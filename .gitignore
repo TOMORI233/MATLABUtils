@@ -5,6 +5,7 @@
 #ignore slprj folder
 */slprj/
 /slprj/
+/MATLAB Add-Ons/
 
 #ignore following files;
 *asv
