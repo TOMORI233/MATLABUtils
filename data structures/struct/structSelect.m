@@ -12,7 +12,7 @@ function sNew = structSelect(s, fieldSel)
     
     structLength = length(s);
     oldCell = table2cell(struct2table(s)); 
-    [m n] = size(oldCell); 
+    [m, n] = size(oldCell); 
     if n == structLength 
         oldCell = oldCell';
     end

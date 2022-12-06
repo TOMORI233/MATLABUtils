@@ -85,7 +85,6 @@ function addLines2Axes(varargin)
             else
                 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
             end
-
         end
 
     end

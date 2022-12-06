@@ -9,7 +9,7 @@ function axisValue = setAxes(FigOrAxes, axisParams, axisValue)
 
     narginchk(2, 3);
 
-    if strcmp(class(FigOrAxes), "matlab.ui.Figure")
+    if strcmp(class(FigOrAxes), "matlab.ui.Figure") || strcmp(class(FigOrAxes), "matlab.graphics.Graphics")
         allAxes = findobj(FigOrAxes, "Type", "axes");
     else
         allAxes = FigOrAxes;
@@ -18,7 +18,7 @@ function axisValue = setAxes(FigOrAxes, axisParams, axisValue)
     if nargin < 3
         axisValue = get(allAxes(1), axisParams);
     end
-
+    
     for aIndex = 1:length(allAxes)
         set(allAxes(aIndex), axisParams, axisValue);
     end

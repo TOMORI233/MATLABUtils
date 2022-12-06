@@ -25,23 +25,23 @@ function [colorOutput, colorGrad] = generateColorGrad(n,method,varargin)
 %     plot([1:10],i+[1:10],'color',res2{i},'linestyle','-','linewidth',3); hold on
 % end
 %% set color pool
-blueGrad = {'#0000FF','#1E90FF','#87CEEB','#4682B4','#6A5ACD','#40E0D0'};
-greenGrad = {'#00FF00','#32CD32','#9ACD32','#228B22','#006400','#556B2F'};
-orangeGrad = {'#FFA500','#FF7F50','#FF6347','#A52A2A','#D2691E','#D2B48C'};
 redGrad = {'#FF0000','#FF69B4','#FF1493','#FFC0CB','#DB7093','#B03060'};
-blackGrad = {'#000000','#222222','#444444','#666666','#888888','#AAAAAA'};
+orangeGrad = {'#FFA500','#FF7F50','#FF6347','#A52A2A','#D2691E','#D2B48C'};
+greenGrad = {'#00FF00','#32CD32','#9ACD32','#228B22','#006400','#556B2F'};
+blueGrad = {'#0000FF','#1E90FF','#87CEEB','#4682B4','#6A5ACD','#40E0D0'};
+blackGrad = {'#000000','#444444','#888888','#AAAAAA','#CCCCCC','#EEEEEE'};
 
-colorBuffer = [blueGrad;greenGrad;orangeGrad;redGrad;blackGrad];
+colorBuffer = [redGrad; orangeGrad; greenGrad ;blueGrad; blackGrad];
 if ~any(strcmp(method,{'rgb','hex'}))
     error('error method input! Please use ''rgb'' or ''hex''');
 end
 
 if strcmp(method,'rgb')
     % convert hex style to rgb style
-    colorBuffer = cellfun(@(x) [hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
+    colorBuffer = cellfun(@(x) roundn([hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, -2), cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
 end
 
-colorGrad = easyStruct({'blueGrad','greenGrad','orangeGrad','redGrad','blackGrad'},colorBuffer');
+colorGrad = easyStruct({'redGrad','orangeGrad','greenGrad','blueGrad','blackGrad'},colorBuffer');
 
 [colorType colorNum] = size(colorBuffer);
 
