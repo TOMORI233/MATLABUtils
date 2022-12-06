@@ -1,7 +1,7 @@
 {
     "_schemaVersion": "1.0.0",
 
-    "reOrganizeFig": {
+    "addLegend2Fig": {
         "inputs": [
             {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
             {"name": "legendStr", "kind": "required", "type": ["string"]},

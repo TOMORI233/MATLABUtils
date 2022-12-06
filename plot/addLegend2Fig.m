@@ -4,7 +4,7 @@ function addLegend2Fig(Fig, legendStr, varargin)
 mInputParser = inputParser;
 mInputParser.addRequired("Fig", @isgraphics);
 mInputParser.addRequired("legendStr",  @isstring);
-mInputParser.addOptional("legendSize", [0.9, 0.02], @(x) validateattributes(x, {'numeric'}, {'2d'}));
+mInputParser.addOptional("legendSize", [0.9, 0.05], @(x) validateattributes(x, {'numeric'}, {'2d'}));
 mInputParser.addOptional("legendPos", "top", @(x) any(validatestring(x, {'left', 'right', 'bottom', 'top'})));
 
 mInputParser.parse(Fig, legendStr, varargin{:});
