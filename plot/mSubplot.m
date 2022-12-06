@@ -70,7 +70,7 @@ function varargout = mSubplot(varargin)
     elseif numel(nSize) == 2
         nY = nSize(2);
     else
-        error('nSize input should be a 2-element double vector');
+        error('nSize input should be a scalar or a 2-element double vector');
     end
 
     % paddings or margins is [Left, Right, Bottom, Top]

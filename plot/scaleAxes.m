@@ -12,7 +12,7 @@ function axisRange = scaleAxes(varargin)
     % Output:
     %     axisRange: axis limits applied
 
-    if nargin > 1 && all(isgraphics(varargin{1}))
+    if nargin > 0 && all(isgraphics(varargin{1}))
         FigsOrAxes = varargin{1};
         varargin = varargin(2:end);
     else
