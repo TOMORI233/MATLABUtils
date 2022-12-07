@@ -69,6 +69,17 @@ function axisRange = scaleAxes(varargin)
         end
 
     end
+    
+    
+    if strcmpi(axisName, "y")
+        XLim = get(allAxes(1), "xlim");
+        temp = getLine(FigsOrAxes, ["XData", "YData"], "LineStyle", "-");
+        if ~isempty(temp)
+            temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
+            axisLimMin = min(cellfun(@min, temp));
+            axisLimMax = max(cellfun(@max, temp));
+        end
+    end
 
     bestRange = [axisLimMin, axisLimMax];
 
