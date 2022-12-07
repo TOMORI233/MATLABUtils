@@ -61,7 +61,15 @@
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -76,7 +84,15 @@
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]}
+                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
                 ]
             ]}
         ]
