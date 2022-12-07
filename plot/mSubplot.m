@@ -39,16 +39,16 @@ function varargout = mSubplot(varargin)
     end
 
     mIp = inputParser;
-    mIp.addRequired("Fig", @isgraphics);
-    mIp.addRequired("row", @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
-    mIp.addRequired("col", @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
+    mIp.addRequired("Fig",   @isgraphics);
+    mIp.addRequired("row",   @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
+    mIp.addRequired("col",   @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
     mIp.addRequired("index", @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
-    mIp.addOptional("nSize0", [], @(x) validateattributes(x, 'numeric', {'vector'}));
-    mIp.addOptional("margins0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
+    mIp.addOptional("nSize0",    [], @(x) validateattributes(x, 'numeric', {'vector'}));
+    mIp.addOptional("margins0",  [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addOptional("paddings0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
     mIp.addParameter("nSize", [1, 1], @(x) validateattributes(x, 'numeric', {'vector'}));
-    mIp.addParameter("margins", [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
+    mIp.addParameter("margins",  [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addParameter("paddings", [0.03, 0.03, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
     mIp.addParameter("shape", "auto", @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
     mIp.addParameter("alignment", 'center', @(x) any(validatestring(x, {'top-left', ...
@@ -70,15 +70,15 @@ function varargout = mSubplot(varargin)
     mIp.addParameter("paddings_top"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
     mIp.parse(Fig, varargin{:})
 
-    Fig = mIp.Results.Fig;
-    row = mIp.Results.row;
-    col = mIp.Results.col;
-    index = mIp.Results.index;
+    Fig       = mIp.Results.Fig      ;
+    row       = mIp.Results.row      ;
+    col       = mIp.Results.col      ;
+    index     = mIp.Results.index    ;
     alignment = mIp.Results.alignment;
-    nSize = getOr(mIp.Results, "nSize0", mIp.Results.nSize, true);
-    margins = getOr(mIp.Results, "margins0", mIp.Results.margins, true);
-    paddings = getOr(mIp.Results, "paddings0", mIp.Results.paddings, true);
-    shape = getOr(mIp.Results, "shape0", mIp.Results.shape, true);
+    nSize     = getOr(mIp.Results, "nSize0",    mIp.Results.nSize,    true);
+    margins   = getOr(mIp.Results, "margins0",  mIp.Results.margins,  true);
+    paddings  = getOr(mIp.Results, "paddings0", mIp.Results.paddings, true);
+    shape     = getOr(mIp.Results, "shape0",    mIp.Results.shape,    true);
     margin_left    = mIp.Results.margin_left    ;
     margin_right   = mIp.Results.margin_right   ;
     margin_bottom  = mIp.Results.margin_bottom  ;
