@@ -1,9 +1,9 @@
 {
     "_schemaVersion": "1.0.0",
 
-    "reOrganizeFig": {
+    "addLegend2Fig": {
         "inputs": [
-            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
             {"name": "legendStr", "kind": "required", "type": ["string"]},
             {"name": "legendSize", "kind": "required", "type": ["numeric", "vector"]},
             {"name": "legendPos", "kind": "required", "type": ["choices = {'left', 'right', 'top', 'bottom'}"]}
@@ -12,7 +12,7 @@
 
     "orderLine": {
         "inputs": [
-            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
             {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
             {"name": "searchValue", "kind": "required"},
             {"name": "order", "kind": "required", "type": ["choices = {'top','bottom'}"]}
@@ -21,28 +21,54 @@
 
     "getLine": {
         "inputs": [
-            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
             {"name": "getParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
             {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
-            {"name": "searchValue", "kind": "required"}  
+            {"name": "searchValue", "kind": "required"}
+        ]
+    },
+
+    "getObjVal": {
+        "inputs": [
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "ObjType", "kind": "required", "type": ["choices = {'line'}"]},
+                    {"name": "getParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
+                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
+                    {"name": "searchValue", "kind": "ordered"}
+                ],
+                [
+                    {"name": "ObjType", "kind": "required", "type": ["choices = {'image'}"]},
+                    {"name": "getParams", "kind": "required", "type": ["choices = {'XData', 'YData', 'CData', 'AlphaData'}"]},
+                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'AlphaData'}"]},
+                    {"name": "searchValue", "kind": "ordered"}
+                ],
+                [
+                    {"name": "ObjType", "kind": "required", "type": ["choices = {'axes'}"]},
+                    {"name": "getParams", "kind": "required", "type": ["choices = {'XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
+                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
+                    {"name": "searchValue", "kind": "ordered"}
+                ]
+            ]}
         ]
     },
 
     "deleteLine": {
         "inputs": [
-            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
             {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
-            {"name": "searchValue", "kind": "required"}  
+            {"name": "searchValue", "kind": "required"}
         ]
     },
 
     "setLine": {
         "inputs": [
-            {"name": "Fig", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+            {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
             {"name": "setParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
             {"name": "setValue", "kind": "required"},
             {"name": "searchParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
-            {"name": "searchValue", "kind": "required"}  
+            {"name": "searchValue", "kind": "required"}
         ]
     },
 
@@ -105,14 +131,16 @@
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
-                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
+                    {"name": "autoScale", "kind": "namevalue", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
-                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
+                    {"name": "autoScale", "kind": "namevalue", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ]
             ]}
         ]
@@ -125,7 +153,7 @@
                     {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) isgraphics(args)"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ]
             ]}

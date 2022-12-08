@@ -25,12 +25,14 @@ function axisRange = scaleAxes(varargin)
     mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
     mIp.addOptional("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
     mIp.addOptional("symOpts", [], @(x) any(validatestring(x, {'min', 'max'})));
+    mIp.addParameter("autoScale", "on", @(x) any(validatestring(x, {'on', 'off'})));
     mIp.parse(FigsOrAxes, varargin{:});
 
     axisName = mIp.Results.axisName;
     axisRange = mIp.Results.axisRange;
     cutoffRange = mIp.Results.cutoffRange;
     symOpts = mIp.Results.symOpts;
+    autoScale = mIp.Results.autoScale;
 
     if strcmpi(axisName, "x")
         axisLimStr = "xlim";
@@ -66,6 +68,31 @@ function axisRange = scaleAxes(varargin)
             axisLimMax = axisLim(2);
         end
 
+    end
+    
+    
+    if strcmpi(axisName, "y") && strcmpi(autoScale, "on")
+        XLim = get(allAxes(1), "xlim");
+        temp = getObjVal(FigsOrAxes, "line", ["XData", "YData"], "LineStyle", "-");
+        if ~isempty(temp)
+            temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
+            axisLim = [min(cellfun(@min, temp)), max(cellfun(@max, temp))];
+            axisLimMin = axisLim(1) - diff(axisLim) * 0.05;
+            axisLimMax = axisLim(2) + diff(axisLim) * 0.05;
+        end
+    end
+
+
+    if strcmpi(axisName, "c") && strcmpi(autoScale, "on")
+        XLim = get(allAxes(1), "xlim");
+        temp = getObjVal(FigsOrAxes, "image", ["XData", "CData"]);
+        if ~isempty(temp)
+            temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
+            [f,xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
+            f = mapminmax(f, 0, 1);
+            axisLimMin = xi(find(f >= 0.05, 1));
+            axisLimMax = xi(find(f >= 0.95, 1));
+        end
     end
 
     bestRange = [axisLimMin, axisLimMax];
