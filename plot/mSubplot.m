@@ -31,7 +31,7 @@ function varargout = mSubplot(varargin)
     % Output:
     %     mAxe: subplot axes object
 
-    if strcmp(class(varargin{1}), "matlab.ui.Figure") || strcmp(class(varargin{1}), "matlab.graphics.Graphics")
+    if strcmp(class(varargin{1}), "matlab.ui.Figure")
         Fig = varargin{1};
         varargin = varargin(2:end);
     else

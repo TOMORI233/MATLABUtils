@@ -9,6 +9,9 @@ function axisRange = scaleAxes(varargin)
     %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
     %                  replaced by cutoffRange.
     %     symOpts: symmetrical option - "min" or "max"
+    %     autoScale: best range option, "on"(default) or "off"
+    %                - "on": best range will be [0.05,0.95] of [Y] or [C] values of all subplots in current [XLim]
+    %                - "off": best range will be [min,max] of [axisName] values of all subplots
     % Output:
     %     axisRange: axis limits applied
 
@@ -46,7 +49,7 @@ function axisRange = scaleAxes(varargin)
         error("Wrong axis name input");
     end
 
-    if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
+    if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics") || strcmp(class(FigsOrAxes), "matlab.graphics.GraphicsPlaceholder")
         allAxes = findobj(FigsOrAxes, "Type", "axes");
     else
         allAxes = FigsOrAxes;
@@ -69,7 +72,6 @@ function axisRange = scaleAxes(varargin)
         end
 
     end
-    
     
     if strcmpi(axisName, "y") && strcmpi(autoScale, "on")
         XLim = get(allAxes(1), "xlim");

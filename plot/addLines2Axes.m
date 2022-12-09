@@ -1,5 +1,4 @@
 function addLines2Axes(varargin)
-% function addLines2Axes(FigsOrAxes, lines)
     % Description: add lines to all subplots in figures
     % Input:
     %     FigsOrAxes: figure object array or axes object array

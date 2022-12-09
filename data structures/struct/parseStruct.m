@@ -6,5 +6,5 @@ end
 sField = fields(S);
 for fIndex = 1 : length(sField)
     % add local var to base workspace
-    eval(['assignin(''base'', ''', sField{fIndex}, ''', vertcat(S(sIndex).', sField{fIndex}, '));']);
+    eval(['assignin(''caller'', ''', sField{fIndex}, ''', vertcat(S(sIndex).', sField{fIndex}, '));']);
 end
