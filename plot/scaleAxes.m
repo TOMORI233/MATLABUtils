@@ -92,8 +92,8 @@ function axisRange = scaleAxes(varargin)
             temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
             [f,xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
             f = mapminmax(f, 0, 1);
-            axisLimMin = xi(find(f >= 0.05, 1));
-            axisLimMax = xi(find(f >= 0.95, 1));
+            axisLimMin = xi(find(f >= 0.02, 1));
+            axisLimMax = xi(find(f >= 0.98, 1));
         end
     end
 
