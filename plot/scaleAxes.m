@@ -1,19 +1,18 @@
 function axisRange = scaleAxes(varargin)
-    % Description: apply the same scale settings to all subplots in figures
+    % Description: apply the same scale settings to all subplots in figures.
     % Input:
-    %     FigsOrAxes: figure object array or axis object array
-    %     axisName: axis name - "x", "y", "z" or "c"
-    %     axisRange: axis limits, specified as a two-element vector. If
-    %                given value -Inf or Inf, or left empty, the best range
-    %                will be used.
-    %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
-    %                  replaced by cutoffRange.
-    %     symOpts: symmetrical option - "min" or "max"
-    %     autoScale: best range option, "on"(default) or "off"
-    %                - "on": best range will be [0.05,0.95] of [Y] or [C] values of all subplots in current [XLim]
-    %                - "off": best range will be [min,max] of [axisName] values of all subplots
+    %     FigsOrAxes: figure object array or axes object array.
+    %     axisName: axis name - "x", "y", "z" or "c".
+    %     axisRange: axis limits, specified as a two-element vector. If given value -Inf or Inf,
+    %                or left empty, the best range will be used.
+    %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be replaced by cutoffRange.
+    %     symOpts: symmetrical option - "min" or "max".
+    %     autoScale: best range option, "on" or "off"(default)
+    %                - "on": best range will be [0.05,0.95] of [Y] or [0.02,0.98] of [C] values
+    %                        of all subplots in current [XLim].
+    %                - "off": best range will be [min,max] of [axisName] values of all subplots.
     % Output:
-    %     axisRange: axis limits applied
+    %     axisRange: axis limits applied.
 
     if nargin > 0 && all(isgraphics(varargin{1}))
         FigsOrAxes = varargin{1};
@@ -28,7 +27,7 @@ function axisRange = scaleAxes(varargin)
     mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
     mIp.addOptional("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
     mIp.addOptional("symOpts", [], @(x) any(validatestring(x, {'min', 'max'})));
-    mIp.addParameter("autoScale", "on", @(x) any(validatestring(x, {'on', 'off'})));
+    mIp.addParameter("autoScale", "off", @(x) any(validatestring(x, {'on', 'off'})));
     mIp.parse(FigsOrAxes, varargin{:});
 
     axisName = mIp.Results.axisName;
@@ -84,13 +83,12 @@ function axisRange = scaleAxes(varargin)
         end
     end
 
-
     if strcmpi(axisName, "c") && strcmpi(autoScale, "on")
         XLim = get(allAxes(1), "xlim");
         temp = getObjVal(FigsOrAxes, "image", ["XData", "CData"]);
         if ~isempty(temp)
             temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
-            [f,xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
+            [f, xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
             f = mapminmax(f, 0, 1);
             axisLimMin = xi(find(f >= 0.02, 1));
             axisLimMax = xi(find(f >= 0.98, 1));
