@@ -1,7 +1,5 @@
 function x = replaceVal(x, val)
-
-if isempty(x) || isnan(x) || isinf(x)
+    
+if isempty(x)
     x = val;
 end
-
-return;

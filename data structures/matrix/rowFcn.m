@@ -12,7 +12,7 @@ function varargout = rowFcn(fcn, A, varargin)
 
     %% Validation
     mIp = inputParser;
-    mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'numel', 1}));
+    mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
     mIp.addRequired("A", @(x) validateattributes(x, {'numeric', 'string', 'char', 'cell'}, {'2d'}));
     bIdx = find(cellfun(@isnumeric, varargin));
 

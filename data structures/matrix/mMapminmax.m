@@ -1,11 +1,14 @@
-function res = mMapminmax(data, yAbs)
-    narginchk(1, 2);
+function res = mMapminmax(data, ymax)
+% Map data to [-ymax, ymax] with zero point unshifted
+% e.g.
+% data = [-2, -1, 0, 1, 2, 3, 4];
+% res = mMapminmax(data, 1);
+% >> res = [-0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]
 
-    if nargin < 2
-        yAbs = 1;
-    end
+narginchk(1, 2);
 
-    [row, col] = size(data);
-    res = mapminmax(reshape(abs(data), [1, numel(data)]), 0, yAbs);
-    res = reshape(res, [row, col]) .* (-1 * (data < 0) + 1 * (data > 0));
+if nargin < 2
+    ymax = 1;
 end
+
+res = data / max(abs(data), [], "all") * ymax;

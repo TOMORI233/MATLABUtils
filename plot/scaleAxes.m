@@ -3,6 +3,7 @@ function axisRange = scaleAxes(varargin)
 % Input:
 %     FigsOrAxes: figure object array or axis object array
 %     axisName: axis name - "x", "y", "z" or "c"
+%     autoScale: "on" or "off"
 %     axisRange: axis limits, specified as a two-element vector. If
 %                given value -Inf or Inf, or left empty, the best range
 %                will be used.
@@ -72,7 +73,6 @@ for aIndex = 2:length(allAxes)
     if axisLim(1) < axisLimMin
         axisLimMin = axisLim(1);
     end
-
     if axisLim(2) > axisLimMax
         axisLimMax = axisLim(2);
     end
@@ -96,7 +96,7 @@ if  strcmpi(autoScale, "on")
         temp = getObjVal(FigsOrAxes, "image", ["XData", "CData"]);
         if ~isempty(temp)
             temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
-            [f,xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
+            [f, xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
             f = mapminmax(f, 0, 1);
             axisLimMin = xi(find(f >= 0.02, 1));
             axisLimMax = xi(find(f >= 0.98, 1));

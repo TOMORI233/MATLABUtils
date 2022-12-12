@@ -18,7 +18,7 @@ function v = validateInput(prompt, varargin)
     mIp = inputParser;
     mIp.addRequired("prompt", @(x) ischar(x) || isstring(x));
     mIp.addOptional("arg2", [], @(x) isa(x, 'function_handle') || any(validatestring(x, {'s'})));
-    mIp.addOptional("sInput", [], @(x) validatestring(x, {'s'}));
+    mIp.addOptional("sInput", [], @(x) any(validatestring(x, {'s'})));
     mIp.parse(prompt, varargin{:});
 
     arg2 = mIp.Results.arg2;
