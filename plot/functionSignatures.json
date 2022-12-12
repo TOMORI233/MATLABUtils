@@ -34,20 +34,26 @@
             {"mutuallyExclusiveGroup": [
                 [
                     {"name": "ObjType", "kind": "required", "type": ["choices = {'line'}"]},
-                    {"name": "getParams", "kind": "required", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"]},
+                    {"name": "getParams", "kind": "ordered", "type": [["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName', 'XData', 'YData', 'ZData'}"], ["@(args) isempty(args)"]]},
                     {"name": "searchParams", "kind": "ordered", "type": ["choices = {'Color', 'LineStyle', 'LineWidth', 'DisplayName'}"]},
                     {"name": "searchValue", "kind": "ordered"}
                 ],
                 [
                     {"name": "ObjType", "kind": "required", "type": ["choices = {'image'}"]},
-                    {"name": "getParams", "kind": "required", "type": ["choices = {'XData', 'YData', 'CData', 'AlphaData'}"]},
+                    {"name": "getParams", "kind": "ordered", "type": [["choices = {'XData', 'YData', 'CData', 'AlphaData'}"], ["@(args) isempty(args)"]]},
                     {"name": "searchParams", "kind": "ordered", "type": ["choices = {'AlphaData'}"]},
                     {"name": "searchValue", "kind": "ordered"}
                 ],
                 [
                     {"name": "ObjType", "kind": "required", "type": ["choices = {'axes'}"]},
-                    {"name": "getParams", "kind": "required", "type": ["choices = {'XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
-                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
+                    {"name": "getParams", "kind": "ordered", "type": [["choices = {'Tag', 'XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"], ["@(args) isempty(args)"]]},
+                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'Tag','XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
+                    {"name": "searchValue", "kind": "ordered"}
+                ],
+                [
+                    {"name": "ObjType", "kind": "required", "type": ["choices = {'figure', 'FigOrAxes'}"]},
+                    {"name": "getParams", "kind": "ordered", "type": [["choices = {'Tag', 'Children', 'Position'}"], ["@(args) isempty(args)"]]},
+                    {"name": "searchParams", "kind": "ordered", "type": ["choices = {'Tag','XLim', 'YLim', 'Title', 'Position', 'XTickLabel', 'XTick', 'YTickLabel', 'YTick', 'XScale', 'YScale'}"]},
                     {"name": "searchValue", "kind": "ordered"}
                 ]
             ]}
@@ -129,18 +135,18 @@
             {"mutuallyExclusiveGroup": [
                 [
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
+                    {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"},
                     {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
-                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
-                    {"name": "autoScale", "kind": "namevalue", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
                 ],
                 [
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
                     {"name": "cutoffRange", "kind": "ordered", "type": ["numeric"]},
-                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
-                    {"name": "autoScale", "kind": "namevalue", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
+                    {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"}
                 ]
             ]}
         ]

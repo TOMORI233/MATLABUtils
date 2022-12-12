@@ -2,8 +2,8 @@ function addLegend2Fig(Fig, legendStr, varargin)
 
 %% Validate input
 mInputParser = inputParser;
-mInputParser.addRequired("Fig", @isgraphics);
-mInputParser.addRequired("legendStr",  @isstring);
+mInputParser.addRequired("Fig", @(x) all(isgraphics(x)));
+mInputParser.addRequired("legendStr",  @(x) all(isstring(x)));
 mInputParser.addOptional("legendSize", [0.9, 0.05], @(x) validateattributes(x, {'numeric'}, {'2d'}));
 mInputParser.addOptional("legendPos", "top", @(x) any(validatestring(x, {'left', 'right', 'bottom', 'top'})));
 
@@ -14,8 +14,8 @@ legendPos = mInputParser.Results.legendPos;
 orderLine(Fig, "LineStyle", "--", "bottom");
 
 for fIndex = 1 : length(Fig)
-    Fig.Units = "normalized";
-    Axes = findobj(Fig, "Type", "axes");
+    Fig(fIndex).Units = "normalized";
+    Axes = findobj(Fig(fIndex), "Type", "axes");
     axesPos = cell2mat({Axes.Position}');
     temp = diff(unique(axesPos(:, 2)));
     Axes_and_Margin_X = temp(1);
