@@ -3,7 +3,7 @@ function ft_setPath2Top
 try
     % find existing FieldTrip paths
     startupPath = which("startup", "-all");
-    mPath = regexp(string(startupPath), '.*FieldTrip', 'match');
+    mPath = regexp(startupPath, '.*FieldTrip', 'match');
     mPath = string(mPath{~cellfun(@isempty, mPath)});
     temp = dir(strcat(mPath, "\**\*"));
     mfolders = string({temp([temp.isdir]').folder}');
