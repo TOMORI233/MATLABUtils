@@ -113,24 +113,23 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
+                    {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
+                ],
+                [
                     {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ],
                 [
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
-                    {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
-                    {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
-                ],
-                [
-                    {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
-                    {"name": "axisRange", "kind": "ordered", "type": ["numeric"]}
+                    {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
                 ],
                 [
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
-                    {"name": "axisRange", "kind": "ordered", "type": ["numeric"]}
+                    {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ]
             ]},
+            {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
             {"name": "cutoffRange", "kind": "ordered", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
             {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},

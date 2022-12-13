@@ -1,4 +1,11 @@
 function axisRange = scaleAxes(varargin)
+    % scaleAxes(axisName, axisRange)
+    % scaleAxes(axisName, axisRange, cutoffRange)
+    % scaleAxes(axisName, axisRange, cutoffRange, symOpts)
+    % scaleAxes(axisName, autoScale, axisRange, ...)
+    % scaleAxes(..., "cutoffRange", cutoffRange, "symOpts", symOpts)
+    % scaleAxes(FigsOrAxes, ...)
+    %
     % Description: apply the same scale settings to all subplots in figures
     % Input:
     %     FigsOrAxes: figure object array or axis object array
