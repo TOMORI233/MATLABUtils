@@ -111,8 +111,14 @@ function axisRange = scaleAxes(varargin)
 
             if ~isempty(temp)
                 temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
-                [f, xi] = ksdensity(temp, linspace(min(temp), max(temp), 200), 'Function', 'cdf', 'BoundaryCorrection', 'reflection');
-                f = mapminmax(f, 0, 1);
+                maxBinCount = length(temp) / 100;
+                binCount = [inf, inf];
+                binN = 10;
+                while any(binCount> maxBinCount)
+                    binN = binN * 10;
+                    [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
+                end
+                f = mapminmax(cumsum(binCount), 0, 1);
                 axisLimMin = xi(find(f >= 0.02, 1));
                 axisLimMax = xi(find(f >= 0.98, 1));
             end
