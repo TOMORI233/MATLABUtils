@@ -112,8 +112,8 @@ function axisRange = scaleAxes(varargin)
                     [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
                 end
                 f = mapminmax(cumsum(binCount), 0, 1);
-                axisLimMin = xi(find(f >= 0.02, 1));
-                axisLimMax = xi(find(f >= 0.98, 1));
+                axisLimMin = xi(find(f >= 0.01, 1));
+                axisLimMax = xi(find(f >= 0.99, 1));
             end
 
         end
@@ -170,7 +170,7 @@ function axisRange = scaleAxes(varargin)
         if length(unique(axisRange)) > 1
             set(allAxes(aIndex), axisLimStr, axisRange);
         else
-            set(allAxes(aIndex), axisLimStr, [-1, 1] * min(abs(axisLim)));
+            set(allAxes(aIndex), axisLimStr, [-1, 1] * max(abs(axisLim)));
         end
 
     end

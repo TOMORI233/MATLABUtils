@@ -44,7 +44,7 @@ end
 
 
 if isempty(tIndex)
-    disp("no satisfactory objects finded!")
+%     disp("no satisfactory objects finded!")
     varargout{1} = [];
     varargout{2} = [];
     return
