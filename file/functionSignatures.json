@@ -1,0 +1,22 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "mSave": {
+        "inputs": [
+            {"name": "FILENAME", "kind": "required", "type": ["string"]},
+            {"name": "variable", "kind": "required", "type": ["@(x) ~contains(x, '-')"], "repeating": true},
+            {"name": "option", "kind": "ordered", "type": ["@(x) contains(x, '-')"], "repeating": true}
+        ],
+        "description": "已存在则不保存"
+    },
+
+    "mPrint": {
+        "inputs": [
+            {"name": "target", "kind": "required", "type": ["@(x) isgraphics(x)"]},
+            {"name": "FILENAME", "kind": "required", "type": ["string"]},
+            {"name": "formattype", "kind": "ordered", "type": ["choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"]},
+            {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
+        ],
+        "description": "已存在则不保存"
+    }
+}
