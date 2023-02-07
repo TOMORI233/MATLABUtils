@@ -7,7 +7,7 @@ function mSave(FILENAME, varargin)
     end
 
     for index = 1:nVars
-        res = evalin("base", varargin{index});
+        res = evalin("caller", varargin{index});
         eval(strcat(varargin{index}, "=res;"));
     end
 
