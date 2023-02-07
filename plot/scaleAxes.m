@@ -120,8 +120,8 @@ if strcmpi(autoScale, "on")
                 [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
             end
             f = mapminmax(cumsum(binCount), 0, 1);
-            axisLimMin = xi(find(f >= 0.02, 1));
-            axisLimMax = xi(find(f >= 0.98, 1));
+            axisLimMin = xi(find(f >= 0.01, 1));
+            axisLimMax = xi(find(f >= 0.99, 1));
         end
 
     end
