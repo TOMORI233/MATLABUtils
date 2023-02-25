@@ -47,12 +47,14 @@ mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d',
 mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'min', 'max'})));
 mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addParameter("symOpts", [], @(x) any(validatestring(x, {'min', 'max'})));
+mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
 axisRange = mIp.Results.axisRange;
 cutoffRange = getOr(mIp.Results, "cutoffRange0", mIp.Results.cutoffRange, true);
 symOpts = getOr(mIp.Results, "symOpts0", mIp.Results.symOpts, true);
+type = mIp.Results.type;
 
 if strcmpi(axisName, "x")
     axisLimStr = "xlim";
@@ -95,13 +97,28 @@ if strcmpi(autoScale, "on")
 
     if strcmpi(axisName, "y")
         XLim = get(allAxes(1), "xlim");
-        temp = getObjVal(FigsOrAxes, "line", ["XData", "YData"], "LineStyle", "-");
 
-        if ~isempty(temp)
-            temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
-            limTemp = [min(cellfun(@min, temp)), max(cellfun(@max, temp))];
-            axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
-            axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
+        if strcmpi(type, 'line')
+            temp = getObjVal(FigsOrAxes, "line", ["XData", "YData"], "LineStyle", "-");
+            if ~isempty(temp)
+                temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
+                limTemp = [min(cellfun(@min, temp)), max(cellfun(@max, temp))];
+                axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
+                axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
+            end
+        else % Histogram
+            temp = getObjVal(FigsOrAxes, "Histogram", ["BinEdges", "Values"]);
+            if ~isempty(temp)
+                [temp.XData] = temp.BinEdges;
+                [temp.YData] = temp.Values;
+                temp = rmfield(temp, ["BinEdges", "Values"]);
+                XData = arrayfun(@(x) x.XData(1:end - 1), temp, "UniformOutput", false);
+                [temp.XData] = XData{:};
+                temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2))', {temp.XData}', {temp.YData}', "UniformOutput", false);
+                limTemp = [min(cell2mat(temp)), max(cell2mat(temp))];
+                axisLimMin = max([limTemp(1) - diff(limTemp) * 0.05, 0]);
+                axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
+            end
         end
 
     end
@@ -117,6 +134,10 @@ if strcmpi(autoScale, "on")
             binN = 10;
             while any(binCount > maxBinCount)
                 binN = binN * 10;
+                if binN >= 1e6
+                    [binCount, xi] = ksdensity(temp, linspace(min(temp), max(temp), binN));
+                    break;
+                end
                 [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
             end
             f = mapminmax(cumsum(binCount), 0, 1);

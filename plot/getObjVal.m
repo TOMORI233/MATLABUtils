@@ -1,16 +1,16 @@
 function varargout = getObjVal(FigsOrAxes, ObjType, varargin)
-    
-    mIp = inputParser;
-    mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
-    mIp.addRequired("ObjType", @(x) any(validatestring(x, {'line', 'image', 'axes', 'figure', 'FigOrAxes'})));
-    mIp.addOptional("getParams", [], @(x) any(isempty(x) | all(isstring(x))));
-    mIp.addOptional("searchParams", [], @(x) isstring(x));
-    mIp.addOptional("searchValue", [], @(x) any(isnumeric(x)|isstring(x)));
-    mIp.parse(FigsOrAxes, ObjType, varargin{:});
-    
-    getParams = mIp.Results.getParams;
-    searchParams = mIp.Results.searchParams;
-    searchValue = mIp.Results.searchValue;
+
+mIp = inputParser;
+mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
+mIp.addRequired("ObjType", @(x) any(validatestring(x, {'line', 'image', 'axes', 'figure', 'FigOrAxes', 'Histogram'})));
+mIp.addOptional("getParams", [], @(x) any(isempty(x) | all(isstring(x))));
+mIp.addOptional("searchParams", [], @(x) isstring(x));
+mIp.addOptional("searchValue", [], @(x) any(isnumeric(x)|isstring(x)));
+mIp.parse(FigsOrAxes, ObjType, varargin{:});
+
+getParams = mIp.Results.getParams;
+searchParams = mIp.Results.searchParams;
+searchValue = mIp.Results.searchValue;
 
 if ~isequal(ObjType, "FigOrAxes")
     Obj = findobj(FigsOrAxes, "type", ObjType);
@@ -44,7 +44,7 @@ end
 
 
 if isempty(tIndex)
-%     disp("no satisfactory objects finded!")
+    %     disp("no satisfactory objects finded!")
     varargout{1} = [];
     varargout{2} = [];
     return
