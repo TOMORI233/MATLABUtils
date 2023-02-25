@@ -7,7 +7,7 @@ function [A, f, Aoi] = mfft(X, fs, varargin)
     %     dim: which dimension of data to perform fft along.
     %          dim=1 for data of [nSample, nCh].
     %          dim=2 for data of [nCh, nSample](default).
-    %          If X is a vector, dim input does not work.
+    %          If [X] is a vector, [dim] input does not work.
     %     foi: frequency range of interest, one- or two-element vector
     % Output:
     %     A: single-sided amplitude spectrum

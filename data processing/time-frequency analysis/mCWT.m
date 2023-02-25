@@ -1,8 +1,8 @@
-function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
+function [t, f, CData, coi] = mCWT(data, fs, cwtMethod, fsD, freqLimits)
     % Description: downsampling and apply cwt to data
     % Input:
     %     data: 1*n double vector
-    %     fs0: sample rate of data, in Hz
+    %     fs: raw sample rate of data, in Hz
     %     cwtMethod: 'morse', 'morlet', 'bump' or 'STFT'
     %     fsD: downsample rate, in Hz
     %     freqLimits: frequency range of cwt (restrict f)
@@ -13,7 +13,7 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
     %     coi: cone of influence along t
     % Example:
     %     % Plot color map and coi of cwt
-    %     [T, F, CData, coi] = mCWT(data, fs0, 'morlet', fs, [0, 256]);
+    %     [T, F, CData, coi] = mCWT(data, fs, 'morlet', fs, [0, 256]);
     %     figure;
     %     imagesc('XData', T * 1000, 'YData', F, 'CData', CData);
     %     colormap("jet");
@@ -38,11 +38,11 @@ function [t, f, CData, coi] = mCWT(data, fs0, cwtMethod, fsD, freqLimits)
         freqLimits = [0, 256];
     end
 
-    if ~isempty(fsD)
-        [P, Q] = rat(fsD / fs0);
+    if ~isempty(fsD) && fsD ~= fs
+        [P, Q] = rat(fsD / fs);
         dataResample = resample(data, P, Q);
     else
-        fsD = fs0;
+        fsD = fs;
         dataResample = data;
     end
 

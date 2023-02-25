@@ -1,5 +1,4 @@
 function WaveExport2smrx(matPath, ch, savePath)
-
     narginchk(2, 3);
 
     [folderPath, matName, ~] = fileparts(matPath);
