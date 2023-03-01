@@ -1,9 +1,9 @@
-function mKilosort(binFullPath, ops, savePath)
+function mKilosort(binFullPath, ops, SAVEPATH)
     % Description: Run kilosort with code
     % Input:
-    %    - dataPath: full path of *.bin
+    %    - binFullPath: full path of *.bin
     %    - ops: parameters for kilosort
-    %    - savePath: output folder path
+    %    - SAVEPATH: output folder path
     % Example:
     %     Th = [10, 6]; % specify Th
     %     run('.\config\configFileRat.m'); % this returns ops
@@ -13,7 +13,7 @@ function mKilosort(binFullPath, ops, savePath)
     narginchk(2, 3);
 
     if nargin < 3
-        savePath = fileparts(binFullPath);
+        SAVEPATH = fileparts(binFullPath);
     end
 
     ops.fproc = fullfile(fileparts(binFullPath), 'temp_wh.dat'); % proc file on a fast SSD
@@ -33,9 +33,9 @@ function mKilosort(binFullPath, ops, savePath)
 
     rez = find_merges(rez, 1);
 
-    mkdir(savePath)
-    rezToPhy2(rez, savePath);
+    mkdir(SAVEPATH)
+    rezToPhy2(rez, SAVEPATH);
 
-    % cd(savePath);
+    % cd(SAVEPATH);
     % system('phy template-gui params.py');
 end
