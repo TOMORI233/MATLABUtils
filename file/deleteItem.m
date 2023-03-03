@@ -7,18 +7,29 @@ if nargin > 1
     keyword = string(keyword);
     temp = dir(strcat(rootPath, "\**\*"));
     mPath = fullfile(string({temp.folder}'), string({temp.name}'));
+    temp(contains(mPath, ["\.", "\.."]))=[];
+    mPath(contains(mPath, ["\.", "\.."]))=[];
     dirIndex = ~cellfun(@isempty, regexp(mPath, keyword)) & vertcat(temp.isdir);
     fileIndex =  ~cellfun(@isempty, regexp(mPath, keyword)) & ~vertcat(temp.isdir);
 else
     mPath = rootPath;
+    mPath(contains(mPath, ["\.", "\.."]))=[];
     dirIndex = logical(exist(mPath, "dir"));
     fileIndex = logical(exist(mPath, "file"));
 end
 
 % delete folders
 if any(dirIndex)
+
     rmPath = cellstr(mPath(dirIndex));
-    rmdir(rmPath{:}, 's');
+%     n=10;
+%     for dIndex = 1 : floor(length(rmPath)/n)
+%         temp = rmPath((dIndex-1)*n+1:dIndex*n);
+%         rmdir(temp{:}, 's');
+%     end
+%     temp = rmPath(dIndex*n+1:end);
+%     rmdir(rmPath{:}, 's');
+    cellfun(@(x) rmdir(x,"s"), rmPath, "UniformOutput", false);
 end
 
 % delete files

@@ -91,7 +91,7 @@ function axisRange = scaleAxes(varargin)
 
             if ~isempty(temp)
                 temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
-                limTemp = [min(cellfun(@min, temp)), max(cellfun(@max, temp))];
+                limTemp = [min(cell2mat(cellfun(@min, temp, "uni", false))), max(cell2mat(cellfun(@max, temp, "uni", false)))];
                 axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
                 axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
             end
