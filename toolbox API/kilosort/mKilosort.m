@@ -5,10 +5,10 @@ function mKilosort(binFullPath, ops, savePath)
     %    - ops: parameters for kilosort
     %    - savePath: output folder path
     % Example:
-    % Th = [10, 6]; % specify Th
-    % run('.\config\configFileRat.m'); % this returns ops
-    % ops.Th = Th;
-    % mKilosort(pwd, ops);
+    %     Th = [10, 6]; % specify Th
+    %     run('.\config\configFileRat.m'); % this returns ops
+    %     ops.Th = Th;
+    %     mKilosort(pwd, ops);
 
     narginchk(2, 3);
 

@@ -1,0 +1,12 @@
+{
+    "_schemaVersion": "1.0.0",
+    "obtainArgoutN": {
+        "inputs": [
+            {"name": "fcn", "kind": "required", "type": ["function_handle"], "description": "函数句柄"},
+            {"name": "Ns", "kind": "required", "type": ["vector", "integer", "positive"], "description": "返回fcn的第[n1,n2,...,nN]个输出"},
+            {"name": "arg", "kind": "ordered", "repeating": true, "description": "fcn的参数"}
+        ],
+        "description": "获取指定序数的函数输出"
+    }
+
+}

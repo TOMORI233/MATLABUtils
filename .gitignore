@@ -5,12 +5,12 @@
 #ignore slprj folder
 */slprj/
 /slprj/
-/MATLAB Add-Ons/
+**/MATLAB Add-Ons/
 
 #ignore following files;
-*asv
-*slxc
-*mexmaci64
-*mexmaci32
-*mexw32
-*mexw64
+*.asv
+*.slxc
+*.mexmaci64
+*.mexmaci32
+*.mexw32
+*.mexw64
