@@ -18,6 +18,7 @@ function axisRange = scaleAxes(varargin)
 %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
 %                  replaced by cutoffRange.
 %     symOpts: symmetrical option - "min" or "max"
+%     type: "line" or "hist"
 % Output:
 %     axisRange: axis limits applied
 
@@ -46,7 +47,7 @@ mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'i
 mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'min', 'max'})));
 mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
-mIp.addParameter("symOpts", [], @(x) any(validatestring(x, {'min', 'max'})));
+mIp.addParameter("symOpts", [], @(x) any(validatestring(x, {'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
 mIp.parse(FigsOrAxes, varargin{:});
 
@@ -186,11 +187,20 @@ if ~isempty(symOpts)
             temp = min(abs(axisRange));
         case "max"
             temp = max(abs(axisRange));
+        case "positive"
+            temp = abs(max(axisRange(axisRange > 0)));
+        case "negative"
+            temp = abs(min(axisRange(axisRange < 0)));
         otherwise
             error("Invalid symmetrical option input");
     end
 
-    axisRange = [-temp, temp];
+    if ~isempty(temp)
+        axisRange = [-temp, temp];
+    else
+        error("Axis range are all positive or negative");
+    end
+
 end
 
 %% Set axis range
