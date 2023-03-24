@@ -136,7 +136,7 @@ if strcmpi(autoScale, "on")
             while any(binCount > maxBinCount)
                 binN = binN * 10;
                 if binN >= 1e6
-                    [binCount, xi] = ksdensity(temp, linspace(min(temp), max(temp), binN));
+                    [binCount, xi] = ksdensity(temp, linspace(min(temp), max(temp), 1e4));
                     break;
                 end
                 [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
