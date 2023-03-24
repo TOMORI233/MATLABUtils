@@ -7,7 +7,7 @@ function [peakIdx, troughIdx] = findPeakTrough(data, varargin)
     %     peakIdx/troughIdx: logical [nCh, nSample]
 
     mIp = inputParser;
-    mIp.addRequired("data", @(x) validateattributes(x, 'numeric', '2d'));
+    mIp.addRequired("data", @(x) validateattributes(x, {'numeric'}, {'2d'}));
     mIp.addOptional("dim", 2, @(x) ismember(x, [1, 2]));
     mIp.parse(data, varargin{:});
     
