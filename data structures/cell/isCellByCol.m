@@ -8,7 +8,7 @@ function trueOrFalse = isCellByCol(data)
         if length(unique(temp)) == 1
             trueOrFalse = true;
         else
-            uniqueClass = cellfun(@unique, array2VectorCell(temp), 'UniformOutput', false);
+            uniqueClass = cellfun(@unique, num2cell(temp, 2), 'UniformOutput', false);
             trueOrFalse = all(cellfun(@length, uniqueClass) == 1);
         end
     end

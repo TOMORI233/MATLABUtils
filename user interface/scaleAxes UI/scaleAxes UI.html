@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scaleAxes UI</title>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-slider.min.css">
+
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap-slider.min.js"></script>
+</head>
+
+<body>
+    <div class="container p-5">
+        <input type="text" id="axesRangeSelector">
+    </div>
+
+    <script type="text/javascript">
+        function setup(htmlComponent) {
+            var data = htmlComponent.Data;
+            data.step = (data.max - data.min) / 100;
+
+            var mySlider = $("#axesRangeSelector").bootstrapSlider({
+                id: "mySlider",
+                range: true,
+                step: data.step,
+                min: data.min,
+                max: data.max,
+                ticks: data.ticks,
+                ticks_snap_bounds: 3 * data.step,
+                value: data.currentRange,
+                tooltip: "hide"
+            }).on("slideStop", function () {
+                data.currentRange = mySlider.bootstrapSlider('getValue');
+                htmlComponent.Data = data;
+            });
+
+            htmlComponent.addEventListener("DataChanged", function (event) {
+                let changedData = htmlComponent.Data;
+                changedData.step = (changedData.max - changedData.min) / 100;
+
+                mySlider.bootstrapSlider({
+                    step: changedData.step,
+                    min: changedData.min,
+                    max: changedData.max,
+                    ticks_snap_bounds: 3 * changedData.step,
+                    value: changedData.currentRange
+                }).refresh();
+            });
+        }
+    </script>
+
+</body>
+
+<style>
+    #mySlider .slider-selection {
+        background: #46d7ff;
+    }
+
+    #mySlider .slider-handle {
+        background: #009FFF;
+    }
+
+    #myslider .slider-tick {
+        background: #46d7ff;
+    }
+</style>
+
+</html>

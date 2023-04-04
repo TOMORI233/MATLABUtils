@@ -1,9 +1,10 @@
 function axisRange = scaleAxes(varargin)
+% scaleAxes(axisName)
 % scaleAxes(axisName, axisRange)
 % scaleAxes(axisName, axisRange, cutoffRange)
-% scaleAxes(axisName, axisRange, cutoffRange, symOpts)
+% scaleAxes(axisName, axisRange, cutoffRange, symOpt)
 % scaleAxes(axisName, autoScale, axisRange, ...)
-% scaleAxes(..., "cutoffRange", cutoffRange, "symOpts", symOpts)
+% scaleAxes(..., namevalueOptions)
 % scaleAxes(FigsOrAxes, ...)
 % axisRange = scaleAxes(...)
 %
@@ -17,8 +18,9 @@ function axisRange = scaleAxes(varargin)
 %                will be used.
 %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
 %                  replaced by cutoffRange.
-%     symOpts: symmetrical option - "min" or "max"
-%     type: "line" or "hist"
+%     symOpt: symmetrical option - "min" or "max"
+%     type: "line" or "hist" for y scaling (default="line")
+%     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
 % Output:
 %     axisRange: axis limits applied
 
@@ -47,15 +49,17 @@ mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'i
 mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'min', 'max'})));
 mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
-mIp.addParameter("symOpts", [], @(x) any(validatestring(x, {'min', 'max', 'positive', 'negative'})));
+mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
+mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
 axisRange = mIp.Results.axisRange;
 cutoffRange = getOr(mIp.Results, "cutoffRange0", mIp.Results.cutoffRange, true);
-symOpts = getOr(mIp.Results, "symOpts0", mIp.Results.symOpts, true);
+symOpt = getOr(mIp.Results, "symOpts0", mIp.Results.symOpt, true);
 type = mIp.Results.type;
+uiOpt = mIp.Results.uiOpt;
 
 if strcmpi(axisName, "x")
     axisLimStr = "xlim";
@@ -180,9 +184,9 @@ if axisRange(2) > cutoffRange(2)
 end
 
 %% Symmetrical axis range
-if ~isempty(symOpts)
+if ~isempty(symOpt)
 
-    switch symOpts
+    switch symOpt
         case "min"
             temp = min(abs(axisRange));
         case "max"
@@ -212,6 +216,10 @@ for aIndex = 1:length(allAxes)
         set(allAxes(aIndex), axisLimStr, [-1, 1] * min(abs(axisLim)));
     end
 
+end
+
+if strcmpi(uiOpt, "show")
+    scaleAxesApp(allAxes, axisName, axisRange, [axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]);
 end
 
 return;

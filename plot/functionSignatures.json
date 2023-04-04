@@ -133,6 +133,7 @@
     "scaleAxes": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
+                [],
                 [
                     {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
                 ],
@@ -152,11 +153,13 @@
             ]},
             {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
             {"name": "cutoffRange", "kind": "ordered", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
-            {"name": "symOpts", "kind": "ordered", "type": ["choices = {'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
+            {"name": "symOpt", "kind": "ordered", "type": ["choices = {'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
-            {"name": "symOpts", "kind": "namevalue", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
-            {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"}
-        ]
+            {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
+            {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
+            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"}
+        ],
+        "description": "将相同的坐标范围应用于指定图像或坐标区"
     },
 
     "addLines2Axes": {
