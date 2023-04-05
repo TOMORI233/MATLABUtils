@@ -34,7 +34,8 @@
                 ticks: data.ticks,
                 ticks_snap_bounds: 3 * data.step,
                 value: data.currentRange,
-                tooltip: "hide"
+                tooltip: "hide",
+                focus: true
             }).on("slideStop", function () {
                 data.currentRange = mySlider.bootstrapSlider('getValue');
                 htmlComponent.Data = data;
@@ -59,7 +60,7 @@
 
 <style>
     #mySlider .slider-selection {
-        background: #46d7ff;
+        background: #6adfff;
     }
 
     #mySlider .slider-handle {
@@ -67,7 +68,7 @@
     }
 
     #myslider .slider-tick {
-        background: #46d7ff;
+        background: #6adfff;
     }
 </style>
 
