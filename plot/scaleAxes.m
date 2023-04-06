@@ -47,9 +47,9 @@ mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
 mIp.addOptional("axisName", "y", @(x) any(validatestring(x, {'x', 'y', 'z', 'c'})));
 mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
-mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'min', 'max'})));
+mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
-mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'min', 'max', 'positive', 'negative'})));
+mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.parse(FigsOrAxes, varargin{:});
@@ -184,7 +184,7 @@ if axisRange(2) > cutoffRange(2)
 end
 
 %% Symmetrical axis range
-if ~isempty(symOpt)
+if ~isempty(symOpt) && ~strcmpi(symOpt, "none")
 
     switch symOpt
         case "min"
@@ -218,6 +218,7 @@ for aIndex = 1:length(allAxes)
 
 end
 
+%% Call scaleAxes UI
 if strcmpi(uiOpt, "show")
     scaleAxesApp(allAxes, axisName, axisRange, [axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]);
 end

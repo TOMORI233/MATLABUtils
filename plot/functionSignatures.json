@@ -153,9 +153,9 @@
             ]},
             {"name": "axisRange", "kind": "ordered", "type": ["numeric"]},
             {"name": "cutoffRange", "kind": "ordered", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
-            {"name": "symOpt", "kind": "ordered", "type": ["choices = {'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
+            {"name": "symOpt", "kind": "ordered", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
-            {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'min', 'max'}"], "purpose": "symmetrical option"},
+            {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
             {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"}
         ],
