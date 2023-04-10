@@ -74,7 +74,6 @@ else
 end
 
 if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
-
     allAxes = findobj(FigsOrAxes, "Type", "axes");
 else
     allAxes = FigsOrAxes;
@@ -213,7 +212,7 @@ for aIndex = 1:length(allAxes)
     if length(unique(axisRange)) > 1
         set(allAxes(aIndex), axisLimStr, axisRange);
     else
-        set(allAxes(aIndex), axisLimStr, [-1, 1] * min(abs(axisLim)));
+        warning('No suitable range found.');
     end
 
 end
