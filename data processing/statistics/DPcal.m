@@ -15,6 +15,8 @@ try
         au(i) = AUC;
     end
 
+    resDP.value0 = mean(au);
+
     if resDP.value > 0.5
         resDP.p = length(find(au(1, :) > resDP.value)) / length(au);
     else

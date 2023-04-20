@@ -133,7 +133,6 @@
     "scaleAxes": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
-                [],
                 [
                     {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
                 ],
