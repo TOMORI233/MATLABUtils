@@ -1,5 +1,6 @@
 function ROOTPATH = getRootDirPath(currentPath, N)
     % If N is set non-zero, return N-backward root path of current path.
+    % NOTICE: DO NOT SET FieldTrip PATH to THE TOP
     % e.g.
     % currentPath = fileparts(mfilename("fullpath"))
     % >> currentPaht = 'D:\Education\Lab\MATLAB Utils\file'
@@ -11,14 +12,13 @@ function ROOTPATH = getRootDirPath(currentPath, N)
         error('N should be positive.');
     end
 
-    temp = split(currentPath, '\');
+    temp = split(char(currentPath), '\')';
 
     if length(temp) <= N
         error('Could not backward any more.');
     end
 
-    temp = join(temp(1:end - N), '\');
-    ROOTPATH = [temp{1}, '\'];
+    ROOTPATH = [fullfile(temp{1:end - N}), '\'];
     
     return;
 end
