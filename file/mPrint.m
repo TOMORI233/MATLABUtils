@@ -18,7 +18,7 @@ function mPrint(target, FILENAME, formattype, resolution)
     if ~exist(FILENAME, "file")
         print(target, FILENAME, formattype, resolution);
     else
-        disp("File already exists. Skip printing.");
+        disp(strcat(FILENAME, " already exists. Skip printing."));
     end
 
 end

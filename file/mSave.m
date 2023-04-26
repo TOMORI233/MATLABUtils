@@ -14,7 +14,7 @@ function mSave(FILENAME, varargin)
     if ~exist(FILENAME, "file")
         save(FILENAME, varargin{:});
     else
-        disp("File already exists. Skip saving.");
+        disp(strcat(FILENAME, " already exists. Skip saving."));
     end
 
 end
