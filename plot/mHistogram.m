@@ -1,7 +1,23 @@
-function H = mHistogram(varargin)
+function [H, N, edges] = mHistogram(varargin)
+    % mHistogram(X)
+    % mHistogram(X, edges)
+    % mHistogram(..., "width", barWidthVal)
+    % mHistogram(..., "Color", colorsCellArray)
+    % mHistogram(..., "DisplayName", legendStrCellArray)
+    % mHistogram(..., "BinWidth", binWidthVal)
+    % mHistogram(..., "BinMethod", methodName)
+    % [H, N, edges] = mHistogram(...)
+    %
     % Input data X can be a vector or a matrix.
     % If X is a matrix, each row of X is a group.
     % Colors (in cell vector) and legends (in string vector) can be specified for each group.
+    % Example:
+    %     x1 = [2 2 3 4];
+    %     x2 = [1 2 6 8];
+    %     X = [x1; x2];
+    %     [H, N, edges] = mHistogram(X, "BinWidth", 1, ...
+    %                                   "Color", {[1 0 0], [0 0 1]}, ...
+    %                                   "DisplayName", {'condition 1', 'condition 2'});
 
     if strcmp(class(varargin{1}), "matlab.graphics.Graphics")
         mAxe = varargin{1};

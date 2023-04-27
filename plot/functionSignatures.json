@@ -198,6 +198,7 @@
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ]
             ]}
-        ]
+        ],
+        "description": "分组直方图绘制"
     }
 }
