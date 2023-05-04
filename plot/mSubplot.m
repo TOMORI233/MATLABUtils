@@ -3,22 +3,24 @@ function varargout = mSubplot(varargin)
 % Input:
 %     Fig: figure to place subplot
 %     row/col/index: same usage of function subplot
-%     nSize: [nX, nY] specifies size of subplot (default: [1, 1])
+%     nSize: [nX, nY] or nXY (same as [nXY, nXY]) specifies size of subplot (default: [1, 1])
 %     margins: margins of subplot specified as [left, right, bottom, top].
-%              You can also set them separately using name-value pair (prior to margins):
+%              You can also set them separately using name-value pair (prior to margins input):
 %              - margin_left
 %              - margin_right
 %              - margin_bottom
 %              - margin_top
 %     paddings: paddings of subplot specified as [left, right, bottom, top].
-%               You can also set them separately using name-value pair (prior to paddings):
+%               You can also set them separately using name-value pair (prior to paddings input):
 %               - paddings_left
 %               - paddings_right
 %               - paddings_bottom
 %               - paddings_top
-%     shape: 'auto'(default), 'square-min', 'square-max', 'fill'
-%            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
-%     alignment: (RECOMMEND: use with [nSize]) name-value with options:
+%     shape: 'auto'(default),
+%            'square-min'('square-xxx' option is according to maximized figure size),
+%            'square-max',
+%            'fill'(NOTICE: 'fill' option is prior to [margins] and [nSize] options)
+%     alignment: (RECOMMEND: use with [nSize] for better performance) name-value with options:
 %                'top-left',
 %                'top-right',
 %                'bottom-left',
@@ -101,11 +103,11 @@ if ~isempty(padding_top)   , paddings(4) = padding_top   ; end
 nX = nSize(1);
 
 if numel(nSize) == 1
-    nY = 1;
+    nY = nX;
 elseif numel(nSize) == 2
     nY = nSize(2);
 else
-    error('nSize input should be a scalar or a 2-element double vector');
+    error('nSize input should be a scalar or a two-element double vector');
 end
 
 % paddings or margins is [Left, Right, Bottom, Top]

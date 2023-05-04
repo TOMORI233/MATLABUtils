@@ -3,9 +3,10 @@ function ROOTPATH = getRootDirPath(currentPath, N)
     % NOTICE: DO NOT SET FieldTrip PATH to THE TOP
     % e.g.
     % currentPath = fileparts(mfilename("fullpath"))
-    % >> currentPaht = 'D:\Education\Lab\MATLAB Utils\file'
+    % >> currentPath = 'D:\Education\Lab\MATLAB Utils\file'
     %
-    % ROOTPATH = getRootDirPath(currentPath, 1)
+    % N = 1;
+    % ROOTPATH = getRootDirPath(currentPath, N)
     % >> ROOTPATH = 'D:\Education\Lab\MATLAB Utils\'
 
     if N <= 0

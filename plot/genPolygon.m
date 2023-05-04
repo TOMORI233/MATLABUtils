@@ -3,6 +3,12 @@ function [xv, yv, lines] = genPolygon(mAxe)
     %              coordinates and borderlines. It only works with 2-D
     %              axes.
 
+    narginchk(0, 1);
+
+    if nargin < 1
+        mAxe = gca;
+    end
+
     xv = [];
     yv = [];
     lines = [];
