@@ -31,5 +31,22 @@
             }
         ],
         "description": "校验结构体数组"
+    },
+
+    "parseStruct": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "S", "kind": "required", "type": ["@(arg) isstruct(arg)"]},
+                    {"name": "fieldName", "kind": "ordered", "type": [["string"], ["char"]], "repeating": true}
+                ],
+                [
+                    {"name": "S", "kind": "required", "type": ["@(arg) isstruct(arg)"]},
+                    {"name": "sIndex", "kind": "ordered", "type": ["scalar", "positive", "integer"]},
+                    {"name": "fieldName", "kind": "ordered", "type": [["string"], ["char"]], "repeating": true}
+                ]
+            ]}
+        ],
+        "description": "解析结构体数组"
     }
 }

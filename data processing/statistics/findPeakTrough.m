@@ -12,7 +12,13 @@ function [peakIdx, troughIdx] = findPeakTrough(data, varargin)
     mIp.parse(data, varargin{:});
     
     dim = mIp.Results.dim;
-    data = permute(data, [3 - dim, dim]);
+
+    if isvector(data)
+        data = reshape(data, [1, numel(data)]);
+    else
+        data = permute(data, [3 - dim, dim]);
+    end
+    
     peakIdx = cell2mat(rowFcn(@ispeak, data, "UniformOutput", false));
     troughIdx = cell2mat(rowFcn(@istrough, data, "UniformOutput", false));
     return;
