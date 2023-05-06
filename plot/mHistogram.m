@@ -8,9 +8,10 @@ function [H, N, edges] = mHistogram(varargin)
     % mHistogram(..., "BinMethod", methodName)
     % [H, N, edges] = mHistogram(...)
     %
-    % Input data X can be a vector or a matrix.
+    % Input data X can be a double vector, a double matrix or a cell vector.
     % If X is a matrix, each row of X is a group.
-    % Colors (in cell vector) and legends (in string vector) can be specified for each group.
+    % If X is a cell vector, each element contains a group of data (a double vector).
+    % Colors and legends (in cell vector) can be specified for each group.
     % Example:
     %     x1 = [2 2 3 4];
     %     x2 = [1 2 6 8];
@@ -27,7 +28,7 @@ function [H, N, edges] = mHistogram(varargin)
     end
 
     mIp = inputParser;
-    mIp.addRequired("X", @(x) validateattributes(x, {'numeric'}, {'2d'}));
+    mIp.addRequired("X", @(x) validateattributes(x, {'numeric', 'cell'}, {'2d'}));
     mIp.addOptional("edges", [], @(x) validateattributes(x, {'numeric'}, {'vector'}));
     mIp.addParameter("width", 0.8, @(x) validateattributes(x, {'numeric'}, {'>', 0, '<=', 1}));
     mIp.addParameter("Color", [], @(x) iscell(x));
@@ -44,31 +45,39 @@ function [H, N, edges] = mHistogram(varargin)
     BinWidth = mIp.Results.BinWidth;
     BinMethod = mIp.Results.BinMethod;
 
-    if isvector(X)
-        X = reshape(X, [1, numel(X)]);
-    end
+    % Convert X to cell vector
+    if strcmp(class(X), "double")
 
-    if ~isempty(colors) && numel(colors) ~= size(X, 1)
-        error("Number of colors should be the same as the data group number");
-    end
-
-    if ~isempty(legendStrs) && numel(legendStrs) ~= size(X, 1)
-        error("Number of legend strings should be the same as the data group number");
-    end
-    
-    if isempty(edges)
-
-        if isempty(BinWidth)
-            [~, edges] = histcounts(X, "BinMethod", BinMethod);
+        if isvector(X)
+            X = {reshape(X, [1, numel(X)])};
         else
-            [~, edges] = histcounts(X, "BinWidth", BinWidth);
+            X = mat2cell(X, ones(size(X, 1), 1));
         end
 
     end
 
-    N = zeros(size(X, 1), length(edges) - 1);
-    for index = 1:size(X, 1)
-        N(index, :) = histcounts(X(index, :), edges);
+    if ~isempty(colors) && numel(colors) ~= numel(X)
+        error("Number of colors should be the same as the data group number");
+    end
+
+    if ~isempty(legendStrs) && numel(legendStrs) ~= numel(X)
+        error("Number of legend strings should be the same as the data group number");
+    end
+    
+    if isempty(edges)
+        X_All = cell2mat(cellfun(@(x) reshape(x, [numel(x), 1]), X, "UniformOutput", false));
+
+        if isempty(BinWidth)
+            [~, edges] = histcounts(X_All, "BinMethod", BinMethod);
+        else
+            [~, edges] = histcounts(X_All, "BinWidth", BinWidth);
+        end
+
+    end
+
+    N = zeros(numel(X), length(edges) - 1);
+    for index = 1:numel(X)
+        N(index, :) = histcounts(X{index}, edges);
     end
 
     H = bar(mAxe, edges(1:end - 1) + mode(diff(edges)) / 2, N, width, "grouped", "EdgeColor", "none");

@@ -179,9 +179,9 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "X", "kind": "required", "type": ["numeric"]},
+                    {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
-                    {"name": "width", "kind": "ordered", "type": ["numeric", "scalar"]},
+                    {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
                     {"name": "Color", "kind": "namevalue", "type": ["cell"]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
@@ -189,9 +189,9 @@
                 ],
                 [
                     {"name": "axes", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
-                    {"name": "X", "kind": "required", "type": ["numeric"]},
+                    {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
-                    {"name": "width", "kind": "ordered", "type": ["numeric", "scalar"]},
+                    {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
                     {"name": "Color", "kind": "namevalue", "type": ["cell"]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
