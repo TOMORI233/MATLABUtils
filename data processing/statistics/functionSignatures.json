@@ -16,7 +16,7 @@
                     {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={1, 2}"]}
                 ],
                 [
-                    {"name": "dim", "kind": "ordered", "type": ["char", "string", "choices={'all'}"]}
+                    {"name": "dim", "kind": "ordered", "type": ["choices={'all'}"]}
                 ]
             ]}
         ]

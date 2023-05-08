@@ -1,0 +1,20 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "playAudio": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "y", "kind": "required", "type": ["numeric", "2d"]},
+                    {"name": "fsSound", "kind": "required", "type": ["positive", "scalar"]},
+                    {"name": "fsDevice", "kind": "ordered", "type": ["positive", "scalar"]}
+                ],
+                [
+                    {"name": "filepath", "kind": "required", "type": ["file"]},
+                    {"name": "fsDevice", "kind": "ordered", "type": ["positive", "scalar"]}
+                ]
+            ]}
+        ],
+        "description": "使用PTB播放声音"
+    }
+}
