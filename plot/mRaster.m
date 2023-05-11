@@ -8,9 +8,9 @@ function mAxe = mRaster(varargin)
     %         - color: scatter color
     %     sz: scatter size (default = 40)
     % Example:
-    %     data(1).X = {[1, 2, 3, 4, 5]; []};
+    %     data(1).X = {[1, 2, 3, 4, 5]; [1.5, 2.5]}; % two trials
     %     data(1).color = [1 0 0];
-    %     data(2).X = [2, 4, 6];
+    %     data(2).X = {[2, 4, 6]}; % one trial
     %     data(2).color = [0 0 1];
     %     mRaster(data, 20);
 
@@ -34,7 +34,7 @@ function mAxe = mRaster(varargin)
     hold(mAxe, "on");
 
     for index = 1:length(rasterData)
-        X = reshape(rasterData(index).X, [numel(X), 1]);
+        X = reshape(rasterData(index).X, [numel(rasterData(index).X), 1]);
 
         if ~isfield(X, "Y")
             Y = (nTrials + 1:nTrials + length(rasterData(index).X))';
