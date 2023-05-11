@@ -200,5 +200,21 @@
             ]}
         ],
         "description": "分组直方图绘制"
+    },
+
+    "mRaster": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "rasterData", "kind": "required", "type": ["struct"]},
+                    {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
+                ],
+                [
+                    {"name": "axes", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "rasterData", "kind": "required", "type": ["struct"]},
+                    {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
+                ]
+            ]}
+        ]
     }
 }
