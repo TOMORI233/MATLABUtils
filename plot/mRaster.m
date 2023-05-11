@@ -3,10 +3,16 @@ function mAxe = mRaster(varargin)
     % Input:
     %     mAxe: axes target (If ignored, default = gca)
     %     rasterData:
-    %         - X: x data
+    %         - X: x data, cell vector
     %         - Y: y data (If not specified, plot trial by trial)
     %         - color: scatter color
     %     sz: scatter size (default = 40)
+    % Example:
+    %     data(1).X = {[1, 2, 3, 4, 5]; []};
+    %     data(1).color = [1 0 0];
+    %     data(2).X = [2, 4, 6];
+    %     data(2).color = [0 0 1];
+    %     mRaster(data, 20);
 
     if isgraphics(varargin{1}(1), "axes")
         mAxe = varargin{1}(1);
@@ -28,7 +34,7 @@ function mAxe = mRaster(varargin)
     hold(mAxe, "on");
 
     for index = 1:length(rasterData)
-        X = rasterData(index).X;
+        X = reshape(rasterData(index).X, [numel(X), 1]);
 
         if ~isfield(X, "Y")
             Y = (nTrials + 1:nTrials + length(rasterData(index).X))';
