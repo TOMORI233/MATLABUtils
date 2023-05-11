@@ -16,6 +16,7 @@ function [H, N, edges] = mHistogram(varargin)
     %     x1 = [2 2 3 4];
     %     x2 = [1 2 6 8];
     %     X = [x1; x2];
+    %     % For x1,x2 different in size use X = [{x1}; {x2}}];
     %     [H, N, edges] = mHistogram(X, "BinWidth", 1, ...
     %                                   "Color", {[1 0 0], [0 0 1]}, ...
     %                                   "DisplayName", {'condition 1', 'condition 2'});
