@@ -2,7 +2,7 @@ function mAxe = mRaster(varargin)
     % Description: plot raster
     % Input:
     %     mAxe: axes target (If ignored, default = gca)
-    %     rasterData:
+    %     rasterData: raster dataset, struct vector
     %         - X: x data, cell vector
     %         - Y: y data (If not specified, plot trial by trial)
     %         - color: scatter color
@@ -33,7 +33,7 @@ function mAxe = mRaster(varargin)
     nTrials = 0;
     hold(mAxe, "on");
 
-    for index = 1:length(rasterData)
+    for index = 1:numel(rasterData)
         X = reshape(rasterData(index).X, [numel(rasterData(index).X), 1]);
 
         if ~isfield(X, "Y")

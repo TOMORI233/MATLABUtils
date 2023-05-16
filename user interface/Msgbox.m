@@ -54,15 +54,15 @@ function Msgbox_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to Msgbox (see VARARGIN)
 
 msgContent = 'This is a message. Put your content here.';
-msgTtile = 'Info';
+msgTitle = 'Info';
 try
     msgContent = varargin{1};
-    msgTtile = varargin{2};
+    msgTitle = varargin{2};
     msgContentPosition = varargin{3};
     set(handles.msgContent, 'HorizontalAlignment', msgContentPosition);
 end
 set(handles.msgContent, 'string', msgContent);
-set(handles.msgTitle, 'string', msgTtile);
+set(handles.msgTitle, 'string', msgTitle);
 set(handles.MsgboxFig, 'name', 'Info');
 
 % Choose default command line output for Msgbox

@@ -18,5 +18,13 @@
             ]}
         ],
         "description": "带校验的输入"
+    },
+
+    "Msgbox": {
+        "inputs": [
+            {"name": "content", "kind": "required", "type": ["string", "char"]},
+            {"name": "title", "kind": "ordered", "type": ["string", "char"]},
+            {"name": "position", "kind": "ordered", "type": ["choices = {'center', 'left', 'right'}"]}
+        ]
     }
 }
