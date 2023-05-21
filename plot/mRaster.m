@@ -8,7 +8,7 @@ function mAxe = mRaster(varargin)
     %         - color: scatter color
     %     sz: scatter size (default = 40)
     % Example:
-    %     data(1).X = {[1, 2, 3, 4, 5]; [1.5, 2.5]}; % two trials
+    %     data(1).X = {[1, 2, 3, 4, 5]; []; [1.5, 2.5]}; % three trials
     %     data(1).color = [1 0 0];
     %     data(2).X = {[2, 4, 6]}; % one trial
     %     data(2).color = [0 0 1];

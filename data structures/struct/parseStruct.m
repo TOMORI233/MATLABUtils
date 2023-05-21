@@ -2,8 +2,10 @@ function varargout = parseStruct(S, varargin)
     % Description: Parse struct vector S
     % Input:
     %     S: struct vector or scalar
-    %     sIndex: parse S(sIndex). If numel(sIndex)>1, return vars in column vector
-    %     fieldNames: fieldnames of S to parse
+    %     sIndex: index of S to parse (only S(sIndex) will be parsed)
+    %             If not specified, sIndex=1:length(S).
+    %             If numel(sIndex)>1, return vars in column vector.
+    %     fieldNames: fieldnames of S to parse (default: parse all)
     % Output:
     %     varNames: variable names to receive S.(fieldNames)
     % Example:
