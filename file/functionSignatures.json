@@ -18,5 +18,13 @@
             {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
         ],
         "description": "已存在则不保存"
+    },
+
+    "mLoad": {
+        "inputs": [
+            {"name": "FILENAME", "kind": "required", "type": ["file=*.mat"]},
+            {"name": "variables", "kind": "ordered", "type": [["cell"], ["string"], ["char"]]}
+        ],
+        "description": "已存在则不加载"
     }
 }
