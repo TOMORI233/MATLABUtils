@@ -8,6 +8,9 @@ function varargout = parseStruct(S, varargin)
     %     fieldNames: fieldnames of S to parse (default: parse all)
     % Output:
     %     varNames: variable names to receive S.(fieldNames)
+    % Notice:
+    %     An error occurs if not all values of S(sIdx).(f) are of the same class
+    %     because vertcat(S(sIdx).(f)) does not work.
     % Example:
     %     A(1).a1=1;
     %     A(1).a2=2;
@@ -47,7 +50,7 @@ function varargout = parseStruct(S, varargin)
     end
 
     if isempty(varargin)
-        sField = fields(S);
+        sField = fieldnames(S);
 
         for fIndex = 1:length(sField)
             % add local var to base workspace
