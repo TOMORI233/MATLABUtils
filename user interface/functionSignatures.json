@@ -22,9 +22,9 @@
 
     "Msgbox": {
         "inputs": [
-            {"name": "content", "kind": "required", "type": ["string", "char"]},
+            {"name": "content", "kind": "required", "type": [["string", "char"], ["cell"]]},
             {"name": "title", "kind": "ordered", "type": ["string", "char"]},
-            {"name": "position", "kind": "ordered", "type": ["choices = {'center', 'left', 'right'}"]}
+            {"name": "alignment", "kind": "ordered", "type": ["choices = {'center', 'top-left', 'top-right', 'top-center', 'center-left', 'center-right', 'bottom-left', 'bottom-right', 'bottom-center'}"]}
         ]
     }
 }

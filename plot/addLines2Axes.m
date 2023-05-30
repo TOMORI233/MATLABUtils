@@ -54,10 +54,10 @@ function addLines2Axes(varargin)
             hold(allAxes(aIndex), "on");
             X = getOr(lines(lIndex), "X");
             Y = getOr(lines(lIndex), "Y");
-            color = getOr(lines(lIndex), "color", "k");
+            color     = getOr(lines(lIndex), "color", "k");
             lineWidth = getOr(lines(lIndex), "width", 1);
             lineStyle = getOr(lines(lIndex), "style", "--");
-            marker = getOr(lines(lIndex), "marker");
+            marker    = getOr(lines(lIndex), "marker");
             legendStr = getOr(lines(lIndex), "legend");
 
             if numel(X) == 0

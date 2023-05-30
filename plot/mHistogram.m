@@ -12,6 +12,9 @@ function [H, N, edges] = mHistogram(varargin)
     % If X is a matrix, each row of X is a group.
     % If X is a cell vector, each element contains a group of data (a double vector).
     % Colors and legends (in cell vector) can be specified for each group.
+    %
+    % Output H is a bar array, N is histcount, edges is bin edges.
+    %
     % Example:
     %     x1 = [2 2 3 4];
     %     x2 = [1 2 6 8];
