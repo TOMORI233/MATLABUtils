@@ -7,5 +7,4 @@ function plotSize = autoPlotSize(num)
     pause(0.01);
     plotSize =  t.GridSize;
     close(F);
-
-         
+end
