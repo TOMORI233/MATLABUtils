@@ -1,3 +1,4 @@
+%% Demo of creating context menu
 clear; clc; close all;
 Fig = figure;
 

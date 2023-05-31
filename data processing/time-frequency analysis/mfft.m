@@ -17,7 +17,7 @@ function [A, f, Aoi] = mfft(X, fs, varargin)
     mIp = inputParser;
     mIp.addRequired("X", @(x) validateattributes(x, 'numeric', {'2d'}));
     mIp.addRequired("fs", @(x) validateattributes(x, 'numeric', {'scalar', 'positive'}));
-    mIp.addOptional("N", [], @(x) validateattributes(x, 'numeric', {'scalar', 'positive', 'integer'}));
+    mIp.addOptional("N", [], @(x) isempty(x) || (isscalar(x) && x > 0 && x == mod(x, 1)));
     mIp.addOptional("dim", 2, @(x) ismember(x, [1, 2]));
     mIp.addOptional("foi", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing', 'positive', "<=", fs/2}));
     mIp.parse(X, fs, varargin{:});
