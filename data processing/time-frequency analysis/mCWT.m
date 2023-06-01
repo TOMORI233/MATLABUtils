@@ -54,7 +54,8 @@ function [t, f, CData, coi] = mCWT(data, fs, cwtMethod, fsD, freqLimits)
         case 'bump'
             [wt, f, coi] =cwt(dataResample, 'bump', fsD, 'FequencyLimits', freqLimits);   
         case 'STFT'
-            spectrogram
+            spectrogram(dataResample); % use hanning window
+            return;
         otherwise
             error('Invalid cwt method');
     end

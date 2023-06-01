@@ -6,12 +6,12 @@ function playAudio(y, varargin)
     % playAudio(filepath)
     % playAudio(filepath, fsDevice)
     %
-    % y is sound wave or sound file path
-    % fsSound is samplerate of sound y. If y is sound wave, fsSound should not be empty
-    % fsDevice is samplerate of output device (default: [])
+    % y is a 2-D sound wave, a sound wave vector or a sound file path.
+    % fsSound is samplerate of sound y. If y is sound wave, fsSound should not be empty.
+    % fsDevice is samplerate of output device (default: []).
 
     mIp = inputParser;
-    mIp.addRequired("y", @(x) (isa(x, "double") && isvector(x)) || ischar(x) || isstring(x));
+    mIp.addRequired("y", @(x) (isa(x, "double") && ndims(x) == 2) || ischar(x) || isstring(x));
     mIp.addOptional("fs", [], @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
     mIp.addOptional("fsDevice", [], @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
     mIp.parse(y, varargin{:});
