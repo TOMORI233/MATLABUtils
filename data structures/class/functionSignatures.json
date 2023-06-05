@@ -1,0 +1,24 @@
+{
+    "_schemaVersion": "1.0.0",
+    
+    "oddball.oddballTrial.of": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                ],
+                [
+                    {"name": "obj", "kind": "required"},
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                ]
+            ]}
+         ]
+    },
+
+    "oddball.sub.PEOdd7_10Trial.of": {
+        "inputs": [
+            {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'dev freq', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+        ]
+    }
+
+}
