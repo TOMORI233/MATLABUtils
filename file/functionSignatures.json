@@ -22,7 +22,7 @@
 
     "mLoad": {
         "inputs": [
-            {"name": "FILENAME", "kind": "required", "type": ["file=*.mat"]},
+            {"name": "FILENAME", "kind": "required", "type": [["file=*.mat"], ["@(arg) isempty(arg)"]]},
             {"name": "variables", "kind": "ordered", "type": [["cell"], ["string"], ["char"]]}
         ],
         "description": "已存在则不加载"
