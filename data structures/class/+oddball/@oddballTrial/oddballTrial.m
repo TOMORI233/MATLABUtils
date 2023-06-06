@@ -30,7 +30,27 @@ classdef oddballTrial
                     res = (~[obj.correct] & ~arrayfun(@(x) isequal(x, oddball.oddballTypeEnum.INTERRUPT), [obj.oddballType]))';
                 case "stdNum"
                     res = cellfun(@(x) length(x) - 1, {obj.soundOnsetSeq})';
+                otherwise
+                    error("Undifined type");
             end
         end
     end
+
+    methods
+        function obj = setter(obj, fieldName, fieldVal)
+            obj = reshape(obj, [numel(obj), 1]);
+            fieldVal = reshape(fieldVal, [numel(fieldVal), 1]);
+            obj = mCell2mat(rowFcn(@(x, y) setterSingle(x, fieldName, y), obj, fieldVal, "UniformOutput", false));
+            if nargout < 1
+                warning('The result of setter should be reassigned to obj');
+            end
+        end
+    end
+
+    methods (Access = private)
+        function obj = setterSingle(obj, fieldName, fieldVal)
+            obj.(fieldName) = fieldVal;
+        end
+    end
+
 end

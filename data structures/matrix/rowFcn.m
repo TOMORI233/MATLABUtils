@@ -16,12 +16,12 @@ function varargout = rowFcn(fcn, A, varargin)
     %% Validation
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
-    mIp.addRequired("A", @(x) validateattributes(x, {'numeric', 'string', 'char', 'logical', 'struct', 'cell'}, {'2d'}));
+    mIp.addRequired("A");
     bIdx = 1:find(cellfun(@(x) strcmpi(x, "UniformOutput"), varargin), 1) - 1;
 
     for n = 1:length(bIdx)
         eval(['B', num2str(bIdx(n)), '=varargin{', num2str(bIdx(n)), '};']);
-        mIp.addOptional(eval(['"B', num2str(bIdx(n)), '"']), [], @(x) validateattributes(x, {'numeric', 'string', 'char', 'logical', 'struct', 'cell'}, {'size', [size(A, 1), NaN]}));
+        mIp.addOptional(eval(['"B', num2str(bIdx(n)), '"']), [], @(x) size(x, 1) == size(A, 1));
     end
 
     mIp.addParameter("UniformOutput", true, @(x) isscalar(x) && (islogical(x) || ismember(x, [0, 1])));
