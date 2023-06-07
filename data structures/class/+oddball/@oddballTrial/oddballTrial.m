@@ -1,10 +1,10 @@
 classdef oddballTrial
     properties % All in ms
-        trialNum
-        soundOnsetSeq
-        oddballType
-        firstPush
-        correct
+        trialNum      (1, 1) double {mustBeInteger, mustBePositive} = 1
+        soundOnsetSeq double
+        oddballType   (1, 1) oddball.oddballTypeEnum
+        firstPush     double
+        correct       (1, 1) logical
     end
 
     methods (Static)
