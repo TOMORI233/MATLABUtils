@@ -17,7 +17,7 @@ function varargout = rowFcn(fcn, A, varargin)
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
     mIp.addRequired("A");
-    bIdx = 1:find(cellfun(@(x) strcmpi(x, "UniformOutput"), varargin), 1) - 1;
+    bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
 
     for n = 1:length(bIdx)
         eval(['B', num2str(bIdx(n)), '=varargin{', num2str(bIdx(n)), '};']);

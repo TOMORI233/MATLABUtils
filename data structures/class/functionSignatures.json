@@ -5,11 +5,11 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'last std', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
                 ],
                 [
                     {"name": "obj", "kind": "required"},
-                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'last std', 'dev onset', 'push onset', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
                 ]
             ]}
          ]
@@ -19,11 +19,11 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'dev freq', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'last std', 'dev onset', 'push onset', 'dev freq', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
                 ],
                 [
                     {"name": "obj", "kind": "required"},
-                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'dev onset', 'push onset', 'dev freq', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
+                    {"name": "type", "kind": "required", "type": ["choices = {'trial onset', 'last std', 'dev onset', 'push onset', 'dev freq', 'ISI', 'DEV', 'STD', 'INTERRUPT', 'correct', 'wrong', 'stdNum'}"]}
                 ]
             ]}
         ]

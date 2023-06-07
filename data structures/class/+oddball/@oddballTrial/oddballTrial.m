@@ -12,6 +12,8 @@ classdef oddballTrial
             switch type
                 case "trial onset"
                     res = cellfun(@(x) x(1), {obj.soundOnsetSeq})';
+                case "last std"
+                    res = cellfun(@(x) x(end - 1), {obj.soundOnsetSeq})';
                 case "dev onset"
                     res = cellfun(@(x) x(end), {obj.soundOnsetSeq})';
                 case "push onset"
