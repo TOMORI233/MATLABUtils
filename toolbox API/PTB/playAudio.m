@@ -6,9 +6,12 @@ function playAudio(y, varargin)
     % playAudio(filepath)
     % playAudio(filepath, fsDevice)
     %
-    % y is a 2-D sound wave, a sound wave vector or a sound file path.
-    % fsSound is samplerate of sound y. If y is sound wave, fsSound should not be empty.
-    % fsDevice is samplerate of output device (default: []).
+    % NOTICE: There is an approximate 100-ms delay time before playback 
+    %         to prevent burst sound caused by sudden change from zero.
+    % [y] is a 2-D sound wave, a sound wave vector or a sound file path.
+    % [fsSound] is samplerate of sound [y].
+    % If [y] is sound wave, [fsSound] should not be empty.
+    % [fsDevice] is samplerate of output device (default: []).
 
     mIp = inputParser;
     mIp.addRequired("y", @(x) (isa(x, "double") && ndims(x) == 2) || ischar(x) || isstring(x));
@@ -56,11 +59,20 @@ function playAudio(y, varargin)
 
     deviceId = []; % use default device of system
     mode = 1; % playback only
-    latencyClass = 2; % strict
+    latencyClass = 3; % strict
 
     pahandle = PsychPortAudio('Open', deviceId, mode, latencyClass);
-    PsychPortAudio('FillBuffer', pahandle, y);
+
+    % To prevent burst sound caused by sudden change from zero
+    PsychPortAudio('FillBuffer', pahandle, [zeros(1, 10); zeros(1, 10)]);
     PsychPortAudio('Start', pahandle, 1, 0, 1);
+    st = PsychPortAudio('Stop', pahandle, 1, 1);
+
+    % Play sound
+    delay = 0.1; % sec
+    PsychPortAudio('FillBuffer', pahandle, y);
+    PsychPortAudio('Start', pahandle, 1, st + delay, 1);
     PsychPortAudio('Stop', pahandle, 1, 1);
+
     PsychPortAudio('Close');
 end
