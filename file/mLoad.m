@@ -13,8 +13,10 @@ function mLoad(fileName, varNames)
 
     if nargin < 1 || isempty(fileName)
         [fileName, path] = uigetfile("*.mat");
-    elseif ~strcmpi(obtainArgoutN(@fileparts, 3, fileName), "mat")
+    elseif ~strcmpi(obtainArgoutN(@fileparts, 3, fileName), ".mat")
         [fileName, path] = uigetfile(fullfile(fileName, "*.mat"));
+    else
+        path = '';
     end
 
     fileName = fullfile(path, fileName);
