@@ -14,14 +14,18 @@ function v = validateInput(prompt, varargin)
     %     % 2. str input
     %     nameList = {'Mike', 'John', 'Penny'};
     %     s = validateInput('Input a name from the list: ', @(x) any(validatestring(x, nameList)), 's');
+    %     % 3. use UI instead of command line
+    %     v = validateInput("Input an integer", @(x) x == fix(x), "UI", "on");
 
     mIp = inputParser;
     mIp.addRequired("prompt", @(x) ischar(x) || isstring(x));
     mIp.addOptional("arg2", [], @(x) isa(x, 'function_handle') || any(validatestring(x, {'s'})));
     mIp.addOptional("sInput", [], @(x) any(validatestring(x, {'s'})));
+    mIp.addParameter("UI", "off", @(x) any(validatestring(x, {'on', 'off'})));
     mIp.parse(prompt, varargin{:});
 
     arg2 = mIp.Results.arg2;
+    uiOpt = mIp.Results.UI;
 
     switch class(arg2)
         case 'function_handle'
@@ -42,9 +46,21 @@ function v = validateInput(prompt, varargin)
         try
             
             if ~isempty(sInput)
-                v = input(prompt, "s");
+                if strcmpi(uiOpt, "off")
+                    v = input(prompt, "s");
+                else
+                    app = validateInputUI(prompt, validateFcn, "s");
+                    v = app.res;
+                    delete(app);
+                end
             else
-                v = input(prompt);
+                if strcmpi(uiOpt, "off")
+                    v = input(prompt);
+                else
+                    app = validateInputUI(prompt, validateFcn, []);
+                    v = app.res;
+                    delete(app);
+                end
             end
 
             if ~isempty(validateFcn)

@@ -15,7 +15,8 @@
                 [
                     {"name": "sInput", "kind": "ordered", "type": ["choices = {'s'}"], "purpose": "str input"}
                 ]
-            ]}
+            ]},
+            {"name": "UI", "kind": "namevalue", "type": "choices = {'on', 'off'}"}
         ],
         "description": "带校验的输入"
     },
