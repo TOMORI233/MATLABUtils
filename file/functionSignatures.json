@@ -26,5 +26,13 @@
             {"name": "variables", "kind": "ordered", "type": [["cell"], ["string"], ["char"]]}
         ],
         "description": "已存在则不加载"
+    },
+
+    "pathManager": {
+        "inputs": [
+            {"name": "ROOTPATH", "kind": "required", "type": ["folder"]},
+            {"name": "subjects", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
+            {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]}
+        ]
     }
 }

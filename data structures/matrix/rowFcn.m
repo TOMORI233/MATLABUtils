@@ -1,7 +1,7 @@
 function varargout = rowFcn(fcn, A, varargin)
     % Description: apply fcn to each row of matrix (based on cellfun)
-    %
-    % Extension v2.0 (2023/5/11): string, char, logical, struct, cell also supported
+    % Notice:
+    %     Inputs can be all data type valid for mat2cell()
     %
     % Input:
     %     fcn: function handle, function to apply to each row
