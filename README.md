@@ -15,7 +15,7 @@
 3. 如果需要推送代码，请向作者发送Pull Request或者联系加入Collaborators@TOMORI233。
 4. 尽量不要修改通用函数，想要创建自己的版本，请创建自己的工具箱包。
 5. 添加函数请添加在对应功能类型命名的文件夹下。
-6. 推荐使用matlab创建初始版本脚本/函数文件，使用vscode进行修改（尤其是注释添加）和GIT版本控制，这里推荐几个插件：
+6. 推荐使用matlab创建初始版本脚本/函数文件，使用vscode进行修改（尤其是注释添加）和GIT进行版本管理，这里推荐几个插件：
    - MATLAB
    - MATLAB Extension Pack（需要设置`mlint.exe`路径用于格式化代码）
    - GitLens
@@ -159,9 +159,20 @@
 
 #### 7. 创建自己的工具箱
 
-1. 参考[包命名空间 - MATLAB & Simulink - MathWorks 中国](https://ww2.mathworks.cn/help/matlab/matlab_oop/scoping-classes-with-packages.html)
-2. 简单概括：使用`+`开头的英文命名的文件夹下的包空间会被自动加入matlab路径（前提是父包需要在matlab路径中），一个包可以有多级的子包，如`+mutils/+plot2D/plot.m`，通过`mutils.plot2D.plot()`调用可以与built-in函数`plot`区分开来，因此可以通过这种方式创建自己的工具箱。
+1. 参考[包命名空间 - MATLAB & Simulink - MathWorks 中国](https://ww2.mathworks.cn/help/matlab/matlab_oop/scoping-classes-with-packages.html) 和 [函数优先顺序 - MATLAB & Simulink - MathWorks 中国](https://ww2.mathworks.cn/help/matlab/matlab_prog/function-precedence-order.html)
+
+2. 简单概括：使用`+`开头的英文命名的文件夹下的包空间会被自动加入matlab路径（前提是父包需要在matlab路径中），一个包可以有多级的子包，如`+mutils/+plot2D/plot.m`，通过`mutils.plot2D.plot()`调用可以与built-in函数`plot`区分开来，因此可以通过这种方式创建自己的工具箱。注意：可以不同目录下都包含同名`+XXX`文件夹。
+
 3. 包函数与类静态方法命名存在冲突时，包函数优先（请尽量不要有冲突命名）。
+
+4. 如果不想使用类似`mutils.plot2D.plot`而是直接使用`plot`来调用自定义的`plot`函数，那么可以在脚本开头加上
+
+   ```matlab
+   global plot
+   plot = @mutils.plot2D.plot;
+   ```
+   
+   那么matlab将以文件中变量作为最高优先级对`plot`进行调用（这里的`plot`被认为是一个变量名）。当项目存在冲突时，可以建一个这样的脚本将函数指向特定的工具包（中间不要有`clear`的操作）。注意：这个方式会让函数签名失效。
 
 #### 8. 风格与习惯
 
@@ -182,10 +193,16 @@ end
 
 6. 对于不同项目中不通用的工具函数存在命名冲突的情况，如EEGProcess和ECOGProcess都有`excludeTrials`但是逻辑不同，推荐修改方式：各自的`utils`文件夹下新建`+EEGProcess`和`+ECOGProcess`，将存在冲突的函数放在其中，以类似`EEGProcess.excludeTrials`的方式调用。
 7. 尽量减少循环的使用，matlab的循环是单线程，当次数很多且不使用平行计算的条件下效率会很低。对于大部分循环执行单语句的情况，可以使用`cellfun, arrayfun, rowFcn`这类函数提高效率与代码简洁性，其中`rowFcn`基于`cellfun`且对所有可以被`mat2cell`分割的数据类型兼容。
+8. 关于类和类方法（面向对象编程）
+   - MATLAB对类的说明：创建类可以简化涉及与特殊类型的数据交互的专用数据结构体或大量函数的编程任务。MATLAB 类支持函数和运算符重载、对属性和方法的控制访问、引用和值语义以及事件和侦听程序。
+   - 当一个类对象被创建，对它进行的所有操作都将直接指向它在内存中的位置（参考C语言中的指针）。这意味着当一个被实例化的类对象作为函数的输入参数时，它将以指针的方式被函数访问（区别于其他类型的参数以**形式参数**的方式被copy内存中而占用**额外的内存空间**，并且在函数执行完毕后该部分内存会被释放），在函数中对该类对象的属性值（Properties）所做的一切更改将在函数执行后仍然有效。
+   - 与struct的区别：当函数（以`mfcn`代指）需要输入的参数很多并且有较多可选输入时，可以使用struct（以下用`params`指代）来承载这些参数（事实上如FieldTrip和Kilosort都是这么做的），但是仍然需要在`mfcn`中或者单独的脚本/函数中为这些变量赋初值，并且在`mfcn`中对这些变量进行校验；而如果`params`被定义为一个类，那么赋初值和校验的操作就可以在Properties声明属性值时完成（校验在再次赋值时也会生效），且当它继承自`handle`时，可以使用监听（`addlistener`）的方式对参数冲突等情况进行处理。注意：与struct不同，class的属性不能动态增减，这也就意味着它不能中途加参数和删除参数。
+   - 枚举类：参考[定义枚举类 - MATLAB & Simulink - MathWorks 中国](https://ww2.mathworks.cn/help/matlab/matlab_oop/enumerations.html)。当某个属性值有一个固定的有限取值集合，或者需要定义类似于[R,G,B]→color name、数字电路真值表→输出情况的映射时，可以使用枚举类，它会规范限制程序结果。
+   - Demo见`data structures\class`目录下，一个是监听的Demo，一个是类的Demo。
 
 #### 9. Update Log
 
-请将每次更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
+请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
 - 2023/07/18 by XHX - Compatible
 
@@ -194,6 +211,5 @@ end
   | Add  | `validateInput.m` | 增加了一个UI输入框，可以通过`validateInput(..., "UI", "on")`开启，替代命令行的输入方式 |
   | Add  | `pathManager.m`   | 返回`ROOTPATH\subject\protocol\datetime\*.mat`数据存放方式的完整mat路径，可以指定subject和protocol，如`matPaths = pathManager(ROOTPATH, "subjects", ["DDZ", "DD"], "protocols", "Noise");` |
   | Add  | `README.md`       | 添加说明文档                                                 |
-
 
 
