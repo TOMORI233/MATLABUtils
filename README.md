@@ -204,6 +204,12 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/07/29 by XHX - Compatible
+
+  | Type | Target             | Content                  |
+  | ---- | ------------------ | ------------------------ |
+  | Add  | `Instruction.xlsx` | 为每个常用函数添加了说明 |
+
 - 2023/07/18 by XHX - Compatible
 
   | Type | Target            | Content                                                      |
@@ -211,5 +217,4 @@ end
   | Add  | `validateInput.m` | 增加了一个UI输入框，可以通过`validateInput(..., "UI", "on")`开启，替代命令行的输入方式 |
   | Add  | `pathManager.m`   | 返回`ROOTPATH\subject\protocol\datetime\*.mat`数据存放方式的完整mat路径，可以指定subject和protocol，如`matPaths = pathManager(ROOTPATH, "subjects", ["DDZ", "DD"], "protocols", "Noise");` |
   | Add  | `README.md`       | 添加说明文档                                                 |
-
 
