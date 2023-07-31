@@ -179,6 +179,7 @@
 以下为私货，但你总会有自己的风格、习惯和更好的实现方式。
 
 1. 每个trial都有自己的一些参数信息，因此可以用`struct array`来存，习惯命名为`trialAll`，方便人读，也方便使用其中的一个或几个参数作为筛选条件。
+1. 尽量不要在脚本文件中使用固定参数，尤其是当这些参数需要应用于多个处理脚本中并且需要同步变动时。可以用一个单独的脚本/函数存，使用`run`命令调用该脚本或直接调用函数将参数加载到工作区。
 2. 对于时间上连续的多通道数据，如LFP、EEG、ECoG，对齐到一个时间点并截取相同长度，使用`cell array`来存，`nTrial*1`的`cell`，每个`cell`包含`nChannel*nSample`的数据。
 3. 对于时间上不连续的多cluster的spike数据，`nSpike*2`的结构，第1列为spike时间，第2列为cluster index，直接存放在`trialAll`每个trial的`spike`字段中。
 4. 基于以上`cell, struct, matrix`的混合数据存储方式，本项目包含了许多针对结构转换的工具函数，详见`data structures`目录。
