@@ -12,10 +12,10 @@ if any(dirIndex)
     rmPath = cellstr(mPath(dirIndex));
     cellfun(@(x) movefile(x, strrep(x, keyword, newName)), rmPath, "UniformOutput", false)
 end
-% rename files
-if any(fileIndex)
-    rmPath = cellstr(mPath(fileIndex));
-    cellfun(@(x) movefile(x, strrep(x, keyword, newName)), rmPath, "UniformOutput", false)
-end
+% % rename files
+% if any(fileIndex)
+%     rmPath = cellstr(mPath(fileIndex));
+%     cellfun(@(x) movefile(x, strrep(x, keyword, newName)), rmPath, "UniformOutput", false)
+% end
 
 end

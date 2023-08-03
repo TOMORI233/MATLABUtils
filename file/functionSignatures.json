@@ -32,7 +32,8 @@
         "inputs": [
             {"name": "ROOTPATH", "kind": "required", "type": ["folder"]},
             {"name": "subjects", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
-            {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]}
+            {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
+            {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]}
         ]
     }
 }
