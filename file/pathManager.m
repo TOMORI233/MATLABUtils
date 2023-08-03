@@ -2,7 +2,7 @@ function res = pathManager(ROOTPATH, varargin)
 % Output:
 %     res: struct array with fields [protocol] and [path]
 % Standard storage:
-%     ROOTPATH\subject\protocol\datetime\*.mat
+%     ROOTPATH\subject\protocol\datetime\**\*.mat
 % Example:
 %     ROOTPATH = "D:\Education\Lab\Projects\Linear\MAT DATA";
 %
