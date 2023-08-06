@@ -205,6 +205,13 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/08/06 by XHX - Compatible
+
+  | Type | Target               | Content                                        |
+  | ---- | -------------------- | ---------------------------------------------- |
+  | Add  | `scaleAxesApp.mlapp` | 为`scaleAxes`的UI增加`Reset`按钮，还原初始设置 |
+  | Add  | `mCheckUpdate.m`     | 检查更新的脚本                                 |
+
 - 2023/07/29 by XHX - Compatible
 
   | Type | Target             | Content                  |
