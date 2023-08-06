@@ -2,7 +2,7 @@ function res = pathManager(ROOTPATH, varargin)
 % Output:
 %     res: struct array with fields [protocol] and [path]
 % Standard storage:
-%     ROOTPATH\subject\protocol\datetime\*.mat
+%     ROOTPATH\subject\protocol\datetime\**\*.mat
 % Example:
 %     ROOTPATH = "D:\Education\Lab\Projects\Linear\MAT DATA";
 %
@@ -17,15 +17,21 @@ function res = pathManager(ROOTPATH, varargin)
 %
 %     % Specify subjects and protocols
 %     res = pathManager(ROOTPATH, "subjects", ["DDZ", "DD"], "protocols", "Noise");
+%
+%     % Specify mat file name with regexp
+%     % Return mat file whose name starts with "AC"
+%     res = pathManager(ROOTPATH, "matPat", "AC*");
 
 mIp = inputParser;
 mIp.addRequired("ROOTPATH", @(x) exist(x, "dir") ~= 0);
 mIp.addParameter("subjects", [], @(x) isstring(x) || iscellstr(x) || ischar(x));
 mIp.addParameter("protocols", [], @(x) isstring(x) || iscellstr(x) || ischar(x));
+mIp.addParameter("matPat", "*", @(x) (isstring(x) && isscalar(x)) || (ischar(x) && isrow(x)));
 mIp.parse(ROOTPATH, varargin{:});
 
 subjects = mIp.Results.subjects;
 protocols = mIp.Results.protocols;
+matPat = mIp.Results.matPat;
 
 if isempty(subjects)
     temp = dir(ROOTPATH);
@@ -55,9 +61,10 @@ else
     end
 end
 
-temp = cellfun(@(x) rowFcn(@(y) dir(fullfile(ROOTPATH, y, x, "**\*.mat")), subjects, "UniformOutput", false), protocols, "UniformOutput", false);
+temp = cellfun(@(x) rowFcn(@(y) dir(fullfile(ROOTPATH, y, x, strcat("**\", matPat, ".mat"))), subjects, "UniformOutput", false), protocols, "UniformOutput", false);
 temp = cellfun(@(x) cellfun(@(y) arrayfun(@(z) fullfile(z.folder, z.name), y, "UniformOutput", false), x, "UniformOutput", false), temp, "UniformOutput", false);
 temp = cellfun(@(x) mCell2mat(x), temp, "UniformOutput", false);
+temp = cellfun(@string, temp, "UniformOutput", false);
 res = struct("protocol", protocols, "path", temp);
 
 return;
