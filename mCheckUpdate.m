@@ -1,5 +1,8 @@
 function mCheckUpdate(logstr, syncOpt)
-    % Commit current work and check update for MATLABUtils
+    % Commit current work and check update for MATLAB-Utils
+    % Put it in your startup.m is RECOMMENDED.
+    % Use it for other projects, rename and put it in the root path of the project.
+
     narginchk(0, 2);
 
     if nargin < 2
