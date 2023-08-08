@@ -1,4 +1,4 @@
-function varargout = obtainArgoutN(fcn, Ns, varargin)
+function varargout = obtainArgoutN(fcn, Ns, varargin) %#ok<*STOUT,*INUSL> 
     % Description: return the [fcn] output value of specified ordinal number.
     %              You can use it in arrayfun, cellfun, rowFcn.
     % Input:

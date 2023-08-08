@@ -1,5 +1,12 @@
 function varargout = parseStruct(S, varargin)
     % Description: Parse struct vector S
+    % Usage:
+    %     parseStruct(S)
+    %     parseStruct(S, sIndex)
+    %     parseStruct(S, fieldName1, fieldName2, ...)
+    %     parseStruct(S, sIndex, fieldName1, fieldName2, ...)
+    %     [varName1, varName2, ...] = parseStruct(S, fieldName1, fieldName2, ...)
+    %     [varName1, varName2, ...] = parseStruct(S, sIndex, fieldName1, fieldName2, ...)
     % Input:
     %     S: struct vector or scalar
     %     sIndex: index of S to parse (only S(sIndex) will be parsed)
@@ -19,12 +26,11 @@ function varargout = parseStruct(S, varargin)
     %     A(2).a2=12;
     %     A(2).a3=13;
     %
-    %     [varName1, varName2, ...] = parseStruct(S, sIndex, fieldName1, fieldName2, ...)
-    %     [varName1, varName2, ...] = parseStruct(S, fieldName1, fieldName2, ...)
+    %     parseStruct(A) returns a1=[1;11] a2=[2;12] a3=[3;13] in workspace
+    %     parseStruct(A, 1) returns a1=1 a2=2 a3=3 in workspace
+    %     parseStruct(A, "a1") returns a1=[1;11] in workspace
     %     parseStruct(A, 1, "a1") returns a1=1 in workspace
     %     parseStruct(A, 2, "a1") returns a1=11 in workspace
-    %     parseStruct(A, "a1") returns a1=[1;11] in workspace
-    %     parseStruct(A) returns a1=[1;11] a2=[2;12] a3=[3;13] in workspace
     %     b1=parseStruct(A, "a1") returns b1=[1;11] in workspace (same as b1=vertcat(A.a1))
 
     if nargin > 1
