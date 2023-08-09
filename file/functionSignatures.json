@@ -28,6 +28,25 @@
         "description": "已存在则不加载"
     },
 
+    "loadDailyData": {
+        "inputs": [
+            {"name": "ROOTPATH", "kind": "required", "type": ["@(x) isstring(x)"]},
+            {"name": "MATNAME", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
+            {"name": "DATE", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
+            {"name": "protocols", "kind": "namevalue", "type": ["@(x) isstring(x)"]}
+        ],
+        "description": "将特定路径下的同名MAT文件整合"
+    },
+
+    "renameItem": {
+        "inputs": [
+            {"name": "rootPath", "kind": "required", "type": ["folder"]},
+            {"name": "keyword", "kind": "required", "type": ["string"]},
+            {"name": "newName", "kind": "required", "type": ["string"]},
+            {"name": "folderOrFile", "kind": "namevalue", "type": ["choices = {'all', 'file', 'folder'}"]}
+        ]
+    },
+
     "pathManager": {
         "inputs": [
             {"name": "ROOTPATH", "kind": "required", "type": ["folder"]},

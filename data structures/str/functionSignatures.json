@@ -1,0 +1,13 @@
+{
+    "_schemaVersion": "1.0.0",
+    "mContains": {
+        "inputs": [
+            {"name": "str", "kind": "required", "type": ["string"]},
+            {"name": "pat", "kind": "required", "type": ["string"]},
+            {"name": "IgnoreCase", "kind": "namevalue", "type": ["logical", "scalar"]},
+            {"name": "all_or", "kind": "namevalue", "type": ["string", "choices={'all', 'or'}"]}
+        ],
+        "description": "contain可以使用all"
+    }
+
+}

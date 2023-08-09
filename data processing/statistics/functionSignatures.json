@@ -8,6 +8,41 @@
         ]
     },
 
+    "mAnovaCell": {
+        "inputs": [
+            {"name": "trialData", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "tIndex", "kind": "namevalue", "type": ["numeric", "vector"]},
+            {"name": "label", "kind": "namevalue"},
+            {"name": "CriticalValueType", "kind": "namevalue", "type":["choices={'tukey-kramer', 'dunn-sidak', 'bonferroni', 'scheffe', 'dunnett'}"]}
+        ]
+    },
+
+    "mTtest": {
+        "inputs": [
+            {"name": "x", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "y", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "Tail", "kind": "namevalue", "type":["choices={'both', 'left', 'right'}"]},
+            {"name": "Alpha", "kind": "namevalue", "type": ["numeric", "vector"]}
+        ]
+    },
+
+     "mTtestCellSuccessive": {
+        "inputs": [
+            {"name": "trialData", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "Tail", "kind": "namevalue", "type":["choices={'both', 'left', 'right'}"]},
+            {"name": "Alpha", "kind": "namevalue", "type": ["numeric", "vector"]}
+        ]
+    },
+    
+
+     "judgeStdIncDec": {
+        "inputs": [
+            {"name": "trialData", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "Tail", "kind": "namevalue", "type":["choices={'both', 'left', 'right'}"]},
+            {"name": "Alpha", "kind": "namevalue", "type": ["numeric", "vector"]}
+        ]
+    },
+
     "SE": {
         "inputs": [
             {"name": "x", "kind": "required", "type": ["numeric", "2d"]},

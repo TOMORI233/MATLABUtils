@@ -1,7 +1,6 @@
 function sNew = structSelect(s, fieldSel)
-    if iscell(fieldSel)
-        fieldSel = string(fieldSel);
-    end
+fieldSel = string(fieldSel);
+if length(s) > 1
     sField = fields(s);
     wrongIdx = find(~ismember(fieldSel, sField));
     if ~isempty(wrongIdx)
@@ -9,19 +8,24 @@ function sNew = structSelect(s, fieldSel)
     end
 
     [~, selectIdx] = ismember(fieldSel, sField);
-    
+
     structLength = length(s);
-    oldCell = table2cell(struct2table(s)); 
-    [m, n] = size(oldCell); 
-    if n == structLength 
+    oldCell = table2cell(struct2table(s));
+    [m, n] = size(oldCell);
+    if n == structLength
         oldCell = oldCell';
     end
 
     if ~isCellByCol(oldCell)
         oldCell = oldCell';
     end
-    
+
     valueSel = oldCell(:, selectIdx);
 
     sNew = easyStruct(fieldSel, valueSel);
+else
+    for sIndex = 1 : length(fieldSel)
+        sNew.(fieldSel(sIndex)) = s.(fieldSel(sIndex));
+    end
+end
 end
