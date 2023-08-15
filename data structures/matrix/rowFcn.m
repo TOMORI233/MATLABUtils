@@ -17,10 +17,11 @@ function varargout = rowFcn(fcn, A, varargin)
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
     mIp.addRequired("A");
-    bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
 
-    if isempty(bIdx)
+    if isempty(find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1))
         bIdx = 1:length(varargin);
+    else
+        bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
     end
 
     for n = 1:length(bIdx)
