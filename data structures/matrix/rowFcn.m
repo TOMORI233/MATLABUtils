@@ -19,6 +19,10 @@ function varargout = rowFcn(fcn, A, varargin)
     mIp.addRequired("A");
     bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
 
+    if isempty(bIdx)
+        bIdx = 1:length(varargin);
+    end
+
     for n = 1:length(bIdx)
         eval(['B', num2str(bIdx(n)), '=varargin{', num2str(bIdx(n)), '};']);
         mIp.addOptional(eval(['"B', num2str(bIdx(n)), '"']), [], @(x) size(x, 1) == size(A, 1));

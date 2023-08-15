@@ -27,11 +27,13 @@ mIp.addRequired("ROOTPATH", @(x) exist(x, "dir") ~= 0);
 mIp.addParameter("subjects", [], @(x) isstring(x) || iscellstr(x) || ischar(x));
 mIp.addParameter("protocols", [], @(x) isstring(x) || iscellstr(x) || ischar(x));
 mIp.addParameter("matPat", "*", @(x) (isstring(x) && isscalar(x)) || (ischar(x) && isrow(x)));
+mIp.addParameter("folderOnly", false, @(x) isscalar(x) && islogical(x));
 mIp.parse(ROOTPATH, varargin{:});
 
 subjects = mIp.Results.subjects;
 protocols = mIp.Results.protocols;
 matPat = mIp.Results.matPat;
+folderOnly = mIp.Results.folderOnly;
 
 if isempty(subjects)
     temp = dir(ROOTPATH);
@@ -65,6 +67,11 @@ temp = cellfun(@(x) rowFcn(@(y) dir(fullfile(ROOTPATH, y, x, strcat("**\", matPa
 temp = cellfun(@(x) cellfun(@(y) arrayfun(@(z) fullfile(z.folder, z.name), y, "UniformOutput", false), x, "UniformOutput", false), temp, "UniformOutput", false);
 temp = cellfun(@(x) mCell2mat(x), temp, "UniformOutput", false);
 temp = cellfun(@string, temp, "UniformOutput", false);
+
+if folderOnly
+    temp = cellfun(@(x) mCell2mat(arrayfun(@(y) fileparts(y), x, "UniformOutput", false)), temp, "UniformOutput", false);
+end
+
 res = struct("protocol", protocols, "path", temp);
 
 return;

@@ -7,7 +7,7 @@ function mPrint(target, FILENAME, formattype, resolution)
     end
 
     if nargin < 4
-        resolution = "-r300";
+        resolution = "-r100";
     end
 
     % Using absolute path for current path
