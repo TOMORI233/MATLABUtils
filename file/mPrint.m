@@ -1,4 +1,4 @@
-function mPrint(target, FILENAME, formattype, resolution)
+function success = mPrint(target, FILENAME, formattype, resolution)
     % Check whether FILE exists and if it does, do nothing
     narginchk(2, 4);
 
@@ -17,8 +17,11 @@ function mPrint(target, FILENAME, formattype, resolution)
 
     if ~exist(FILENAME, "file")
         print(target, FILENAME, formattype, resolution);
+        success = true;
     else
         disp(strcat(FILENAME, " already exists. Skip printing."));
+        success = false;
     end
 
+    return;
 end

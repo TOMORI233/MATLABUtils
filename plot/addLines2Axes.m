@@ -22,16 +22,16 @@ function addLines2Axes(varargin)
     %     % Example 2: Draw a dividing line y=x for ROC
     %     addLines2Axes(Fig);
 
-    if nargin > 1 && all(isgraphics(varargin{1}))
+    if all(isgraphics(varargin{1}))
         FigsOrAxes = varargin{1};
-        varargin = varargin(2);
+        varargin = varargin(2:end);
     else
         FigsOrAxes = gcf;
     end
 
     mIp = inputParser;
     mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
-    mIp.addOptional("lines", [], @(x) isstruct(x));
+    mIp.addOptional("lines", [], @(x) isempty(x) || isstruct(x));
     mIp.parse(FigsOrAxes, varargin{:});
 
     lines = mIp.Results.lines;

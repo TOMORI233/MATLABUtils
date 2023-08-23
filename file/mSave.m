@@ -1,4 +1,4 @@
-function mSave(FILENAME, varargin)
+function success = mSave(FILENAME, varargin)
     % Check whether FILE exists and if it does, do nothing
     nVars = find(cellfun(@(x) contains(x, "-"), varargin), 1) - 1;
 
@@ -13,8 +13,11 @@ function mSave(FILENAME, varargin)
 
     if ~exist(FILENAME, "file")
         save(FILENAME, varargin{:});
+        success = true;
     else
         disp(strcat(FILENAME, " already exists. Skip saving."));
+        success = false;
     end
 
+    return;
 end
