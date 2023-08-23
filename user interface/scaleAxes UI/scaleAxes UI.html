@@ -23,7 +23,8 @@
     <script type="text/javascript">
         function setup(htmlComponent) {
             var data = htmlComponent.Data;
-            data.step = (data.max - data.min) / 100;
+            var resolution = 2000;
+            data.step = (data.max - data.min) / resolution;
 
             var mySlider = $("#axesRangeSelector").bootstrapSlider({
                 id: "mySlider",
@@ -45,7 +46,7 @@
             // Data from MATLAB to HTML
             htmlComponent.addEventListener("DataChanged", function (event) {
                 let changedData = htmlComponent.Data;
-                changedData.step = (changedData.max - changedData.min) / 100;
+                changedData.step = (changedData.max - changedData.min) / resolution;
 
                 mySlider.bootstrapSlider({
                     step: changedData.step,
