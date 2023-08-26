@@ -34,13 +34,8 @@ function varargout = rowFcn(fcn, A, varargin)
 
     %% Impl
     segIdx = ones(size(A, 1), 1);
-
-    if ~iscell(A)
-        A = mat2cell(A, segIdx);
-    end
-
-    idx = ~cellfun(@iscell, varargin(bIdx));
-    varargin(idx) = cellfun(@(x) mat2cell(x, segIdx), varargin(idx), "UniformOutput", false);
+    A = mat2cell(A, segIdx);
+    varargin(bIdx) = cellfun(@(x) mat2cell(x, segIdx), varargin(bIdx), "UniformOutput", false);
     [varargout{1:nargout}] = cellfun(fcn, A, varargin{bIdx}, "UniformOutput", mIp.Results.UniformOutput);
     
     return;
