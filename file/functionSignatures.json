@@ -62,7 +62,8 @@
             {"name": "ROOTPATH", "kind": "required", "type": ["folder"]},
             {"name": "subjects", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
             {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
-            {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]}
+            {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]},
+            {"name": "folderOnly", "kind": "namevalue", "type": ["logical", "scalar"]}
         ]
     }
 }

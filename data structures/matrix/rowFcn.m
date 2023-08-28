@@ -17,7 +17,12 @@ function varargout = rowFcn(fcn, A, varargin)
     mIp = inputParser;
     mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
     mIp.addRequired("A");
-    bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
+
+    if isempty(find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1))
+        bIdx = 1:length(varargin);
+    else
+        bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
+    end
 
     for n = 1:length(bIdx)
         eval(['B', num2str(bIdx(n)), '=varargin{', num2str(bIdx(n)), '};']);
@@ -29,13 +34,8 @@ function varargout = rowFcn(fcn, A, varargin)
 
     %% Impl
     segIdx = ones(size(A, 1), 1);
-
-    if ~iscell(A)
-        A = mat2cell(A, segIdx);
-    end
-
-    idx = ~cellfun(@iscell, varargin(bIdx));
-    varargin(idx) = cellfun(@(x) mat2cell(x, segIdx), varargin(idx), "UniformOutput", false);
+    A = mat2cell(A, segIdx);
+    varargin(bIdx) = cellfun(@(x) mat2cell(x, segIdx), varargin(bIdx), "UniformOutput", false);
     [varargout{1:nargout}] = cellfun(fcn, A, varargin{bIdx}, "UniformOutput", mIp.Results.UniformOutput);
     
     return;
