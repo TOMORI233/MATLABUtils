@@ -201,7 +201,7 @@ if ~isempty(symOpt) && ~strcmpi(symOpt, "none")
     if ~isempty(temp)
         axisRange = [-temp, temp];
     else
-        error("Axis range are all positive or negative");
+        warning("Axis range are all positive or negative");
     end
 
 end

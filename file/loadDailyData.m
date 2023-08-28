@@ -12,7 +12,7 @@ DATE = mIp.Results.DATE;
 protocols = mIp.Results.protocols;
 
 %% get MAT path
-MATPATH = dirItem(ROOTPATH, MATNAME);
+MATPATH = dirItem(ROOTPATH, MATNAME, "folderOrFile", "file");
 PATHPART = cellfun(@(x) strsplit(x, "\"), MATPATH, "UniformOutput", false);
 if isempty(protocols)
     protocols = unique(string(cellfun(@(x) x{end - 2}, PATHPART, "UniformOutput", false)));
@@ -22,7 +22,7 @@ MATPATH = string(MATPATH);
 %% merge daily data
 for pIndex = 1 : length(protocols)
     ProtPATH = MATPATH(mContains(MATPATH, DATE, "all_or", "all") & mContains(MATPATH, protocols(pIndex)));
-    PATHPART = cellfun(@(x) strsplit(x, "\"), MATPATH, "UniformOutput", false);
+    PATHPART = cellfun(@(x) strsplit(x, "\"), ProtPATH, "UniformOutput", false);
     dateStrs = cellfun(@(x) x{end - 1}, PATHPART, "UniformOutput", false);
     for mIndex = 1 : length(ProtPATH)
         temp = whos('-file', ProtPATH(mIndex));

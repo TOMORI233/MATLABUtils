@@ -21,6 +21,7 @@ Alpha = mIp.Results.Alpha;
 
 X = trialData(1 : end-1);
 Y = trialData(2 : end);
+
 XX = cellfun(@(x, y) [x(ismember(x(:, 2), y(:, 2)), :)], X, Y, "UniformOutput", false);
 
 [H, P] = cellfun(@(x, y) mTtest(x(:, 1), y(:,1), "Tail", Tail, "Alpha", Alpha), XX, Y, "UniformOutput", false);

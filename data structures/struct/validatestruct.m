@@ -7,9 +7,10 @@ function [pass, msg] = validatestruct(s, varargin)
     % Output:
     %     pass: pass validation or not
     %     msg: validation failure message
+    %          It shows in "sIndex - fieldName: error msg"
 
     fIdx = find(cellfun(@(x) ischar(x) || isstring(x), varargin));
-    msg = 'Validation Failed: ';
+    msg = 'Validation Failed : ';
     pass = true;
 
     for sIndex = 1:length(s)
@@ -17,9 +18,16 @@ function [pass, msg] = validatestruct(s, varargin)
         for n = 1:length(fIdx)
 
             try
+                clearvars ans
                 varargin{fIdx(n) + 1}(s(sIndex).(varargin{fIdx(n)}));
-            catch e
-                msg = [msg, newline, num2str(sIndex), ' - ', char(varargin{fIdx(n)}), ': ', char(e.message)];
+
+                if exist("ans", "var") && ~ans
+                    msg = [msg, newline, num2str(sIndex), ' - ', char(varargin{fIdx(n)})];
+                    pass = false;
+                end
+                
+            catch ME
+                msg = [msg, newline, num2str(sIndex), ' - ', char(varargin{fIdx(n)}), ': ', char(ME.message)];
                 pass = false;
             end
 

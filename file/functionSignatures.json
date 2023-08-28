@@ -38,13 +38,23 @@
         "description": "将特定路径下的同名MAT文件整合"
     },
 
+    "dirItem": {
+        "inputs": [
+            {"name": "rootPath", "kind": "required", "type": ["folder"]},
+            {"name": "keyword", "kind": "required", "type": ["string"]},
+            {"name": "folderOrFile", "kind": "namevalue", "type": ["choices = {'all', 'file', 'folder'}"]}
+        ],
+        "description": "返回跟目录下包含特定字符串的路径/文件"
+    },
+
     "renameItem": {
         "inputs": [
             {"name": "rootPath", "kind": "required", "type": ["folder"]},
             {"name": "keyword", "kind": "required", "type": ["string"]},
             {"name": "newName", "kind": "required", "type": ["string"]},
             {"name": "folderOrFile", "kind": "namevalue", "type": ["choices = {'all', 'file', 'folder'}"]}
-        ]
+        ],
+        "description": "重命名跟目录下包含特定字符串的路径/文件"
     },
 
     "pathManager": {

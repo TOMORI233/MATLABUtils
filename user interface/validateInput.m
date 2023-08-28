@@ -67,7 +67,10 @@ function v = validateInput(prompt, varargin)
                 validateFcn(v);
             end
     
-            e = [];
+            if (exist("ans", "var") && ans) || ~exist("ans", "var")
+                e = [];
+            end
+
         catch e
             disp(e.message);
         end

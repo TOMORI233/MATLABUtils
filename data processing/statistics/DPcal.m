@@ -32,6 +32,6 @@ try
     end
 
 catch
-    resDP.value = [];
-    resDP.p = [];
+    resDP.value = 0.5;
+    resDP.p = 1;
 end

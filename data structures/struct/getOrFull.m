@@ -1,11 +1,11 @@
 function v = getOrFull(s, default)
     % Description:
-    % Complete [s] with [default]. [default] is specified as a 
-    % struct containing some fields of [s] with default values.
-    % Fields not in [default] but in [s] or not in [s] but in 
-    % [default] will be reserved.
-    % For fields in both [s] and [default], field values in [s] 
-    % will be reserved.
+    %     Complete [s] with [default]. [default] is specified as a 
+    %     struct containing some fields of [s] with default values.
+    %     Fields not in [default] but in [s] or not in [s] but in 
+    %     [default] will be reserved.
+    %     For fields in both [s] and [default], field values in [s] 
+    %     will be reserved.
     % Example:
     %     A = struct("a1", 1, "a2", 2);
     %     B = struct("a1", 11, "a3", 3);

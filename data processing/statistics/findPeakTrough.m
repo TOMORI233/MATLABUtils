@@ -1,5 +1,5 @@
 function [peakIdx, troughIdx] = findPeakTrough(data, varargin)
-    % Description: find indexes of peak and trough of waves
+    % Description: find indices (in logical) of peak and trough of waves
     % Input:
     %     data: a vector or 2-D matrix
     %     dim: 1 for data of [nSample, nCh], 2 for data of [nCh, nSample] (default: 2)
