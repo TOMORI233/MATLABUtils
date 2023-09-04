@@ -36,10 +36,10 @@ function mAxe = mRaster(varargin)
     for index = 1:numel(rasterData)
         X = reshape(rasterData(index).X, [numel(rasterData(index).X), 1]);
 
-        if ~isfield(X, "Y")
-            Y = (nTrials + 1:nTrials + length(rasterData(index).X))';
+        if ~isfield(rasterData(index), "Y")
+            Y = mat2cell((nTrials + 1:nTrials + length(rasterData(index).X))', ones(length(rasterData(index).X), 1));
             nTrials = nTrials + length(X);
-            Y = cell2mat(rowFcn(@(x, y) repmat(y, [length(x), 1]), X, Y, "UniformOutput", false));
+            Y = cell2mat(cellfun(@(x, y) repmat(y, [length(x), 1]), X, Y, "UniformOutput", false));
             X = cell2mat(cellfun(@(x) reshape(x, [length(x), 1]), X, "UniformOutput", false));
         end
 
