@@ -12,10 +12,10 @@ function varargout = mSubplot(varargin)
     %              - margin_top
     %     paddings: paddings of subplot specified as [left, right, bottom, top].
     %               You can also set them separately using name-value pair (prior to paddings):
-    %               - paddings_left
-    %               - paddings_right
-    %               - paddings_bottom
-    %               - paddings_top
+    %               - padding_left
+    %               - padding_right
+    %               - padding_bottom
+    %               - padding_top
     %     shape: 'auto'(default), 'square-min', 'square-max', 'fill'
     %            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
     %     alignment: (RECOMMEND: use with [nSize]) name-value with options:
@@ -60,14 +60,14 @@ function varargout = mSubplot(varargin)
                                                                         'center-left', ...
                                                                         'center-right', ...
                                                                         'center'})));
-    mIp.addParameter("margin_left"    , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("margin_right"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("margin_bottom"  , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("margin_top"     , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("paddings_left"  , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("paddings_right" , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("paddings_bottom", [], @(x) validateattributes(x, 'numeric', {'scalar'}));
-    mIp.addParameter("paddings_top"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("margin_left"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("margin_right"  , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("margin_bottom" , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("margin_top"    , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("padding_left"  , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("padding_right" , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("padding_bottom", [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+    mIp.addParameter("padding_top"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
     mIp.parse(Fig, varargin{:})
 
     Fig       = mIp.Results.Fig      ;
@@ -83,10 +83,10 @@ function varargout = mSubplot(varargin)
     margin_right   = mIp.Results.margin_right   ;
     margin_bottom  = mIp.Results.margin_bottom  ;
     margin_top     = mIp.Results.margin_top     ;
-    padding_left   = mIp.Results.paddings_left  ;
-    padding_right  = mIp.Results.paddings_right ;
-    padding_bottom = mIp.Results.paddings_bottom;
-    padding_top    = mIp.Results.paddings_top   ;
+    padding_left   = mIp.Results.padding_left  ;
+    padding_right  = mIp.Results.padding_right ;
+    padding_bottom = mIp.Results.padding_bottom;
+    padding_top    = mIp.Results.padding_top   ;
 
     if ~isempty(margin_left)  , margins(1) = margin_left  ; end
     if ~isempty(margin_right) , margins(2) = margin_right ; end
