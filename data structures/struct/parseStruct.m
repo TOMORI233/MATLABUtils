@@ -75,7 +75,12 @@ function varargout = parseStruct(S, varargin)
         else
 
             for fIndex = 1:nargout
-                varargout{fIndex} = vertcat(S(sIndex).(varargin{fIndex}));
+                try
+                    varargout{fIndex} = vertcat(S(sIndex).(varargin{fIndex}));
+                catch
+                    disp("Not all values are of the same type and size. Return in cell.");
+                    varargout{fIndex} = {S(sIndex).(varargin{fIndex})}';
+                end
             end
 
         end
