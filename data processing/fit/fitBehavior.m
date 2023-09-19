@@ -1,0 +1,16 @@
+function res = fitBehavior(Y, X)
+    narginchk(1, 2);
+
+    if nargin < 2
+        X = (1:numel(Y))';
+    end
+
+    fitRes = mPFit([reshape(X, [numel(X), 1]), reshape(Y, [numel(Y), 1])], ...
+                   "expType", "YesNo", ...
+                   "plotFitRes", 0, ...
+                   "sigmoidName", 'gaussint', ...
+                   "xFit", linspace(X(1), X(end), 1000), ...
+                   "useGPU", 1);
+    res = [fitRes.xFit; fitRes.yFit];
+    return;
+end
