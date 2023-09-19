@@ -205,6 +205,13 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/09/19 by XHX - Compatible
+
+  | Type  | Target         | Content                                                      |
+  | ----- | -------------- | ------------------------------------------------------------ |
+  | Debug | `mHistogram.m` | 修复了在未指定legend时出现legend框的问题                     |
+  | Add   | `addfield.m`   | 用于向列向量的struct数组添加字段，要求添加的字段所赋值在行数与原结构体相同 |
+
 - 2023/08/06 by XHX - Compatible
 
   | Type | Target               | Content                                                      |
