@@ -47,5 +47,8 @@ function mAxe = mRaster(varargin)
         scatter(mAxe, X, Y, sz, color, "filled");
     end
 
+    set(mAxe, "XLimitMethod", "tight");
+    set(mAxe, "YLimitMethod", "tight");
+
     return;
 end
