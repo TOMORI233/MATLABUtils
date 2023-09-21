@@ -8,7 +8,7 @@ labels = data(:,2);
 scores = data(:,1);
 
 try
-    [~, ~, ~, resDP.value] = perfcurve(labels, scores, 1);
+    [resDP.X, resDP.Y, ~, resDP.value] = perfcurve(labels, scores, 1);
 
     parfor i = 1:iteration
         [~, ~, ~, AUC, ~] = perfcurve(labels(randperm(numel(labels))), scores(randperm(numel(scores))), 1);

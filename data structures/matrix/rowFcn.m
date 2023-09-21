@@ -1,12 +1,12 @@
 function varargout = rowFcn(fcn, A, varargin)
     % Description: apply fcn to each row of matrix (based on cellfun)
     % Notice:
-    %     Inputs can be all data type valid for mat2cell()
-    %
+    %     Inputs can be all data type valid for mat2cell().
+    %     A cell array can also be segmented by mat2cell().
     % Input:
     %     fcn: function handle, function to apply to each row
-    %     A: a 2-D matrix or a vector
-    %     B1,...,Bn: other matrixes
+    %     A: a 2-D matrix or a vector of any type
+    %     B1,...,Bn: other matrixes of any type
     %     "UniformOutput": true/false
     % Output:
     %     Ouputs of fcn with nRows=size(A, 1)

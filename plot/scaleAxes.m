@@ -219,7 +219,7 @@ end
 
 %% Call scaleAxes UI
 if strcmpi(uiOpt, "show")
-    scaleAxesApp(allAxes, axisName, axisRange, [axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]);
+    scaleAxesApp(allAxes, axisName, double(axisRange), double([axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]));
     drawnow;
 end
 

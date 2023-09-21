@@ -22,7 +22,7 @@ function addLines2Axes(varargin)
     %     % Example 2: Draw a dividing line y=x for ROC
     %     addLines2Axes(Fig);
 
-    if all(isgraphics(varargin{1}))
+    if nargin > 0 && all(isgraphics(varargin{1}))
         FigsOrAxes = varargin{1};
         varargin = varargin(2:end);
     else

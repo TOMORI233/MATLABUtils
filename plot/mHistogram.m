@@ -99,6 +99,9 @@ function [H, N, edges] = mHistogram(varargin)
 
     end
 
-    legend(mAxe);
+    if ~isempty(legendStrs)
+        legend(mAxe);
+    end
+    
     return;
 end
