@@ -1,7 +1,7 @@
-function [p, postHoc, h] = mAnovaCell(trialData, varargin)
+function [p, postHoc, h, postHoc_H] = mAnovaCell(trialData, varargin)
 % Description: do one-way anova for n*1 cell, each cell contains m*1 vector
 % Input:
-%     trialData: data (a 1-D cell)
+%     trialData: data (an 1-D cell)
 %     tIndex: index of data selected
 %     label: the label of entire trialData
 %     CriticalValueType: method of post-hoc test
@@ -47,10 +47,12 @@ tagTemp = vertcat(temp{:});
 h = double(p > 0.05);
 
 [c, ~, ~, gnames] = multcompare(stats, "Display", "off", "CriticalValueType", CriticalValueType);
-cTemp = [c, double(c(:, 6) > 0.05)];
+cTemp = [c, double(c(:, 6) < 0.05)];
 
 temp0 = 1 : length(tIndex);
 postHocTemp = cellfun(@(x) [temp0(~ismember(temp0, x))' cTemp(any(ismember(cTemp(:, 1:2), x), 2), 6:7)], num2cell(temp0), "UniformOutput", false)';
+temp = cell2mat(postHocTemp);
+postHoc_H = any(temp(:, end));
 minNum = cellfun(@(x) char(tag(x(find(x(:, 3) == 1, 1, "first"), 1))), postHocTemp, "UniformOutput", false);
 postHoc = cell2struct([num2cell(temp0)', gnames, postHocTemp, minNum], ["idx", "group", "multiCompare", "minNum"], 2);
 end
