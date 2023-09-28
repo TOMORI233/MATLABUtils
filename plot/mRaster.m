@@ -6,6 +6,7 @@ function mAxe = mRaster(varargin)
     %         - X: x data, cell vector
     %         - Y: y data (If not specified, plot trial by trial)
     %         - color: scatter color
+    %         - lines: lines to add to scatterplot, only X value is valid (see addLines2Axes.m)
     %     sz: scatter size (default = 40)
     % Example:
     %     data(1).X = {[1, 2, 3, 4, 5]; []; [1.5, 2.5]}; % three trials
@@ -43,8 +44,25 @@ function mAxe = mRaster(varargin)
             X = cell2mat(cellfun(@(x) reshape(x, [length(x), 1]), X, "UniformOutput", false));
         end
 
+        if isempty(X) || isempty(Y)
+            continue;
+        end
+
         color = getOr(rasterData(index), "color", "k");
         scatter(mAxe, X, Y, sz, color, "filled");
+
+        lines = getOr(rasterData(index), "lines");
+        if ~isempty(lines)
+            for lIndex = 1:length(lines)
+                lines(lIndex).color = getOr(lines(lIndex), "color", "r", true);
+                lines(lIndex).width = getOr(lines(lIndex), "width", 1, true);
+                lines(lIndex).style = getOr(lines(lIndex), "style", "-", true);
+                plot(ones(1, 2) * lines(lIndex).X, [min(Y), max(Y)], ...
+                     "Color", lines(lIndex).color, ...
+                     "LineStyle", lines(lIndex).style, ...
+                     "LineWidth", lines(lIndex).width);
+            end
+        end
     end
 
     set(mAxe, "XLimitMethod", "tight");
