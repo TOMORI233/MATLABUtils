@@ -1,9 +1,15 @@
 function fr = calFR(trials, windowFR)
-    % [trials] should contain field [spike]
+    % If [trials] is a struct array, it should contain field [spike]
+    % If [trials] is a cell array, its element contains spikes of each trial
     % [fr] will be returned as a column vector
     % [windowFR] is a two-element vector in millisecond
 
-    fr = arrayfun(@(x) length(x.spike >= windowFR(1) & x.spike <= windowFR(2)) / (diff(windowFR) / 1000), trials);
+    switch class(trials)
+        case "cell"
+            fr = cellfun(@(x) length(x >= windowFR(1) & x <= windowFR(2)) / (diff(windowFR) / 1000), trials);
+        case "struct"
+            fr = arrayfun(@(x) length(x.spike >= windowFR(1) & x.spike <= windowFR(2)) / (diff(windowFR) / 1000), trials);
+    end
 
     return;
 end
