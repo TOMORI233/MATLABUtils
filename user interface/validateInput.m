@@ -4,6 +4,7 @@ function v = validateInput(prompt, varargin)
     %     prompt: hint of input
     %     validateFcn: validate function handle
     %     sInput: input type, "s" or 's' for str input and left empty for other type input
+    %     UI: if set "on", an UI will be used instead of command line
     % Output:
     %     v: valid input content
     % Example:

@@ -205,6 +205,12 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/09/25 by XHX - Compatible
+
+  | Type | Target               | Content                                                      |
+  | ---- | -------------------- | ------------------------------------------------------------ |
+  | Add  | `figureViewer.mlapp` | 将图片拼接滚动查看。输入参数`srcPaths`为字符串数组，指定图片完整路径；输入参数`orientation`指定图片拼接方向：`"vertical"`为纵向，`"horizontal"`为横向 |
+
 - 2023/09/19 by XHX - Compatible
 
   | Type  | Target          | Content                                                      |

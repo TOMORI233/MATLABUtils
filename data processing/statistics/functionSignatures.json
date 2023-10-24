@@ -8,6 +8,15 @@
         ]
     },
 
+    "findVectorLoc": {
+        "inputs": [
+            {"name": "X", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "pat", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "n", "kind": "ordered", "type": [["numeric", "integer", "postive", "scalar"], ["@isempty"]]},
+            {"name": "direction", "kind": "ordered", "type": ["choices={'first', 'last'}"]}
+        ]
+    },
+
     "mAnovaCell": {
         "inputs": [
             {"name": "trialData", "kind": "required", "type": ["numeric", "vector"]},

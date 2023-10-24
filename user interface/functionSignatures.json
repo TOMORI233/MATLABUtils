@@ -33,5 +33,12 @@
             {"name": "ContentFontSize", "kind": "namevalue", "type": ["scalar", "positive"]},
             {"name": "BackgroundColor", "kind": "namevalue"}
         ]
+    },
+
+    "figureViewer": {
+        "inputs": [
+            {"name": "srcPaths", "kind": "required", "type": ["string"]},
+            {"name": "orientation", "kind": "ordered", "type": ["choices = {'vertical', 'horizontal'}"]}
+        ]
     }
 }
