@@ -28,7 +28,7 @@ P = zeros(length(n), 1);
 for index = 1:length(n)
     P(index) = 1 - poisscdf(n(index) - 1, lambda(index));
 end
-latency = spikes(find(P < th, 1));
+latency = spikes(find(P < th, 1) + 4);
 
 mSubplot(1, 2, 2, "nSize", [0.8, 0.2], "alignment", "top-center");
 plot(spikes, zeros(length(spikes), 1), "k", "Marker", "|", "LineStyle", "none", "MarkerSize", 20);
