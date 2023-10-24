@@ -6,9 +6,9 @@ function fr = calFR(trials, windowFR)
 
     switch class(trials)
         case "cell"
-            fr = cellfun(@(x) length(x >= windowFR(1) & x <= windowFR(2)) / (diff(windowFR) / 1000), trials);
+            fr = cellfun(@(x) sum(x >= windowFR(1) & x <= windowFR(2)) / (diff(windowFR) / 1000), trials);
         case "struct"
-            fr = arrayfun(@(x) length(x.spike >= windowFR(1) & x.spike <= windowFR(2)) / (diff(windowFR) / 1000), trials);
+            fr = arrayfun(@(x) sum(x.spike >= windowFR(1) & x.spike <= windowFR(2)) / (diff(windowFR) / 1000), trials);
     end
 
     return;
