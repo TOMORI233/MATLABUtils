@@ -1,4 +1,6 @@
 function resStruct = addFieldToStruct(struct,fieldVal,fieldName)
+% Example: struct = addFieldToStruct(struct, [a, b], ["a", "b"]);
+
 if ~iscell(fieldName)
     fieldName = cellstr(fieldName);
 end
@@ -6,6 +8,7 @@ end
 structLength = length(struct);
 oldFields = string(fields(struct));
 fieldName = string(fieldName);
+fieldName = reshape(fieldName, [], 1);
 %% convert struct to cell
 if length(struct) > 1
     oldCell = table2cell(struct2table(struct));
