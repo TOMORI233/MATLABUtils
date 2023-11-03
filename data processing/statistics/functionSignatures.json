@@ -52,6 +52,15 @@
         ]
     },
 
+
+     "mPdist": {
+        "inputs": [
+            {"name": "x", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "cellData", "kind": "required", "type": ["cell", "vector"]},
+            {"name": "Method", "kind": "ordored", "type": ["seuclidean", "squaredeuclidean", "seuclidean", "mahalanobis", "cityblock", "minkowski", "spearman", "hamming", "correlation", "cosine"]}
+        ]
+    },
+
     "SE": {
         "inputs": [
             {"name": "x", "kind": "required", "type": ["numeric", "2d"]},

@@ -1,0 +1,11 @@
+{
+    "_schemaVersion": "1.0.0",
+    "mUniqueCell": {
+        "inputs": [
+            {"name": "cellRaw", "kind": "required", "type": ["string"]},
+            {"name": "delSubCell", "kind": "ordered", "type": ["choices = {'simple', 'largest set', 'minimum set'}"]}
+        ],
+        "description": "适用于cell的unique"
+    }
+
+}

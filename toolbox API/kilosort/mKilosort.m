@@ -34,6 +34,7 @@ function mKilosort(binFullPath, ops, SAVEPATH)
     rez = find_merges(rez, 1);
 
     mkdir(SAVEPATH)
+    save(fullfile(SAVEPATH, "kiloRez.mat"), "rez", "-v7.3");
     rezToPhy2(rez, SAVEPATH);
 
     % cd(SAVEPATH);
