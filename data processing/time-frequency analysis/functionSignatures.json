@@ -9,5 +9,15 @@
             {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={2, 1}"]},
             {"name": "foi", "kind": "ordered", "type": ["numeric", "2d"], "purpose": "frequency of interest"}
         ]
+    },
+
+    "mCWT": {
+        "inputs": [
+            {"name": "data", "kind": "required", "type": ["numeric", "vector"], "purpose": "1*n double"},
+            {"name": "fs", "kind": "required", "type": ["numeric", "scalar", "@(x) x > 0"], "purpose": "sample rate in Hz"},
+            {"name": "method", "kind": "ordered", "type": ["choices={'morse', 'morlet', 'bump', 'STFT'}"]},
+            {"name": "fsDownsample", "type": ["numeric", "scalar", "@(x) x > 0"], "purpose": "downsample rate in Hz"},
+            {"name": "freqLimits", "type": ["numeric", "@(x) numel(x) == 2 && all(x) >= 0 && x(2) > x(1)"]}
+        ]
     }
 }
