@@ -13,11 +13,24 @@ data.time    = {t};
 data.fsample = fs;
 data.label   = {'1'};
 
-cfg           = [];
-cfg.method    = 'wavelet';
-cfg.taper     = 'hanning';
-cfg.toi       = 'all';
-freq          = ft_freqanalysis(cfg, data);
+cfg         = [];
+cfg.method  = 'wavelet';
+cfg.output  = 'pow';
+cfg.taper   = 'hanning';
+cfg.toi     = 'all';
+cfg.foilim  = [0, 200];
+cfg.pad     = 'nextpow2';
+freq        = ft_freqanalysis(cfg, data);
+
+cfg = [];
+cfg.channel = {'1'};  % 指定通道名称
+cfg.zlim = [-inf, inf];
+ft_singleplotTFR(cfg, freq);
+
+figure;
+imagesc("XData", t, "YData", freq.freq, "CData", squeeze(freq.powspctrm));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
 
 [cwtres, f, coi] = cwtMultiAll(y', fs);
 figure;

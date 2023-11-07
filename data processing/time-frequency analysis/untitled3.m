@@ -7,6 +7,9 @@ fs = dataAC.fs;
 %%
 granger = mGranger(dataAC.trialsECOG(1:10), dataPFC.trialsECOG(1:10), dataAC.windowPE, fs, "parametricOpt", "NP");
 
+%%
+figure;
+imagesc("XData", granger.time, "YData", granger.freq, "CData", squeeze(granger.grangerspctrm(1, 2, :, :)));
 
 %%
 tic;
