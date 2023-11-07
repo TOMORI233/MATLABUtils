@@ -2,6 +2,11 @@
 # Edit by Waschl 
 #This file is created by: touch.gitignore 
 #put it in the root folder
+
+#ignore codegen folder
+*/codegen/
+/codegen/
+
 #ignore slprj folder
 */slprj/
 /slprj/
