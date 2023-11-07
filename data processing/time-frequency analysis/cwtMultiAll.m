@@ -4,7 +4,7 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
 
     [nSample, nTrial] = size(data);
     [~, f, coi] = cwt(data(:, 1), 'amor', fs);
-    cwtres = nan(nSample, length(f), nTrial);
+    cwtres = nan(length(f), nSample, nTrial);
 
     parfor tIndex = 1:nTrial
         cwtres(:, :, tIndex) = abs(cwt(data(:, tIndex), 'amor', fs));
