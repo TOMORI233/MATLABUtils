@@ -3,6 +3,9 @@
 #This file is created by: touch.gitignore 
 #put it in the root folder
 
+#ignore temporary untitled files
+untitled*
+
 #ignore codegen folder
 */codegen/
 /codegen/
