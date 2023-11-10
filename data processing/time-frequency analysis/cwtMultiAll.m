@@ -1,5 +1,8 @@
 function [cwtres, f, coi] = cwtMultiAll(data, fs)
-    % Apply cwt to multi-channel data and return spectrum within specified frequency range.
+    % Apply cwt to multi-channel data. The result is returned in complex.
+    % This procedure is for cross-spectral density matrix computation in 
+    % nonparametric computation of granger causality.
+    %
     % It can be encoded by gpucoder for parallel computation. See mGpucoder.m
 
     [nSample, nTrial] = size(data);
@@ -7,7 +10,7 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
     cwtres = nan(length(f), nSample, nTrial);
 
     parfor tIndex = 1:nTrial
-        cwtres(:, :, tIndex) = abs(cwt(data(:, tIndex), 'amor', fs));
+        cwtres(:, :, tIndex) = cwt(data(:, tIndex), 'amor', fs);
     end
 
     return;

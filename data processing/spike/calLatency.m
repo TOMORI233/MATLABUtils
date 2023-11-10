@@ -1,4 +1,4 @@
-function latency = calLatency(trials, windowOnset, windowBase, th, nStart)
+function [latency, P] = calLatency(trials, windowOnset, windowBase, th, nStart)
     % Return latency of neuron using spike data.
     %
     % If [trials] is a struct array, it should contain field [spike] for each trial.
