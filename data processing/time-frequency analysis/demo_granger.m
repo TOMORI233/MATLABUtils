@@ -62,7 +62,7 @@ set(gca, "YLimitMethod", "tight");
 % cwt
 [cwtres, f, coi] = cwtMultiAll(y1', fs);
 figure;
-imagesc("XData", t, "YData", f, "CData", cwtres);
+imagesc("XData", t, "YData", f, "CData", abs(cwtres));
 set(gca, "XLimitMethod", "tight");
 set(gca, "YLimitMethod", "tight");
 set(gca, "YScale", "log");
