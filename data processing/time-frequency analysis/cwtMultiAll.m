@@ -7,7 +7,7 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
 
     [nSample, nTrial] = size(data);
     [~, f, coi] = cwt(data(:, 1), 'amor', fs);
-    cwtres = nan(length(f), nSample, nTrial);
+    cwtres = complex(nan(length(f), nSample, nTrial));
 
     parfor tIndex = 1:nTrial
         cwtres(:, :, tIndex) = cwt(data(:, tIndex), 'amor', fs);
