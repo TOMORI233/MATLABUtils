@@ -1,4 +1,8 @@
 function y = SE(x, dim)
+    % Return standard error of [x] along [dim]
+    % [dim]=1 means row by row
+    % [dim]=2 means column by column
+
     narginchk(1, 2);
 
     if nargin < 2

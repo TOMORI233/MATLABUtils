@@ -1,5 +1,5 @@
 function mLoad(fileName, varNames)
-    % Load *.mat to workspace and if [varNames] exist in workspace, do nothing.
+    % Load *.mat to workspace. If [varNames] exist in workspace, do nothing.
     % If a part of [varNames] are in workspace, the rest part will be loaded.
     % [varNames] should be specified as cell vector, string vector or char.
     % If [fileName] is dir path or empty, use uigetfile to select a mat file.

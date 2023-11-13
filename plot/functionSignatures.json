@@ -134,9 +134,6 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
-                ],
-                [
                     {"name": "axisName", "kind": "required", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ],

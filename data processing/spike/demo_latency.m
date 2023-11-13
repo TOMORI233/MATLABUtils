@@ -1,5 +1,6 @@
 ccc;
 
+addpath(genpath(fileparts(mfilename("fullpath"))), "-begin");
 load('D:\Education\Lab\Projects\Neural correlates with duration related cognition (pre)\SN_m4\noise duration\m4c24_duration_att30dB_sort_1.mat');
 
 %% 
@@ -52,3 +53,55 @@ ylabel('Probability');
 set(gca, "YScale", "log");
 addLines2Axes(gca, struct("Y", th, "width", 1.5));
 title(['Latency ', num2str(latency), ' ms']);
+
+%% fcn
+function trialAll = noiseProcessFcn(epocs)
+    trialOnsetTimeAll = epocs.Swep.onset * 1000; % ms
+
+    n = length(trialOnsetTimeAll);
+    temp = cell(n, 1);
+    trialAll = struct('trialNum', temp, ...
+                      'soundOnsetSeq', temp);
+
+    for tIndex = 1:length(trialOnsetTimeAll)
+        trialAll(tIndex).trialNum = tIndex;
+        trialAll(tIndex).soundOnsetSeq = trialOnsetTimeAll(tIndex);
+    end
+
+    return;
+end
+
+function trials = selectSpikes(spktime, trials, segOption, windowSeg)
+    % spktime: [spiketime, clusterind]
+    % trials: n*1 struct
+    % segOption: "trial onset" | "dev onset" | "push onset" | "last std"
+    %            For numeric vector input, it represents segment time.
+    % windowSeg: 2-element vector, in ms
+    %
+    % return in [trials.spike], in ms
+
+    switch segOption
+        case "trial onset"
+            segTime = cellfun(@(x) x(1), {trials.soundOnsetSeq}');
+        case "dev onset"
+            segTime = [trials.devOnset]';
+        case "push onset" % make sure pushing time of all trials not empty
+    
+            if length(trials) ~= length([trials.firstPush])
+                error("Pushing time of all trials should not be empty");
+            end
+    
+            segTime = [trials.firstPush]';
+        case "last std"
+            segTime = cellfun(@(x) x(end - 1), {trials.soundOnsetSeq}');
+        otherwise
+            segTime = segOption;
+    end
+
+    for index = 1:length(segTime)
+        trials(index).spike = spktime(spktime(:, 1) >= (segTime(index) + windowSeg(1)) / 1000 & spktime(:, 1) <= (segTime(index) + windowSeg(2)) / 1000, :);
+        trials(index).spike(:, 1) = trials(index).spike(:, 1) * 1000 - segTime(index); % return in ms
+    end
+
+    return;
+end
