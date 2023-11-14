@@ -25,9 +25,10 @@ legend;
 % NP
 granger = mGranger({y1}, {y2}, [t(1), t(end)]*1000, fs, "parametricOpt", "NP");
 mSubplot(2, 2, 2);
-plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
-hold on;
-plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
+imagesc("XData", granger.time, "YData", granger.freq, "CData", squeeze(granger.grangerspctrm(1, 2, :, :)));
+% plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
+% hold on;
+% plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
 legend;
 title("Nonparametric");
 
@@ -48,14 +49,14 @@ data.fsample = fs;
 data.label   = {'1'};
 cfg         = [];
 cfg.method  = 'wavelet';
-cfg.output  = 'pow';
+cfg.output  = 'fourier';
 cfg.taper   = 'hanning';
 cfg.toi     = 'all';
 cfg.foilim  = [0, 200];
 cfg.pad     = 'nextpow2';
 freq        = ft_freqanalysis(cfg, data);
 figure;
-imagesc("XData", t, "YData", freq.freq, "CData", squeeze(freq.powspctrm));
+imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(1, 2, :, :))));
 set(gca, "XLimitMethod", "tight");
 set(gca, "YLimitMethod", "tight");
 
