@@ -6,9 +6,9 @@ x1 = sin(2*pi*100*t0);
 x2 = sin(2*pi*20*t0);
 y1 = [x1, zeros(1, 400), 2*x2];
 y2 = [zeros(1, 200), 0.8*x1, x2];
-minLen = min([length(y1), length(y2)]);
-y1 = y1(1:minLen);
-y2 = y2(1:minLen);
+dur = 2;
+y1 = y1(1:fix(dur * fs));
+y2 = y2(1:fix(dur * fs));
 t = (0:length(y1) - 1) / fs;
 
 %% Raw
@@ -25,10 +25,10 @@ legend;
 % NP
 granger = mGranger({y1}, {y2}, [t(1), t(end)]*1000, fs, "parametricOpt", "NP");
 mSubplot(2, 2, 2);
-imagesc("XData", granger.time, "YData", granger.freq, "CData", squeeze(granger.grangerspctrm(1, 2, :, :)));
-% plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
-% hold on;
-% plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
+% imagesc("XData", granger.time, "YData", granger.freq, "CData", squeeze(granger.grangerspctrm(1, 2, :, :)));
+plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
+hold on;
+plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
 legend;
 title("Nonparametric");
 
@@ -43,22 +43,30 @@ title("Parametric");
 
 %% Wavelet
 % Fieldtrip
-data.trial   = {y1};
-data.time    = {t};
+data.trial   = {y1, y2};
+data.time    = {t, t};
 data.fsample = fs;
 data.label   = {'1'};
 cfg         = [];
 cfg.method  = 'wavelet';
 cfg.output  = 'fourier';
-cfg.taper   = 'hanning';
+cfg.taper   = 'dpss';
 cfg.toi     = 'all';
-cfg.foilim  = [0, 200];
 cfg.pad     = 'nextpow2';
 freq        = ft_freqanalysis(cfg, data);
 figure;
-imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(1, 2, :, :))));
+mSubplot(1, 2, 1);
+imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(1, 1, :, :))));
 set(gca, "XLimitMethod", "tight");
 set(gca, "YLimitMethod", "tight");
+title('y1');
+mSubplot(1, 2, 2);
+imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(2, 1, :, :))));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
+title('y2');
+scaleAxes("c");
+colorbar;
 
 % cwt
 [cwtres, f, coi] = cwtMultiAll(y1', fs);
