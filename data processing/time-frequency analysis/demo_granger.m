@@ -1,82 +1,128 @@
 ccc;
+dbstop if error;
 
-fs = 1e3;
-t0 = 0:1/fs:1;
-x1 = sin(2*pi*100*t0);
-x2 = sin(2*pi*20*t0);
-y1 = [x1, zeros(1, 400), 2*x2];
-y2 = [zeros(1, 200), 0.8*x1, x2];
-dur = 2;
-y1 = y1(1:fix(dur * fs));
-y2 = y2(1:fix(dur * fs));
-t = (0:length(y1) - 1) / fs;
+rng default
+rng(50)
 
-%% Raw
+fs = 200;
+
+cfg             = [];
+cfg.ntrials     = 500;
+cfg.triallength = 1;
+cfg.fsample     = fs;
+cfg.nsignal     = 3;
+cfg.method      = 'ar';
+
+cfg.params(:,:,1) = [ 0.8    0    0 ;
+                        0  0.9  0.5 ;
+                      0.4    0  0.5];
+
+cfg.params(:,:,2) = [-0.5    0    0 ;
+                        0 -0.8    0 ;
+                        0    0 -0.2];
+
+cfg.noisecov      = [ 0.3    0    0 ;
+                        0    1    0 ;
+                        0    0  0.2];
+
+data              = ft_connectivitysimulation(cfg);
+
+cfg         = [];
+cfg.order   = 5;
+cfg.toolbox = 'bsmart';
+mdata       = ft_mvaranalysis(cfg, data);
+cfg         = [];
+cfg.method  = 'mvar';
+mfreq       = ft_freqanalysis(cfg, mdata); 
+cfg           = [];
+cfg.method    = 'granger';
+grangerP      = ft_connectivityanalysis(cfg, mfreq);
+figure;
+cfg           = [];
+cfg.parameter = 'grangerspctrm';
+cfg.zlim      = [0 1];
+ft_connectivityplot(cfg, grangerP);
+
+cfg           = [];
+cfg.method    = 'mtmfft';
+cfg.taper     = 'dpss';
+cfg.output    = 'fourier';
+cfg.tapsmofrq = 2;
+freq          = ft_freqanalysis(cfg, data);
+cfg           = [];
+cfg.method    = 'granger';
+grangerNP     = ft_connectivityanalysis(cfg, freq);
+figure;
+cfg           = [];
+cfg.parameter = 'grangerspctrm';
+cfg.zlim      = [0 1];
+ft_connectivityplot(cfg, grangerNP);
+
+figure
+for row=1:3
+    for col=1:3
+        subplot(3,3,(row-1)*3+col);
+        plot(grangerP.freq, squeeze(grangerP.grangerspctrm(row,col,:)))
+        ylim([0 1])
+    end
+end
+
+%%
+y = data.trial';
+t = data.time{1};
+figure
+plot(data.time{1}, data.trial{1})
+legend(data.label)
+xlabel('time (s)')
+
+%% wavelet transform
+[cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), y, "UniformOutput", false);
+f = flip(f{1})';
+coi = coi{1};
+cwtres = cellfun(@(x) flip(x, 1), cwtres, "UniformOutput", false);
+cwtres = cellfun(@(x) permute(x, [4, 3, 1, 2]), cwtres, "UniformOutput", false);
+cwtres = cell2mat(cwtres); % rpt_chan_freq_time
+
+freqdata = [];
+freqdata.freq = f;
+freqdata.time = t;
+freqdata.dimord = 'rpt_chan_freq_time';
+freqdata.cumtapcnt = ones(length(t), length(f));
+freqdata.fourierspctrm = cwtres;
+
+%% 
+grangercfg = [];
+freqdata.label = data.label;
+grangercfg.channelcmb = cat(2, cellstr(repmat(freqdata.label{1}, [length(data.label(2:end)) 1])), cellstr(string(data.label(2:end))));
+grangercfg.cmbindx = [ones(size(grangercfg.channelcmb, 1), 1), [2:size(grangercfg.channelcmb, 1) + 1]'];
+gdata = ft_granger_hm(grangercfg, freqdata);
+
+%%
 figure;
 maximizeFig;
-mSubplot(1, 2, 1);
-plot(t, y1, "DisplayName", "y1");
-hold on;
-plot(t, y2, "DisplayName", "y2");
-set(gca, "XLimitMethod", "tight");
-title("Shift from 100 Hz to 20 Hz");
-legend;
 
-% NP
-granger = mGranger({y1}, {y2}, [t(1), t(end)]*1000, fs, "parametricOpt", "NP");
+mSubplot(2, 2, 1);
+imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", flip(squeeze(gdata.grangerspctrm(2, :, :)), 2));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
+title('From signal001 to signal002');
+
 mSubplot(2, 2, 2);
-% imagesc("XData", granger.time, "YData", granger.freq, "CData", squeeze(granger.grangerspctrm(1, 2, :, :)));
-plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
-hold on;
-plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
-legend;
-title("Nonparametric");
+imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", flip(squeeze(gdata.grangerspctrm(4, :, :)), 2));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
+title('From signal001 to signal003');
 
-% P
-granger = mGranger({y1}, {y2}, [t(1), t(end)]*1000, fs, "parametricOpt", "P");
+mSubplot(2, 2, 3);
+imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", flip(squeeze(gdata.grangerspctrm(1, :, :)), 2));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
+title('From signal002 to signal001');
+
 mSubplot(2, 2, 4);
-plot(granger.freq, squeeze(granger.grangerspctrm(1, 2, :)), "DisplayName", "From y1 to y2");
-hold on;
-plot(granger.freq, squeeze(granger.grangerspctrm(2, 1, :)), "DisplayName", "From y2 to y1");
-legend;
-title("Parametric");
+imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", flip(squeeze(gdata.grangerspctrm(3, :, :)), 2));
+set(gca, "XLimitMethod", "tight");
+set(gca, "YLimitMethod", "tight");
+title('From signal003 to signal001');
 
-%% Wavelet
-% Fieldtrip
-data.trial   = {y1, y2};
-data.time    = {t, t};
-data.fsample = fs;
-data.label   = {'1'};
-cfg         = [];
-cfg.method  = 'wavelet';
-cfg.output  = 'fourier';
-cfg.taper   = 'dpss';
-cfg.toi     = 'all';
-cfg.pad     = 'nextpow2';
-freq        = ft_freqanalysis(cfg, data);
-figure;
-mSubplot(1, 2, 1);
-imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(1, 1, :, :))));
-set(gca, "XLimitMethod", "tight");
-set(gca, "YLimitMethod", "tight");
-title('y1');
-mSubplot(1, 2, 2);
-imagesc("XData", t, "YData", freq.freq, "CData", abs(squeeze(freq.fourierspctrm(2, 1, :, :))));
-set(gca, "XLimitMethod", "tight");
-set(gca, "YLimitMethod", "tight");
-title('y2');
 scaleAxes("c");
-colorbar;
-
-% cwt
-[cwtres, f, coi] = cwtMultiAll(y1', fs);
-figure;
-imagesc("XData", t, "YData", f, "CData", abs(cwtres));
-set(gca, "XLimitMethod", "tight");
-set(gca, "YLimitMethod", "tight");
-set(gca, "YScale", "log");
-hold on;
-plot(t, coi, "w--", "LineWidth", 1.5);
-set(gca, "YScale", "log");
-yticks(2.^(0:8)');
-yticklabels(num2str(2.^(0:8)'));
