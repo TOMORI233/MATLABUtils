@@ -80,12 +80,11 @@ xlabel('time (s)')
 
 %% wavelet transform
 [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), y, "UniformOutput", false);
-f = flip(f{1})';
+f = f{1}';
 f = 10 * log(f);
-c = 0 - f(1);
+c = 0 - f(end);
 f = f + c;
 coi = coi{1};
-cwtres = cellfun(@(x) flip(x, 1), cwtres, "UniformOutput", false);
 cwtres = cellfun(@(x) permute(x, [4, 3, 1, 2]), cwtres, "UniformOutput", false);
 cwtres = cell2mat(cwtres); % rpt_chan_freq_time
 
@@ -126,14 +125,19 @@ P = squeeze(sum(grangerspctrm(2, :, :, 1) < grangerspctrm(2, :, :, 2:end), 4)) /
 P = reshape(P, [numel(P), 1]);
 P = mafdr(P, 'BHFDR', true);
 P = reshape(P, [length(f), length(t)]);
-temp = flip(squeeze(grangerspctrm(2, :, :, 1)) .* (P < alphaVal), 2);
-imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", temp);
+temp = squeeze(grangerspctrm(2, :, :, 1)) .* (P < alphaVal);
+imagesc(gdata.time, gdata.freq, temp);
 set(gca, "XLimitMethod", "tight");
 set(gca, "YLimitMethod", "tight");
 title('From signal001 to signal002');
 
 mSubplot(2, 2, 2);
-imagesc("XData", gdata.time, "YData", flip(gdata.freq), "CData", flip(squeeze(grangerspctrm(4, :, :, 1)), 2));
+P = squeeze(sum(grangerspctrm(4, :, :, 1) < grangerspctrm(4, :, :, 2:end), 4)) / nperm;
+P = reshape(P, [numel(P), 1]);
+P = mafdr(P, 'BHFDR', true);
+P = reshape(P, [length(f), length(t)]);
+temp = squeeze(grangerspctrm(4, :, :, 1)) .* (P < alphaVal);
+imagesc(gdata.time, gdata.freq, temp);
 set(gca, "XLimitMethod", "tight");
 set(gca, "YLimitMethod", "tight");
 title('From signal001 to signal003');
