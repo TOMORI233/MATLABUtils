@@ -1,5 +1,6 @@
 ccc;
-dbstop if error;
+
+ft_setPath2Top;
 
 rng default
 rng(50)
