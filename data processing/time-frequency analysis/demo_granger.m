@@ -80,9 +80,9 @@ xlabel('time (s)')
 
 %% wavelet transform
 [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), y, "UniformOutput", false);
-f = flip(f{1})';
+f = f{1}';
 f = 10 * log(f);
-c = 0 - f(1);
+c = 0 - f(end);
 f = f + c;
 coi = coi{1};
 cwtres = cellfun(@(x) flip(x, 1), cwtres, "UniformOutput", false);
