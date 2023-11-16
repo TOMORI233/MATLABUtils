@@ -1,7 +1,7 @@
 ccc;
 
 addpath(genpath(fileparts(mfilename("fullpath"))), "-begin");
-load('D:\Education\Lab\Projects\Neural correlates with duration related cognition (pre)\SN_m4\noise duration\m4c24_duration_att30dB_sort_1.mat');
+load('D:\Education\Lab\Projects\Neural correlates with duration related cognition (pre)\SN_m4\noise duration\m4c1_duration_att30dB_sort_1.mat');
 
 %% 
 set(0, "defaultAxesFontSize", 12);
