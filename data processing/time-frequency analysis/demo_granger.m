@@ -6,24 +6,27 @@ rng default
 rng(50)
 
 fs = 200;
-nperm = 100;
+nperm = 500;
 alphaVal = 0.01;
 
 cfg             = [];
-cfg.ntrials     = 200;
+cfg.ntrials     = 500;
 cfg.triallength = 1;
 cfg.fsample     = fs;
-cfg.nsignal     = 2;
+cfg.nsignal     = 3;
 cfg.method      = 'ar';
 
-cfg.params(:,:,1) = [ 0.8    0;
-                        0  0.9];
+cfg.params(:,:,1) = [ 0.8    0    0 ;
+                        0  0.9  0.5 ;
+                      0.4    0  0.5];
 
-cfg.params(:,:,2) = [-0.5    0;
-                        0 -0.8];
+cfg.params(:,:,2) = [-0.5    0    0 ;
+                        0 -0.8    0 ;
+                        0    0 -0.2];
 
-cfg.noisecov      = [ 0.3    0;
-                        0    1];
+cfg.noisecov      = [ 0.3    0    0 ;
+                        0    1    0 ;
+                        0    0  0.2];
 
 data              = ft_connectivitysimulation(cfg);
 
@@ -59,9 +62,9 @@ cfg.zlim      = [0 1];
 ft_connectivityplot(cfg, grangerNP);
 
 figure
-for row=1:2
-    for col=1:2
-        subplot(2,2,(row-1)*2+col);
+for row=1:3
+    for col=1:3
+        subplot(3,3,(row-1)*3+col);
         plot(grangerP.freq, squeeze(grangerP.grangerspctrm(row,col,:)))
         ylim([0 1])
     end
@@ -74,6 +77,11 @@ figure
 plot(data.time{1}, data.trial{1})
 legend(data.label)
 xlabel('time (s)')
+
+%%
+yseed = cellfun(@(x) y(1, :), y, "UniformOutput", false);
+ytarget = cellfun(@(x) y(2:end, :), y, "UniformOutput", false);
+granger = mGrangerWavelet(yseed, ytarget, fs);
 
 %% wavelet transform
 [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), y, "UniformOutput", false);
@@ -98,8 +106,6 @@ freqdata.label = data.label;
 grangercfg.channelcmb = cat(2, cellstr(repmat(freqdata.label{1}, [length(data.label(2:end)) 1])), cellstr(string(data.label(2:end))));
 grangercfg.cmbindx = [ones(size(grangercfg.channelcmb, 1), 1), [2:size(grangercfg.channelcmb, 1) + 1]'];
 gdata = ft_granger_hm(grangercfg, freqdata);
-gdata.freq = exp((gdata.freq - c) / 10);
-gdata.labelcmbType = {'To', 'From'};
 
 %% PT
 grangerspctrm = zeros(length(data.label(2:end)) * 2, length(f), length(t), nperm + 1);
@@ -114,6 +120,7 @@ for index = 1:nperm
     grangerspctrm(:, :, :, 1 + index) = gdata.grangerspctrm;
 end
 gdata.freq = exp((gdata.freq - c) / 10);
+gdata.labelcmbType = {'To', 'From'};
 
 %% 
 chMean = cell2mat(cellfun(@(x) mean(x, 1), changeCellRowNum(data.trial), "UniformOutput", false));
@@ -125,11 +132,9 @@ maximizeFig;
 
 mSubplot(2, 2, 1);
 idx = 1;
-P = squeeze(sum(grangerspctrm(idx, :, :, 1) < grangerspctrm(idx, :, :, 2:end), 4)) / nperm;
-P = reshape(P, [numel(P), 1]);
-P = mafdr(P, 'BHFDR', true);
-P = reshape(P, [length(f), length(t)]);
-temp = squeeze(grangerspctrm(idx, :, :, 1)) .* (P < alphaVal);
+temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
+th = temp(fix(nperm * (1 - alphaVal)));
+temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
 yticks([0, 2.^(0:nextpow2(max(gdata.freq)) - 1)]);
@@ -139,11 +144,9 @@ title('From signal001 to signal002');
 
 mSubplot(2, 2, 2);
 idx = 3;
-P = squeeze(sum(grangerspctrm(idx, :, :, 1) < grangerspctrm(idx, :, :, 2:end), 4)) / nperm;
-P = reshape(P, [numel(P), 1]);
-P = mafdr(P, 'BHFDR', true);
-P = reshape(P, [length(f), length(t)]);
-temp = squeeze(grangerspctrm(idx, :, :, 1)) .* (P < alphaVal);
+temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
+th = temp(fix(nperm * (1 - alphaVal)));
+temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
 yticks([0, 2.^(0:nextpow2(max(gdata.freq)) - 1)]);
@@ -153,11 +156,9 @@ title('From signal001 to signal003');
 
 mSubplot(2, 2, 3);
 idx = 2;
-P = squeeze(sum(grangerspctrm(idx, :, :, 1) < grangerspctrm(idx, :, :, 2:end), 4)) / nperm;
-P = reshape(P, [numel(P), 1]);
-P = mafdr(P, 'BHFDR', true);
-P = reshape(P, [length(f), length(t)]);
-temp = squeeze(grangerspctrm(idx, :, :, 1)) .* (P < alphaVal);
+temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
+th = temp(fix(nperm * (1 - alphaVal)));
+temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
 yticks([0, 2.^(0:nextpow2(max(gdata.freq)) - 1)]);
@@ -167,11 +168,9 @@ title('From signal002 to signal001');
 
 mSubplot(2, 2, 4);
 idx = 4;
-P = squeeze(sum(grangerspctrm(idx, :, :, 1) < grangerspctrm(idx, :, :, 2:end), 4)) / nperm;
-P = reshape(P, [numel(P), 1]);
-P = mafdr(P, 'BHFDR', true);
-P = reshape(P, [length(f), length(t)]);
-temp = squeeze(grangerspctrm(idx, :, :, 1)) .* (P < alphaVal);
+temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
+th = temp(fix(nperm * (1 - alphaVal)));
+temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
 yticks([0, 2.^(0:nextpow2(max(gdata.freq)) - 1)]);
