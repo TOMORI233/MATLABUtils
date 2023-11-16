@@ -6,7 +6,7 @@ rng default
 rng(50)
 
 fs = 200;
-nperm = 500;
+nperm = 10;
 alphaVal = 0.01;
 
 cfg             = [];
@@ -73,58 +73,19 @@ end
 %%
 y = data.trial';
 t = data.time{1};
-figure
-plot(data.time{1}, data.trial{1})
-legend(data.label)
-xlabel('time (s)')
+figure;
+plot(data.time{1}, data.trial{1});
+legend(data.label);
+xlabel('time (s)');
 
-%%
-yseed = cellfun(@(x) y(1, :), y, "UniformOutput", false);
-ytarget = cellfun(@(x) y(2:end, :), y, "UniformOutput", false);
-granger = mGrangerWavelet(yseed, ytarget, fs);
-
-%% wavelet transform
-[cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), y, "UniformOutput", false);
-f = f{1};
-f = 10 * log(f);
-c = 0 - f(end);
-f = f + c;
-coi = coi{1};
-cwtres = cellfun(@(x) permute(x, [4, 3, 1, 2]), cwtres, "UniformOutput", false);
-cwtres = cell2mat(cwtres); % rpt_chan_freq_time
-
-freqdata = [];
-freqdata.freq = f;
-freqdata.time = t;
-freqdata.dimord = 'rpt_chan_freq_time';
-freqdata.cumtapcnt = ones(length(t), length(f));
-freqdata.fourierspctrm = cwtres;
-
-%% 
-grangercfg = [];
-freqdata.label = data.label;
-grangercfg.channelcmb = cat(2, cellstr(repmat(freqdata.label{1}, [length(data.label(2:end)) 1])), cellstr(string(data.label(2:end))));
-grangercfg.cmbindx = [ones(size(grangercfg.channelcmb, 1), 1), [2:size(grangercfg.channelcmb, 1) + 1]'];
-gdata = ft_granger_hm(grangercfg, freqdata);
-
-%% PT
-grangerspctrm = zeros(length(data.label(2:end)) * 2, length(f), length(t), nperm + 1);
-grangerspctrm(:, :, :, 1) = gdata.grangerspctrm;
-for index = 1:nperm
-    % trial randomization
-    for chIdx = 1:size(freqdata.fourierspctrm, 2)
-        freqdata.fourierspctrm(:, chIdx, :, :) = freqdata.fourierspctrm(randperm(size(freqdata.fourierspctrm, 1)), chIdx, :, :);
-    end
-
-    gdata = ft_granger_hm(grangercfg, freqdata);
-    grangerspctrm(:, :, :, 1 + index) = gdata.grangerspctrm;
-end
-gdata.freq = exp((gdata.freq - c) / 10);
-gdata.labelcmbType = {'To', 'From'};
-
-%% 
 chMean = cell2mat(cellfun(@(x) mean(x, 1), changeCellRowNum(data.trial), "UniformOutput", false));
 plotTFA(chMean, fs, [], [0, 1000]);
+
+%% wavelet granger causality
+yseed = cellfun(@(x) x(1, :), y, "UniformOutput", false);
+ytarget = cellfun(@(x) x(2:end, :), y, "UniformOutput", false);
+gdata = mGrangerWavelet(yseed, ytarget, fs, nperm);
+grangerspctrm = gdata.grangerspctrm;
 
 %%
 figure;
@@ -133,7 +94,7 @@ maximizeFig;
 mSubplot(2, 2, 1);
 idx = 1;
 temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
-th = temp(fix(nperm * (1 - alphaVal)));
+th = temp(ceil(nperm * (1 - alphaVal)));
 temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
@@ -145,7 +106,7 @@ title('From signal001 to signal002');
 mSubplot(2, 2, 2);
 idx = 3;
 temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
-th = temp(fix(nperm * (1 - alphaVal)));
+th = temp(ceil(nperm * (1 - alphaVal)));
 temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
@@ -157,7 +118,7 @@ title('From signal001 to signal003');
 mSubplot(2, 2, 3);
 idx = 2;
 temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
-th = temp(fix(nperm * (1 - alphaVal)));
+th = temp(ceil(nperm * (1 - alphaVal)));
 temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
@@ -169,7 +130,7 @@ title('From signal002 to signal001');
 mSubplot(2, 2, 4);
 idx = 4;
 temp = sort(squeeze(max(grangerspctrm(idx, :, :, 2:end), [], [2 3])));
-th = temp(fix(nperm * (1 - alphaVal)));
+th = temp(ceil(nperm * (1 - alphaVal)));
 temp = squeeze(grangerspctrm(idx, :, :, 1) .* (grangerspctrm(idx, :, :, 1) > th));
 imagesc("XData", gdata.time, "YData", gdata.freq, "CData", temp);
 set(gca, "YScale", "log");
