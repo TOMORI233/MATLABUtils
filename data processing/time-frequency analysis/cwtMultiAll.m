@@ -6,7 +6,7 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
     % It can be encoded by gpucoder for parallel computation. See mGpucoder.m
 
     [nSample, nTrial] = size(data);
-    [~, f, coi] = cwt(data(:, 1), 'amor', fs);
+    [~, f, coi] = cwt(data(:, 1), 'amor', fs, 'FrequencyLimits', [0, 80]);
     cwtres = complex(nan(length(f), nSample, nTrial));
 
     parfor tIndex = 1:nTrial
