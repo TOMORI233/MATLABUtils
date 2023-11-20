@@ -10,7 +10,7 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
     cwtres = complex(nan(length(f), nSample, nTrial));
 
     parfor tIndex = 1:nTrial
-        cwtres(:, :, tIndex) = cwt(data(:, tIndex), 'amor', fs);
+        cwtres(:, :, tIndex) = cwt(data(:, tIndex), 'amor', fs, 'FrequencyLimits', [0, 80]);
     end
 
     return;
