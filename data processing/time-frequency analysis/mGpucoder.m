@@ -4,4 +4,4 @@
 ccc;
 ft_removePath;
 cfg = coder.gpuConfig('mex');
-codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[2202 2]),coder.typeof(0)}
+codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[651 65]),coder.typeof(0)}
