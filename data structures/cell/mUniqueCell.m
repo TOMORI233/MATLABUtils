@@ -8,11 +8,12 @@ type = mIp.Results.type;
 
 temp = reshape(cellRaw, [], 1);
 idxTemp = 1 : length(temp);
-temp = cellfun(@sort, temp(cellfun(@length, temp) > 1), "UniformOutput", false);
-[temp, uniqIdx] = unique(string(cellfun(@(x) strjoin(mat2cellStr(x), ","), temp, "UniformOutput", false)));
+[temp, uniqIdx] = unique(string(cellfun(@(x) strjoin(mat2cellStr(sort(x)), ","), temp, "UniformOutput", false)));
 idxTemp = idxTemp(uniqIdx);
 temp = cellfun(@(k) str2double(strsplit(k, ",")), temp, "UniformOutput", false);
-
+[~, index] = sortrows(cell2mat(cellfun(@(x) [x, zeros(1, max(cellfun(@length, temp) - length(x)))], temp, "UniformOutput", false)), 1:cellfun(@length, temp), "ascend");
+idxTemp = idxTemp(index);
+temp = temp(index);
 if matches(type, "simple")
     uniqueCA = temp;
     idx = idxTemp';

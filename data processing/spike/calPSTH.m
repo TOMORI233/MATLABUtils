@@ -1,4 +1,4 @@
-function psth = calPSTH(trials, windowPSTH, binSize, step)
+function [psth, edge] = calPSTH(trials, windowPSTH, binSize, step)
     % If [trials] is a struct array, it should contain field [spike] for each trial.
     % If [trials] is a cell array, its element contains spikes of each trial.
     % [psth] will be returned as a column vector.
