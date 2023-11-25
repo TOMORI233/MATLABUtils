@@ -7,6 +7,7 @@
 untitled*
 
 #ignore codegen folder
+**/codegen/
 */codegen/
 /codegen/
 
