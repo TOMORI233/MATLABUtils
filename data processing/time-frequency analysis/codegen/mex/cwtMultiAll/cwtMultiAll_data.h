@@ -29,7 +29,7 @@
 extern emlrtCTX emlrtRootTLSGlobal;
 extern boolean_T psidft_not_empty;
 extern emlrtContext emlrtContextGlobal;
-extern real_T (*dv1_gpu_clone)[10001];
-extern real_T (*dv_gpu_clone)[95];
+extern real_T (*dv1_gpu_clone)[400];
+extern real_T (*dv_gpu_clone)[48];
 
 // End of code generation (cwtMultiAll_data.h)

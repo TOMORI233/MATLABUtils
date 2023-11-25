@@ -69,6 +69,7 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
             eval(str);
             movefile('cwtMultiAll_mex.mexw64', ['private\cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64']);
             cd(currentPath);
+            ft_defaults;
         end
 
         disp('Using GPU...');

@@ -26,7 +26,7 @@
 #endif
 
 // Function Declarations
-void cwtMultiAll(const real_T data[50010], real_T fs, creal_T cwtres[4750950],
-                 real_T f[95], real_T coi[5001]);
+void cwtMultiAll(const real_T data[2000], real_T fs, creal_T cwtres[96000],
+                 real_T f[48], real_T coi[200]);
 
 // End of code generation (cwtMultiAll.h)

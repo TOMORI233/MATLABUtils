@@ -23,8 +23,8 @@ static void cwtMultiAll_once()
 {
   mex_InitInfAndNan();
   psidft_not_empty_init();
-  cudaMalloc(&dv1_gpu_clone, sizeof(real_T[10001]));
-  cudaMalloc(&dv_gpu_clone, sizeof(real_T[95]));
+  cudaMalloc(&dv1_gpu_clone, sizeof(real_T[400]));
+  cudaMalloc(&dv_gpu_clone, sizeof(real_T[48]));
 }
 
 void cwtMultiAll_initialize()

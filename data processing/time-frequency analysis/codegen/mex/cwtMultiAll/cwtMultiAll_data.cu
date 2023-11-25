@@ -29,8 +29,8 @@ emlrtContext emlrtContextGlobal{
     nullptr                                               // fSigMem
 };
 
-real_T (*dv1_gpu_clone)[10001];
+real_T (*dv1_gpu_clone)[400];
 
-real_T (*dv_gpu_clone)[95];
+real_T (*dv_gpu_clone)[48];
 
 // End of code generation (cwtMultiAll_data.cu)

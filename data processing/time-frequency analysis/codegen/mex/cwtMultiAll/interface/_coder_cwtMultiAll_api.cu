@@ -60,37 +60,37 @@ static real_T emlrt_marshallIn(const mxArray *u,
 void cwtMultiAll_api(const mxArray *const prhs[2], int32_T nlhs,
                      const mxArray *plhs[3])
 {
-  static const int32_T d_dims[3]{10, 95, 5001};
-  static const int32_T dims[2]{5001, 10};
-  static const int32_T b_dims[1]{5001};
-  static const int32_T c_dims[1]{95};
+  static const int32_T d_dims[3]{10, 48, 200};
+  static const int32_T dims[2]{200, 10};
+  static const int32_T b_dims[1]{200};
+  static const int32_T c_dims[1]{48};
   const mxGPUArray *data_gpu;
   mxGPUArray *coi_gpu;
   mxGPUArray *cwtres_gpu;
   mxGPUArray *f_gpu;
-  creal_T(*cwtres)[4750950];
-  real_T(*data)[50010];
-  real_T(*coi)[5001];
-  real_T(*f)[95];
+  creal_T(*cwtres)[96000];
+  real_T(*data)[2000];
+  real_T(*coi)[200];
+  real_T(*f)[48];
   real_T fs;
   // Marshall function inputs
   data_gpu = emlrt_marshallInGPU(
       emlrtRootTLSGlobal, prhs[0], (const char_T *)"data",
       (const char_T *)"double", false, 2, (void *)&dims[0], true);
-  data = (real_T(*)[50010])emlrtGPUGetDataReadOnly(data_gpu);
+  data = (real_T(*)[2000])emlrtGPUGetDataReadOnly(data_gpu);
   fs = emlrt_marshallIn(emlrtAliasP(prhs[1]), "fs");
   // Create GpuArrays for outputs
   coi_gpu = emlrtGPUCreateNumericArray((const char_T *)"double", false, 1,
                                        (void *)&b_dims[0]);
-  coi = (real_T(*)[5001])emlrtGPUGetData(coi_gpu);
+  coi = (real_T(*)[200])emlrtGPUGetData(coi_gpu);
   // Create GpuArrays for outputs
   f_gpu = emlrtGPUCreateNumericArray((const char_T *)"double", false, 1,
                                      (void *)&c_dims[0]);
-  f = (real_T(*)[95])emlrtGPUGetData(f_gpu);
+  f = (real_T(*)[48])emlrtGPUGetData(f_gpu);
   // Create GpuArrays for outputs
   cwtres_gpu = emlrtGPUCreateNumericArray((const char_T *)"double", true, 3,
                                           (void *)&d_dims[0]);
-  cwtres = (creal_T(*)[4750950])emlrtGPUGetData(cwtres_gpu);
+  cwtres = (creal_T(*)[96000])emlrtGPUGetData(cwtres_gpu);
   // Invoke the target function
   cwtMultiAll(*data, fs, *cwtres, *f, *coi);
   // Marshall function outputs
