@@ -13,8 +13,12 @@ function [cwtres, f, coi] = cwtNxM(trialsData, fs, varargin)
             [nCh, nTime] = size(trialsData{1});
 
             trialsData = cell2mat(trialsData);
-            segIdx = 
-            trialsData = mat2cell(trialsData, [segNum * ones(floor(nTrial * nCh / segNum), 1); mod(nTrial * nCh, segNum)]);
+            if mod(nTrial * nCh, segNum) == 0
+                segIdx = segNum * ones(floor(nTrial * nCh / segNum), 1);
+            else
+                segIdx = [segNum * ones(floor(nTrial * nCh / segNum), 1); mod(nTrial * nCh, segNum)];
+            end
+            trialsData = mat2cell(trialsData, segIdx);
 
             if exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
                 disp('Using GPU...');
