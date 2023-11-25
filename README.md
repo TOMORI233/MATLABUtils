@@ -208,6 +208,14 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/11/25 by XHX - Compatible
+
+  | Type | Target                                 | Content                                                      |
+  | ---- | -------------------------------------- | ------------------------------------------------------------ |
+  | Add  | `cwtAny.m`, `cwtMultiAll.m`            | `cwtAny.m`返回任意trial和通道数目data的小波变换结果(complex)，可以指定分隔的数目(即每x个合并在一起做小波变换)以更好地使用GPU计算(内置了gpucoder部分生成对应大小的`mex`文件，请注意实际是否支持) |
+  | Add  | `ft_removePath.m`                      | 移除FiledTrip的相关路径，但保留`ft_defaults`和本脚本所在文件夹路径，防止与builtin函数冲突 |
+  | Add  | `calLatency.m`, `calPSTH.m`, `calFR.m` | 在`data processing\spike\`下添加了用于计算latency、PSTH和firing rate的3个函数，输入为包含了`spike`字段的`trials`结构体或者spike数据的cell数组(需要对齐至0时刻)，单位为ms。`calPSTH`和`calFR`可能存在冲突，请注意。 |
+
 - 2023/09/25 by XHX - Compatible
 
   | Type | Target               | Content                                                      |

@@ -34,31 +34,16 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 
     if strcmpi(workMode, "auto")
         if exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
+            workMode = "GPU";
             disp('Using GPU...');
-            cwtFcn = eval(['@cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex']);
-            if all(segIdx == segIdx(1))
-                [cwtres, f, coi] = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
-                cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
-            else
-                disp('Computing the rest part using CPU...');
-                [cwtres, f, coi] = cellfun(@(x) cwtFcn(x', fs), trialsData(1:end - 1), "UniformOutput", false);
-                cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
-                cwtres = [cwtres; {cwtMultiAll(trialsData{end}', fs)}];
-            end
-            f = gather(f{1});
-            coi = gather(coi{1});
         else
+            workMode = "CPU";
             disp('mex file is missing. Using CPU...');
-            [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
-            f = f{1};
-            coi = coi{1};
         end
     elseif strcmpi(workMode, "CPU")
         disp('Using CPU...');
-        [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
-        f = f{1};
-        coi = coi{1};
     elseif strcmpi(workMode, "GPU")
+        disp('Using GPU...');
         if ~exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
             disp('mex file is missing. Generating mex file...');
             currentPath = pwd;
@@ -71,8 +56,15 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
             cd(currentPath);
             ft_defaults;
         end
+    else
+        error("Invalid mode");
+    end
 
-        disp('Using GPU...');
+    if strcmpi(workMode, "CPU")
+        [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
+        f = f{1};
+        coi = coi{1};
+    else
         cwtFcn = eval(['@cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex']);
         if all(segIdx == segIdx(1))
             [cwtres, f, coi] = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
@@ -85,8 +77,6 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
         end
         f = gather(f{1});
         coi = gather(coi{1});
-    else
-        error("Invalid mode");
     end
 
     cwtres = cat(1, cwtres{:});
