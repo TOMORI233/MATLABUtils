@@ -7,6 +7,7 @@ try
     pathsAll = path;
     pathsAll = split(pathsAll, ';');
     toRm = pathsAll(contains(pathsAll, 'fieldtrip', 'IgnoreCase', true));
+    ftRootPath = fileparts(which("ft_defaults"));
     
     ftRootPath = fileparts(which("ft_defaults"));
     
