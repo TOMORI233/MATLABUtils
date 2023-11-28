@@ -63,15 +63,14 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 
     [minfreq, maxfreq] = cwtfreqbounds(nTime, fs);
     disp(['Frequencies range from ', num2str(minfreq), ' to ', num2str(maxfreq), ' Hz']);
+    [~, f, coi] = cwtMultiAll(trialsData{1}', fs);
 
     if strcmpi(workMode, "CPU")
-        [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
-        f = f{1};
-        coi = coi{1};
+        cwtres = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
     else
         cwtFcn = eval(['@cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex']);
         if all(segIdx == segIdx(1))
-            [cwtres, f, coi] = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
+            cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
             cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
         else
             disp('Computing the rest part using CPU...');
@@ -79,8 +78,6 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
             cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
             cwtres = [cwtres; {cwtMultiAll(trialsData{end}', fs)}];
         end
-        f = gather(f{1});
-        coi = gather(coi{1});
     end
 
     cwtres = cat(1, cwtres{:});
