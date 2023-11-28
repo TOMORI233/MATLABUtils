@@ -6,18 +6,12 @@ function maximizeFig(Figs)
         Figs = gcf;
     end
 
-    warning off;
-    
-    for index = 1:length(Figs)
+    if isa(Figs, "matlab.ui.Figure")
+        set(Figs, "WindowState", "maximized");
 
-        try
-            jFrame = get(Figs(index), "JavaFrame");
-            set(jFrame, "Maximized", 1);
-        catch e
-            disp(e.message);
-            set(Figs(index), "outerposition", get(0, "screensize"));
-        end
-
+        % set(Figs, "outerposition", get(0, "screensize")); % not maximized
+    else
+        error("Input should be figures");
     end
 
 end

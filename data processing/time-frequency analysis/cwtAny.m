@@ -52,6 +52,7 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
             cfg = coder.gpuConfig('mex');
             str = ['codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[', num2str(nTime), ' ', num2str(segNum), ']),coder.typeof(0)}'];
             eval(str);
+            mkdir('private');
             movefile('cwtMultiAll_mex.mexw64', ['private\cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64']);
             cd(currentPath);
             ft_defaults;
@@ -59,6 +60,9 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
     else
         error("Invalid mode");
     end
+
+    [minfreq, maxfreq] = cwtfreqbounds(nTime, fs);
+    disp(['Frequencies range from ', num2str(minfreq), ' to ', num2str(maxfreq), ' Hz']);
 
     if strcmpi(workMode, "CPU")
         [cwtres, f, coi] = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
