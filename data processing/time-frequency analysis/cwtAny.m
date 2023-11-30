@@ -73,7 +73,7 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
             cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
             cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
         else
-            [cwtres, f, coi] = cellfun(@(x) cwtFcn(x', fs), trialsData(1:end - 1), "UniformOutput", false);
+            cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData(1:end - 1), "UniformOutput", false);
             cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
             
             disp('Computing the rest part using CPU...');
