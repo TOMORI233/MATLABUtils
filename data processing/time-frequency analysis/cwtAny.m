@@ -1,5 +1,5 @@
 function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
-    % [trialsData] is a nTrial*1 cell or a nCh*nTime matrix
+    % [trialsData] is a nTrial*1 cell or a nCh*nTime matrix for one trial
     % [cwtres] is a nTrial*nCh*nFreq*nTime matrix
     % [f] is a a descendent column vector
 
