@@ -12,7 +12,7 @@
         "inputs": [
             {"name": "X", "kind": "required", "type": ["numeric", "vector"]},
             {"name": "pat", "kind": "required", "type": ["numeric", "vector"]},
-            {"name": "n", "kind": "ordered", "type": [["numeric", "integer", "postive", "scalar"], ["@isempty"]]},
+            {"name": "n", "kind": "ordered", "type": [["numeric", "integer", "positive", "scalar"], ["@isempty"]]},
             {"name": "direction", "kind": "ordered", "type": ["choices={'first', 'last'}"]}
         ]
     },
@@ -57,7 +57,16 @@
         "inputs": [
             {"name": "x", "kind": "required", "type": ["numeric", "vector"]},
             {"name": "cellData", "kind": "required", "type": ["cell", "vector"]},
-            {"name": "Method", "kind": "ordored", "type": ["seuclidean", "squaredeuclidean", "seuclidean", "mahalanobis", "cityblock", "minkowski", "spearman", "hamming", "correlation", "cosine"]}
+            {"name": "Method", "kind": "ordered", "type": ["choices={'seuclidean', 'squaredeuclidean', 'seuclidean', 'mahalanobis', 'cityblock', 'minkowski', 'spearman', 'hamming', 'correlation', 'cosine'}"]}
+        ]
+    },
+
+     "mXcorr": {
+        "inputs": [
+            {"name": "A", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "B", "kind": "ordered", "type": ["numeric", "vector"]},
+            {"name": "binSize", "kind": "namevalue", "type": ["numeric"]},
+            {"name": "maxLag", "kind": "namevalue", "type": ["numeric", "vector"]}
         ]
     },
 
