@@ -6,6 +6,7 @@ if nargin < 1
     Figs = gcf;
 end
 
+<<<<<<< HEAD
 warning off;
 
 for index = 1:length(Figs)
@@ -20,6 +21,14 @@ for index = 1:length(Figs)
         end
     else
         set(Figs(index), "outerposition", get(0, "screensize"));
+=======
+    if isa(Figs, "matlab.ui.Figure")
+        set(Figs, "WindowState", "maximized");
+
+        % set(Figs, "outerposition", get(0, "screensize")); % not maximized
+    else
+        error("Input should be figures");
+>>>>>>> 633016e1f8510acdcef5e395721bbf95010b0ad0
     end
 
 end
