@@ -70,14 +70,9 @@ else
     error("Invalid mode");
 end
 
-<<<<<<< HEAD
-    [~, f, coi] = cwtMultiAll(trialsData{1}', fs);
-    disp(['Frequencies range from ', num2str(min(f)), ' to ', num2str(max(f)), ' Hz']);
-=======
 [minfreq, maxfreq] = cwtfreqbounds(nTime, fs);
 disp(['Frequencies range from ', num2str(minfreq), ' to ', num2str(maxfreq), ' Hz']);
 [~, f, coi] = cwtMultiAll(trialsData{1}', fs);
->>>>>>> 633016e1f8510acdcef5e395721bbf95010b0ad0
 
 if strcmpi(workMode, "CPU")
     cwtres = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
