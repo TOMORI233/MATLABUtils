@@ -97,6 +97,7 @@ for index = 1:size(temp, 1)
     temp(index, :, :, :) = cwtres(nCh * (index - 1) + 1:nCh * index, :, :);
 end
 cwtres = temp;
+disp('Done.');
 
 return;
 end
