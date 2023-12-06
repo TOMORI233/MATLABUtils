@@ -3,7 +3,7 @@
 
     "mSave": {
         "inputs": [
-            {"name": "FILENAME", "kind": "required", "type": [["string"], ["char"]]},
+            {"name": "FILENAME", "kind": "required", "type": ["file=*.mat"]},
             {"name": "variable", "kind": "required", "type": ["@(x) ~contains(x, '-')"], "repeating": true},
             {"name": "option", "kind": "ordered", "type": ["@(x) contains(x, '-')"], "repeating": true}
         ],
@@ -13,7 +13,7 @@
     "mPrint": {
         "inputs": [
             {"name": "target", "kind": "required", "type": ["@(x) isgraphics(x)"]},
-            {"name": "FILENAME", "kind": "required", "type": [["string"], ["char"]]},
+            {"name": "FILENAME", "kind": "required", "type": ["file=*.jpg, *.png, *.tiff, *.meta"]},
             {"name": "formattype", "kind": "ordered", "type": ["choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"]},
             {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
         ],
