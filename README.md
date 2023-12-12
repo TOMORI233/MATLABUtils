@@ -61,7 +61,7 @@
          disp('demoFcn is called');
      
          if x1 > x2
-             y = 2 * x1 +x2;
+             y = 2 * x1 + x2;
          else
              y = x1 / x2;
          end
