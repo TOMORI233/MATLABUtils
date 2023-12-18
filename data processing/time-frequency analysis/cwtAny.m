@@ -3,8 +3,11 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 % [cwtres] is a nTrial*nCh*nFreq*nTime matrix
 % [f] is a a descendent column vector
 % If [mode] is set "auto", cwtAny tries GPU first and then turn to CPU.
+%
+% The wavelet used here is 'morlet'. For other wavelet types, please edit
+% cwtMultiAll.m
 % 
-% WARNING
+% %% WARNING %%
 % If CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the
 % recent-created folders 'Jobx' in
 % 'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
