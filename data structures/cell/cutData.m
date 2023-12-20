@@ -1,8 +1,9 @@
-function trialsData = cutData(trialsData, fs, windowOld, windowNew)
+function trialsData = cutData(trialsData, windowOld, windowNew)
     % [windowOld] and [windowNew] are in ms
-    % [fs] is in Hz
 
-    tIdx = fix((windowNew(1) - windowOld(1)) / 1000 * fs) + 1:fix((windowNew(2) - windowOld(1)) / 1000 * fs);
+    t = linspace(windowOld(1), windowOld(2), size(trialsData{1}, 2));
+    tIdx = find(t >= windowNew(1), 1):find(t >= windowNew(2), 1);
     trialsData = cellfun(@(x) x(:, tIdx), trialsData, "UniformOutput", false);
+
     return;
 end
