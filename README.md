@@ -208,6 +208,13 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2023/12/25 by XHX - Compatible
+
+  | Type | Target                   | Content                             |
+  | ---- | ------------------------ | ----------------------------------- |
+  | Add  | `addLines2AxesApp.mlapp` | 添加了一个动态添加图线的App         |
+  | Add  | `scaleAxesApp.mlapp`     | 添加了一个`Line`按钮用于调用画线App |
+
 - 2023/11/25 by XHX - Compatible
 
   | Type | Target                                 | Content                                                      |
