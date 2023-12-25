@@ -2,15 +2,16 @@ function addLines2Axes(varargin)
     % Description: add lines to all subplots in figures
     % Input:
     %     FigsOrAxes: figure object array or axes object array
-    %     lines: a struct array of [X], [Y], [color], [width], [style], [marker] and [legend]
+    %     lines: a struct array of [X], [Y], [color], [width], [style], [marker], [markerSize] and [legend]
     %            If [X] or [Y] is left empty, then best x/y range will be
     %            used.
     %            If [X] or [Y] contains 1 element, then the line will be
     %            vertical to x or y axis.
-    %            If not specified, line color will be black.
+    %            If not specified, line color will be black("k").
     %            If not specified, line width will be 1.
-    %            If not specified, line style will be dash line("--").
-    %            If specified, marker option will replace line style option.
+    %            If not specified, line style will be dashed line("--").
+    %            If not specified, marker will be "none".
+    %            If not specified, marker size will be 6.
     %            If not specified, line legend will not be shown.
     % Example:
     %     % Example 1: Draw lines to mark stimuli oneset and offset at t=0, t=1000 ms
@@ -54,11 +55,12 @@ function addLines2Axes(varargin)
             hold(allAxes(aIndex), "on");
             X = getOr(lines(lIndex), "X");
             Y = getOr(lines(lIndex), "Y");
-            legendStr = getOr(lines(lIndex), "legend");
-            color     = getOr(lines(lIndex), "color",  getOr(lines(1), "color", "k"),  true);
-            lineWidth = getOr(lines(lIndex), "width",  getOr(lines(1), "width", 1),    true);
-            lineStyle = getOr(lines(lIndex), "style",  getOr(lines(1), "style", "--"), true);
-            marker    = getOr(lines(lIndex), "marker", getOr(lines(1), "marker"));
+            legendStr  = getOr(lines(lIndex), "legend");
+            color      = getOr(lines(lIndex), "color",  getOr(lines(1), "color", "k"),  true);
+            lineWidth  = getOr(lines(lIndex), "width",  getOr(lines(1), "width", 1),    true);
+            lineStyle  = getOr(lines(lIndex), "style",  getOr(lines(1), "style", "--"), true);
+            marker     = getOr(lines(lIndex), "marker", getOr(lines(1), "marker", "none"), true);
+            markerSize = getOr(lines(lIndex), "markerSize", getOr(lines(1), "markerSize", 6), true);
 
             if numel(X) == 0
                 X = get(allAxes(aIndex), "xlim");
@@ -72,11 +74,11 @@ function addLines2Axes(varargin)
                 Y = Y * ones(1, 2);
             end
 
-            if isempty(marker)
-                h = plot(allAxes(aIndex), X, Y, "Color", color, "LineWidth", lineWidth, "LineStyle", lineStyle);
-            else
-                h = plot(allAxes(aIndex), X, Y, "Color", color, "Marker", marker, "LineStyle", "none");
-            end
+            h = plot(allAxes(aIndex), X, Y, "Color", color, ...
+                                            "Marker", marker, ...
+                                            "MarkerSize", markerSize, ...
+                                            "LineWidth", lineWidth, ...
+                                            "LineStyle", lineStyle);
 
             if ~isempty(legendStr)
                 set(h, "DisplayName", legendStr);
