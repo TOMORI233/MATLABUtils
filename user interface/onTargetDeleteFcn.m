@@ -1,7 +1,15 @@
-function onTargetDeleteFcn(src, event, app)
+function onTargetDeleteFcn(src, evt)
+    % This function is registered as the deleteFcn of axes
+    % src.UserData.apps is a cell array containing multiple apps
 
-    if isvalid(app) && any(~isvalid(app.target))
-        delete(app);
+    apps = src.UserData.apps;
+
+    for index = 1:numel(apps)
+        app = apps{index};
+        if isvalid(app)
+            delete(app);
+        end
     end
     
+    return;
 end

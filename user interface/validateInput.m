@@ -50,7 +50,7 @@ function v = validateInput(prompt, varargin)
                 if strcmpi(uiOpt, "off")
                     v = input(prompt, "s");
                 else
-                    app = validateInputUI(prompt, validateFcn, "s");
+                    app = validateInputApp(prompt, validateFcn, "s");
                     v = app.res;
                     delete(app);
                 end
@@ -58,7 +58,7 @@ function v = validateInput(prompt, varargin)
                 if strcmpi(uiOpt, "off")
                     v = input(prompt);
                 else
-                    app = validateInputUI(prompt, validateFcn, []);
+                    app = validateInputApp(prompt, validateFcn, []);
                     v = app.res;
                     delete(app);
                 end
