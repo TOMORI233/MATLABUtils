@@ -61,7 +61,7 @@
          disp('demoFcn is called');
      
          if x1 > x2
-             y = 2 * x1 +x2;
+             y = 2 * x1 + x2;
          else
              y = x1 / x2;
          end
@@ -174,7 +174,7 @@
    
    那么matlab将以文件中变量作为最高优先级对`plot`进行调用（这里的`plot`被认为是一个变量名）。当项目存在冲突时，可以建一个这样的脚本将函数指向特定的工具包（中间不要有`clear`的操作）。注意：这个方式会让函数签名失效。
    
-5. 私有函数：在`private`文件夹下的函数，只能被该文件夹父级目录中的函数调用，且不会被添加到搜索路径，优先级高于内置同名函数。
+5. 私有函数：在`private`文件夹下的函数，只能被该文件夹父级目录中的函数调用，且不会被添加到搜索路径，优先级高于内置同名函数。注意：`private`文件夹下的子文件夹还是可以被添加至搜索路径，并不会被屏蔽。
 
 #### 8. 风格与习惯
 
@@ -207,6 +207,13 @@ end
 #### 9. Update Log
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
+
+- 2023/12/25 by XHX - Compatible
+
+  | Type | Target                   | Content                             |
+  | ---- | ------------------------ | ----------------------------------- |
+  | Add  | `addLines2AxesApp.mlapp` | 添加了一个动态添加图线的App         |
+  | Add  | `scaleAxesApp.mlapp`     | 添加了一个`Line`按钮用于调用画线App |
 
 - 2023/11/25 by XHX - Compatible
 

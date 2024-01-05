@@ -7,7 +7,7 @@ classdef demoClass < handle
         mEvt
     end
     
-    methods
+    methods (Access = public)
         function obj = setListener(obj)
             addlistener(obj, "val", "PreSet", @obj.handleValPreSet);
             addlistener(obj, "val", "PostSet", @obj.handleValPostSet);

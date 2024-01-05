@@ -1,10 +1,25 @@
 function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
-% [trialsData] is a nTrial*1 cell or a nCh*nTime matrix for one trial
-% [cwtres] is a nTrial*nCh*nFreq*nTime matrix
-% [f] is a a descendent column vector
+% [trialsData] is a nTrial*1 cell or a nCh*nTime matrix for one trial.
+% [cwtres] is a nTrial*nCh*nFreq*nTime matrix.
+%          If [outType] is "raw" (default), [cwtres] is a complex double matrix.
+%          If [outType] is "power", [cwtres] is returned as abs(cwtres).
+%          If [outType] is "phase", [cwtres] is returned as angle(cwtres).
+% [segNum] specifies the number of waves to combine for computation in a single loop. (default = 10)
 % If [mode] is set "auto", cwtAny tries GPU first and then turn to CPU.
+% If [mode] is set "CPU", use CPU only for computation.
+% If [mode] is set "GPU", use GPU first and then turn to CPU for the rest part.
+% Output [f] is a a descendent column vector.
+%
+% Example:
+%     [cwtres, f, coi] = cwtAny(trialsData, fs)
+%     [cwtres, f, coi] = cwtAny(trialsData, fs, segNum)
+%     [cwtres, f, coi] = cwtAny(..., "mode", "auto | CPU | GPU")
+%     [cwtres, f, coi] = cwtAny(..., "outType", "raw | power | phase")
+%
+% The wavelet used here is 'morlet'. For other wavelet types, please edit
+% cwtMultiAll.m
 % 
-% WARNING
+% %% WARNING %%
 % If CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the
 % recent-created folders 'Jobx' in
 % 'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
@@ -17,10 +32,12 @@ mIp.addRequired("trialsData");
 mIp.addRequired("fs", @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 mIp.addOptional("segNum", 10, @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive', 'integer'}));
 mIp.addParameter("mode", "auto", @(x) any(validatestring(x, {'auto', 'CPU', 'GPU'})));
+mIp.addParameter("outType", "raw", @(x) any(validatestring(x, {'raw', 'power', 'phase'})));
 mIp.parse(trialsData, fs, varargin{:});
 
 segNum = mIp.Results.segNum;
 workMode = mIp.Results.mode;
+type = mIp.Results.outType;
 
 switch class(trialsData)
     case "cell"
@@ -70,9 +87,8 @@ else
     error("Invalid mode");
 end
 
-[minfreq, maxfreq] = cwtfreqbounds(nTime, fs);
-disp(['Frequencies range from ', num2str(minfreq), ' to ', num2str(maxfreq), ' Hz']);
 [~, f, coi] = cwtMultiAll(trialsData{1}', fs);
+disp(['Frequencies range from ', num2str(min(f)), ' to ', num2str(max(f)), ' Hz']);
 
 if strcmpi(workMode, "CPU")
     cwtres = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
@@ -97,6 +113,19 @@ for index = 1:size(temp, 1)
     temp(index, :, :, :) = cwtres(nCh * (index - 1) + 1:nCh * index, :, :);
 end
 cwtres = temp;
+
+switch type
+    case "raw"
+        % do nothing
+    case "power"
+        cwtres = abs(cwtres);
+    case "phase"
+        cwtres = angle(cwtres);
+    otherwise
+        error("Invalid output type");
+end
+
+disp('Done.');
 
 return;
 end
