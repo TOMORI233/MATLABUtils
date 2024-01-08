@@ -22,7 +22,7 @@ function v = getOr(s, field, default, replaceEmpty)
 
     fieldExists = isfield(s, field);
 
-    if any(fieldExists)
+    if any(fieldExists) && ~isempty(s)
 
         if ~replaceEmpty
             v = s.(field(find(fieldExists, 1)));
