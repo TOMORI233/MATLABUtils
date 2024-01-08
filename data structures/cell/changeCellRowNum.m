@@ -1,6 +1,6 @@
 function res = changeCellRowNum(cellData)
     % Decription: convert a*1 cell with elements of b*n matrix to b*1 cell with elements of a*n matrix
-    % Notice: cellData will be reshape into column vector before converting.
+    % Notice: cellData will be reshaped into column vector before converting.
     % Input:
     %     cellData: a A*1 or 1*A cell vector with elements of an B*N numeric matrix (or a 2-D cell array 
     %               which is NOT RECOMMENDED).
@@ -36,7 +36,6 @@ function res = changeCellRowNum(cellData)
     if any([a, b, n] == 1)
         res = cellfun(@(x) x', res, "UniformOutput", false);
     end
-
 
     return;
 end
