@@ -52,7 +52,7 @@ function x = replaceVal(x, newVal, condition)
     idx = cellfun(@(y) isa(y, "function_handle"), condition);
     
     % replace value
-    if any(cellfun(@(y) y(x), condition(idx))) || any(cellfun(@(y) isequal(x, y), condition(~idx)))
+    if any(cell2mat(cellfun(@(y) y(x), condition(idx), "UniformOutput", false))) || any(cellfun(@(y) isequal(x, y), condition(~idx)))
         x = newVal;
     end
     

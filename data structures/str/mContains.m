@@ -1,6 +1,6 @@
 function TF = mContains(str, pat, varargin)
 mIp = inputParser;
-mIp.addRequired("str", @(x) isstring(x));
+mIp.addRequired("str", @(x) isstring(x) | iscellstr(x));
 mIp.addRequired("pat", @(x) isstring(x));
 mIp.addParameter("IgnoreCase", false, @(x) islogical(x));
 mIp.addParameter("all_or", "or", @(x) isstring(x));
@@ -27,6 +27,8 @@ if iscell(TF)
     end
     if length(TF) > 1
         TF = all(cell2mat(TF), 2);
+    else
+        TF = cell2mat(TF);
     end
 else
     if ~iscolumn(TF)

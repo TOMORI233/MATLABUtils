@@ -30,8 +30,9 @@ orangeGrad = {'#FFA500','#FF7F50','#FF6347','#A52A2A','#D2691E','#D2B48C'};
 greenGrad = {'#00FF00','#32CD32','#9ACD32','#228B22','#006400','#556B2F'};
 blueGrad = {'#0000FF','#1E90FF','#87CEEB','#4682B4','#6A5ACD','#40E0D0'};
 blackGrad = {'#000000','#444444','#888888','#AAAAAA','#CCCCCC','#EEEEEE'};
+brownGrad = {'#FFCC99', '#CC9966', '#CC9933', '#996633', '#663300', '#996600'};
 
-colorBuffer = [redGrad; orangeGrad; greenGrad ;blueGrad; blackGrad];
+colorBuffer = [redGrad; orangeGrad; greenGrad ;blueGrad; blackGrad; brownGrad];
 if ~any(strcmp(method,{'rgb','hex'}))
     error('error method input! Please use ''rgb'' or ''hex''');
 end
@@ -41,7 +42,7 @@ if strcmp(method,'rgb')
     colorBuffer = cellfun(@(x) roundn([hex2dec(x(1:2)) hex2dec(x(3:4)) hex2dec(x(5:6))]/255, -2), cellfun(@(x) erase(x,'#'),colorBuffer,'UniformOutput',false),'UniformOutput',false);
 end
 
-colorGrad = easyStruct({'redGrad','orangeGrad','greenGrad','blueGrad','blackGrad'},colorBuffer');
+colorGrad = easyStruct({'redGrad','orangeGrad','greenGrad','blueGrad','blackGrad', 'brownGrad'},colorBuffer');
 
 [colorType colorNum] = size(colorBuffer);
 

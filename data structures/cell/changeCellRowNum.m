@@ -22,8 +22,12 @@ function res = changeCellRowNum(cellData)
     %              300, 301, 302]}
 
     cellData = reshape(cellData, [numel(cellData), 1]);
-    row = size(cellData{1}, 1);
-    res = cellfun(@(r) cell2mat(cellfun(@(x) x(r, :), cellData, "UniformOutput", false)), mat2cell((1:row)', ones(row, 1)), "UniformOutput", false);
-    
+%     row = size(cellData{1}, 1);
+%     L = min(cellfun(@(x) size(x, 2), cellData));
+%     res = cellfun(@(r) mCell2mat(cellfun(@(x) x(r, 1:L), cellData, "UniformOutput", false)), mat2cell((1:row)', ones(row, 1)), "UniformOutput", false);
+
+%   optimazed by spr 20240108
+    res = cellfun(@squeeze, mat2cell(permute(cat(3, cellData{:}), [1, 3, 2]), ones(size(cellData{1}, 1), 1), length(cellData), size(cellData{1}, 2)), "UniformOutput", false);
+
     return;
 end

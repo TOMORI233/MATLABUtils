@@ -7,8 +7,8 @@ function Path = dirItem(rootPath, keyword, varargin)
 %       folderOrFile: decide rename file or folder
 
 mIp = inputParser;
-mIp.addRequired("rootPath", @isstring);
-mIp.addRequired("keyword", @isstring);
+mIp.addRequired("rootPath", @(x) isstring(x) | ischar(x));
+mIp.addRequired("keyword", @(x) isstring(x) | ischar(x));
 mIp.addParameter("folderOrFile", "all", @(x) any(validatestring(x, {'all', 'file', 'folder'})));
 mIp.parse(rootPath, keyword, varargin{:});
 

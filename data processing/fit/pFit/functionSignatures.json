@@ -4,7 +4,7 @@
 
     "mPFit": {
         "inputs": [
-            {"name": "data", "kind": "required", "type": ["numeric"]},
+            {"name": "data", "kind": "required", "type": ["numeric"], "purpose": "[x, ratio] or [x, correctTrial, allTrial]"},
             {"name": "xFit", "kind": "namevalue", "type": ["numeric", "vector"]},
             {"name": "sigmoidName", "kind": "namevalue", "type":["choices={'norm', 'gauss', 'gaussint', 'logistic', 'logn', 'weibull', 'gumbel', 'rgumbel', 'tdist'}"]},
             {"name": "expType", "kind": "namevalue", "type":["choices={'YesNo', '2AFC', 'nAFC'}"]},
