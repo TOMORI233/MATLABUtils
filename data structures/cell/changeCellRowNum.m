@@ -27,7 +27,7 @@ function res = changeCellRowNum(cellData)
 %     res = cellfun(@(r) mCell2mat(cellfun(@(x) x(r, 1:L), cellData, "UniformOutput", false)), mat2cell((1:row)', ones(row, 1)), "UniformOutput", false);
 
 %   optimazed by spr 20240108
-    res = cellfun(@squeeze, mat2cell(permute(cat(3, cellData{:}), [1, 3, 2]), ones(size(cellData{1}, 1), 1), length(cellData), size(cellData, 2)), "UniformOutput", false);
+    res = cellfun(@squeeze, mat2cell(permute(cat(3, cellData{:}), [1, 3, 2]), ones(size(cellData{1}, 1), 1), length(cellData), size(cellData{1}, 2)), "UniformOutput", false);
 
     return;
 end
