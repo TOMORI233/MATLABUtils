@@ -33,6 +33,10 @@ function res = changeCellRowNum(cellData)
     temp = cat(3, cellData{:});
     temp = permute(temp, [1, 3, 2]);
     res = cellfun(@squeeze, mat2cell(temp, ones(b, 1), a, n), "UniformOutput", false);
+    if any([a, b, n] == 1)
+        res = cellfun(@(x) x', res, "UniformOutput", false);
+    end
+
 
     return;
 end
