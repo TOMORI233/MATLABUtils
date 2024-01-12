@@ -1,5 +1,10 @@
-function trialsData = cutData(trialsData, windowOld, windowNew)
+function [trialsData, window] = cutData(trialsData, windowOld, windowNew)
     % [windowOld] and [windowNew] are in ms
+
+    if windowNew(2) > windowOld(2)
+        warning('New time window exceeds data range. Limit to upper range.');
+        windowNew(2) = windowOld(2);
+    end
 
     if isa(trialsData, "double") % For single trial input
         t = linspace(windowOld(1), windowOld(2), size(trialsData, 2));
@@ -13,6 +18,8 @@ function trialsData = cutData(trialsData, windowOld, windowNew)
     else
         error("Invalid data type");
     end
+
+    window = [t(tIdx(1)), t(tIdx(end))];
 
     return;
 end
