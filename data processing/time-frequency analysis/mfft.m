@@ -1,4 +1,4 @@
-function [A, f, Aoi] = mfft(X, fs, varargin)
+function [A, f, Aoi, Phase] = mfft(X, fs, varargin)
     % Description: return single-sided amplitude spectrum A of data X
     % Input:
     %     X: data (a vector or a 2-D matrix)
@@ -41,7 +41,7 @@ function [A, f, Aoi] = mfft(X, fs, varargin)
     A = abs(Y(:, 1:N / 2 + 1) / size(X, 2));
     A(:, 2:end - 1) = 2 * A(:, 2:end - 1);
     f = linspace(0, fs / 2, N / 2 + 1);
-
+    Phase = angle(Y(:, 1:N / 2 + 1));
     if nargin < 5
         Aoi = [];
     else
@@ -75,5 +75,6 @@ function [A, f, Aoi] = mfft(X, fs, varargin)
     end
 
     A = permute(A, [3 - dim, dim]);
+    Phase = permute(Phase, [3 - dim, dim]);
     return;
 end

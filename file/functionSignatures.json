@@ -33,7 +33,8 @@
             {"name": "ROOTPATH", "kind": "required", "type": ["@(x) isstring(x)"]},
             {"name": "MATNAME", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
             {"name": "DATE", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
-            {"name": "protocols", "kind": "namevalue", "type": ["@(x) isstring(x)"]}
+            {"name": "protocols", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
+            {"name": "all_or", "kind": "namevalue", "type": ["@(x) isstring(x)"]}
         ],
         "description": "将特定路径下的同名MAT文件整合"
     },
