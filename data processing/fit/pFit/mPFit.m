@@ -27,8 +27,8 @@ mIp.addRequired("data", @(x) ismatrix(x) & ismember(size(x, 2), [2, 3]));
 mIp.addParameter("xFit", linspace(data(1, 1), data(end, 1), 1000), @isnumeric);
 mIp.addParameter("sigmoidName", "norm", @(x) any(validatestring(x, {'norm', 'gauss', 'gaussint', 'logistic', 'logn', 'weibull', 'gumbel', 'rgumbel', 'tdist'})));
 mIp.addParameter("expType", "YesNo", @(x) any(validatestring(x, {'YesNo', '2AFC', 'nAFC'})));
-mIp.addParameter("expN", 3, @(x) x>=3);
-mIp.addParameter("threshPC", 0.5, @(x) x>0 & x < 1);
+mIp.addParameter("expN", 3, @(x) x >= 3);
+mIp.addParameter("threshPC", 0.5, @(x) x > 0 & x < 1);
 mIp.addParameter("useGPU", 0, @(x) ismember(x, [0, 1]));
 mIp.addParameter("plotFitRes", 0, @(x) ismember(x, [0, 1]));
 
