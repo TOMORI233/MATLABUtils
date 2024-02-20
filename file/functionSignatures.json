@@ -66,5 +66,11 @@
             {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]},
             {"name": "folderOnly", "kind": "namevalue", "type": ["logical", "scalar"]}
         ]
+    },
+
+    "getAbsPath": {
+        "inputs": [
+            {"name": "path", "kind": "required", "type": ["folder"]}
+        ]
     }
 }
