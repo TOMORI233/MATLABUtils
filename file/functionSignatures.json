@@ -13,7 +13,7 @@
     "mPrint": {
         "inputs": [
             {"name": "target", "kind": "required", "type": ["@(x) isgraphics(x)"]},
-            {"name": "FILENAME", "kind": "required", "type": ["file=*.jpg, *.png, *.tiff, *.meta"]},
+            {"name": "FILENAME", "kind": "required", "type": [["string"], ["char"]]},
             {"name": "formattype", "kind": "ordered", "type": ["choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"]},
             {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
         ],
