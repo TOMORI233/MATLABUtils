@@ -1,14 +1,19 @@
 function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
-% [trialsData] is a nTrial*1 cell or a nCh*nTime matrix for one trial.
-% [cwtres] is a nTrial*nCh*nFreq*nTime matrix.
-%          If [outType] is "raw" (default), [cwtres] is a complex double matrix.
-%          If [outType] is "power", [cwtres] is returned as abs(cwtres).
-%          If [outType] is "phase", [cwtres] is returned as angle(cwtres).
-% [segNum] specifies the number of waves to combine for computation in a single loop. (default = 10)
-% If [mode] is set "auto", cwtAny tries GPU first and then turn to CPU.
-% If [mode] is set "CPU", use CPU only for computation.
-% If [mode] is set "GPU", use GPU first and then turn to CPU for the rest part.
-% Output [f] is a a descendent column vector.
+% Description: this function returns cwt results of multi-channel and
+%              multi-trial data using parallel computation on GPU.
+% Parameters:
+%     The input [trialsData] is a nTrial*1 cell, or a nCh*nTime matrix for a single trial.
+%     The input data should be type double.
+%     The input [segNum] specifies the number of waves to combine for computation in a single loop. (default = 10)
+%     If the input [mode] is set "auto", cwtAny tries GPU first and then turn to CPU.
+%     If the input [mode] is set "CPU", use CPU only for computation.
+%     If the input [mode] is set "GPU", use GPU first and then turn to CPU for the rest part.
+%     
+%     The output [cwtres] is a nTrial*nCh*nFreq*nTime matrix.
+%         If the input [outType] is "raw" (default), [cwtres] is a complex double matrix.
+%         If the input [outType] is "power", [cwtres] is returned as abs(cwtres).
+%         If the input [outType] is "phase", [cwtres] is returned as angle(cwtres).
+%     The output [f] is a descendent column vector.
 %
 % Example:
 %     [cwtres, f, coi] = cwtAny(trialsData, fs)
@@ -16,15 +21,14 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %     [cwtres, f, coi] = cwtAny(..., "mode", "auto | CPU | GPU")
 %     [cwtres, f, coi] = cwtAny(..., "outType", "raw | power | phase")
 %
-% The wavelet used here is 'morlet'. For other wavelet types, please edit
-% cwtMultiAll.m
+% Additional information:
+%     The wavelet used here is 'morlet'.
+%     For other wavelet types, please edit \private\cwtMultiAll.m.
 % 
-% %% WARNING %%
-% If CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the
-% recent-created folders 'Jobx' in
+% %% WARNING ISSUES %%
+% If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the recent-created folders 'Jobx' in
 % 'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
-% The setting files in these folders may not allow you to connect to the 
-% parallel pool, which is used in this function.
+% The setting files in these folders may not allow you to connect to the parallel pool, which is used in this function.
 % Tailor your data then, to avoid this problem.
 
 mIp = inputParser;
