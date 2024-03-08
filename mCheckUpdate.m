@@ -15,12 +15,14 @@ function mCheckUpdate(logstr, syncOpt)
     currentPath = pwd;
     cd(fileparts(mfilename("fullpath")));
     [~, currentUser] = system("whoami");
+    currentUser = strrep(currentUser, newline, '');
     currentUser = split(currentUser, '\');
+    currentUser = currentUser{2};
     
     system("git add .");
 
     if nargin < 1 || isempty(char(logstr))
-        system(strcat("git commit -m ""update ", string(datetime), " by ", currentUser{1}, """"));
+        system(strcat("git commit -m ""update ", string(datetime), " by ", currentUser, """"));
     else
         logstr = strrep(logstr, '"', '""');
         system(strcat("git commit -m """, logstr, """"));
