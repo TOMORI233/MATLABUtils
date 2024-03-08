@@ -40,14 +40,14 @@ function varargout = mSubplot(varargin)
 %     nSize: [nX, nY] specifies size of subplot (default: [1, 1]).
 %            [nSize] is relative to axes.
 %     margins: margins of subplot specified as [left, right, bottom, top].
-%              [margins] is relative to div.
+%              [margins] is relative to div. (default: [0.05, 0.05, 0.08, 0.05])
 %              You can also set them separately using name-value pair (prior to [margins]):
 %              - margin_left
 %              - margin_right
 %              - margin_bottom
 %              - margin_top
 %     paddings: paddings of subplot specified as [left, right, bottom, top].
-%               [paddings] is relative to figure.
+%               [paddings] is relative to figure. (default: [0.03, 0.03, 0.08, 0.05])
 %               You can also set them separately using name-value pair (prior to [paddings]):
 %               - padding_left
 %               - padding_right
@@ -79,7 +79,7 @@ else
 end
 
 mIp = inputParser;
-mIp.addRequired("Fig",   @isgraphics);
+mIp.addRequired("Fig",   @(x) isa(x, "matlab.ui.Figure"));
 mIp.addRequired("row",   @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
 mIp.addRequired("col",   @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
 mIp.addRequired("index", @(x) validateattributes(x, 'numeric', {'numel', 1, 'positive', 'integer'}));
