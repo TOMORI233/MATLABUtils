@@ -1,17 +1,37 @@
 function varargout = mSubplot(varargin)
 % Description: extension of function subplot
 % Schematic:
-%  ______________________________________________________________
-% |figure ____________________________    _______                |
-% |      |div1  _______               |  |div2   |←-------------→|
-% |      |     |       |              |  |       | padding_right |
-% |      |     | axes  |←------------→|  |_______|               |
-% |      |     |       | margin_right |                          |
-% |      |     |_______|              |                          |
-% |      |____________________________|                          |
-% |                                                              |
-% |______________________________________________________________|
-% 
+%     % The following figure is created by script:
+%     figure("WindowState", "maximized");
+%     set(0, "DefaultAxesBox", "on");
+%     % div1
+%     mSubplot(1, 2, 1, "paddings", [1/9, 1/18, 2/9, 1/9], ...
+%                       "shape", "fill");
+%     % axes1
+%     mSubplot(1, 2, 1, "paddings", [1/9, 1/18, 2/9, 1/9], ...
+%                       "margins", [1/5, 1/2, 1/6, 1/6]);
+%     % div2
+%     mSubplot(1, 2, 2, "paddings", [1/9, 1/18, 2/9, 1/9], ...
+%                       "shape", "fill");
+%     % axes2
+%     mSubplot(1, 2, 2, "paddings", [1/9, 1/18, 2/9, 1/9], ...
+%                       "margins", zeros(1, 4), ...
+%                       "nSize", [1/4, 1/2], ...
+%                       "alignment", "bottom-left");
+%     set(0, "DefaultAxesBox", "factory");
+%
+%  ____________________________________________________________________
+% |figure _________________________________________________________    |
+% |      |div1  _______               |div2                        |   |
+% |      |     |       |              |                            |   |
+% |      |     | axes1 |←------------→|_______                     |   |
+% |      |     |       | margin_right |       |                    |   |
+% |      |     |_______|              | axes2 |                    |   |
+% |←----→|____________________________|_______|____________________|   |
+% |padding_left      ↑ padding_bottom                                  |
+% |__________________↓_________________________________________________|
+%
+%
 % Note: All parameters here are normalized.
 %       Your figure should be maximized before using mSubplot to create axes.
 % Input:
@@ -165,13 +185,9 @@ switch shape
         axeWidth  = borderMax * adjIdx;
         axeHeight = borderMax;
     case 'fill'
-        mAxe = axes(Fig, "Position", [divX, divY, divWidth, divHeight]);
-
-        if nargout == 1
-            varargout{1} = mAxe;
-        end
-
-        return;
+        axeWidth  = divWidth;
+        axeHeight = divHeight;
+        margins   = zeros(1, 4);
     otherwise
         error('Invalid shape input');
 end

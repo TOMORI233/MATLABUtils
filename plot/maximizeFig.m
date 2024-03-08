@@ -9,6 +9,8 @@ function maximizeFig(Figs)
 
 narginchk(0, 1);
 
+warning("This function is obsolete and will be removed in a future release.");
+
 if nargin < 1
     Figs = gcf;
 end
