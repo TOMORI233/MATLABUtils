@@ -141,7 +141,7 @@ if ~isempty(padding_top)   , paddings(4) = padding_top   ; end
 nX = nSize(1);
 
 if numel(nSize) == 1
-    nY = 1;
+    nY = nSize(1);
 elseif numel(nSize) == 2
     nY = nSize(2);
 else
