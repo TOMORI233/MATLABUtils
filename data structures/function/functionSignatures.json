@@ -7,6 +7,13 @@
             {"name": "arg", "kind": "ordered", "repeating": true, "description": "fcn的参数"}
         ],
         "description": "获取指定序数的函数输出"
+    },
+
+    "path2func": {
+        "inputs": [
+            {"name": "P", "kind": "required", "type": ["file=*.m"], "description": "函数文件绝对路径"}
+        ],
+        "description": "将绝对路径转为函数句柄"
     }
 
 }
