@@ -10,6 +10,28 @@
         ]
     },
 
+    "addTitle2Fig": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]},
+                    {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
+                    {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
+                    {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                ],
+                [
+                    {"name": "Fig", "kind": "required", "type": ["@(args) isa(x, 'matlab.ui.Figure')"]},
+                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]},
+                    {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
+                    {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
+                    {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                ]
+            ]}
+        ]
+    },
+
     "orderLine": {
         "inputs": [
             {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},

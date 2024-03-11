@@ -13,7 +13,7 @@
     "mPrint": {
         "inputs": [
             {"name": "target", "kind": "required", "type": ["@(x) isgraphics(x)"]},
-            {"name": "FILENAME", "kind": "required", "type": ["file=*.jpg, *.png, *.tiff, *.meta"]},
+            {"name": "FILENAME", "kind": "required", "type": [["string"], ["char"]]},
             {"name": "formattype", "kind": "ordered", "type": ["choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"]},
             {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
         ],
@@ -65,6 +65,12 @@
             {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
             {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]},
             {"name": "folderOnly", "kind": "namevalue", "type": ["logical", "scalar"]}
+        ]
+    },
+
+    "getAbsPath": {
+        "inputs": [
+            {"name": "path", "kind": "required", "type": ["folder"]}
         ]
     }
 }
