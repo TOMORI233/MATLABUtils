@@ -11,6 +11,7 @@ function path = getAbsPath(relativePath)
         path = pwd;
         cd(currentPath);
     else % absolute path
+        disp("Your input is already absolute path");
         path = relativePath;
     end
 

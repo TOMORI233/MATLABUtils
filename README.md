@@ -208,6 +208,12 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2024/03/11 by XHX - Compatible
+
+  | Type | Target        | Content                      |
+  | ---- | ------------- | ---------------------------- |
+  | Add  | `path2func.m` | 将函数的绝对路径转为函数句柄 |
+
 - 2023/12/25 by XHX - Compatible
 
   | Type | Target                   | Content                             |
