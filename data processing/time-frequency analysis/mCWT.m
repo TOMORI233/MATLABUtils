@@ -46,6 +46,8 @@ function [t, f, CData, coi] = mCWT(data, fs, cwtMethod, fsD, freqLimits)
         dataResample = data;
     end
 
+    dataResample = double(dataResample);
+
     switch cwtMethod
         case 'morse'
             [wt, f, coi] =cwt(dataResample, 'morse', fsD, 'FequencyLimits', freqLimits);
