@@ -80,7 +80,7 @@
             {"name": "logstr", "kind": "required", "type": [["string"], ["char"], ["@(x) isempty(x)"]]},
             {"name": "SyncOption", "kind": "namevalue", "type": ["logical", "scalar"]},
             {"name": "RepositoriesRootPath", "kind": "namevalue", "type": ["folder"]},
-            {"name": "RepositoryPaths", "kind": "namevalue", "type": [["string"], ["char"]]}
+            {"name": "RepositoryPaths", "kind": "namevalue", "type": [["string"], ["char"], ["cell"]]}
         ],
         "description": "更新指定目录下所有Git项目"
     }
