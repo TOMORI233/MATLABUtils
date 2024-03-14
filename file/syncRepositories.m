@@ -22,7 +22,7 @@ mIp = inputParser;
 mIp.addRequired("logstr", @(x) isempty(x) || isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));
 mIp.addParameter("SyncOption", false, @(x) isscalar(x) && islogical(x));
 mIp.addParameter("RepositoriesRootPath", [], @(x) isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));
-mIp.addParameter("RepositoryPaths", [], @(x) iscellstr(x) || isstring(x));
+mIp.addParameter("RepositoryPaths", [], @(x) iscellstr(x) || isstring(x) || (ischar(x) && isStringScalar(string(x))));
 mIp.parse(logstr, varargin{:});
 
 SyncOption = mIp.Results.SyncOption;
@@ -49,6 +49,8 @@ else
 
         if isstring(RepositoryPaths)
             RepositoryPaths = arrayfun(@char, RepositoryPaths, "UniformOutput", false);
+        elseif ischar(RepositoryPaths)
+            RepositoryPaths = {RepositoryPaths};
         end
 
     else
