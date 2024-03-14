@@ -16,7 +16,6 @@ function syncRepositories(logstr, varargin)
 % e.g.       sycnRepositories(logstr, ...
 %                             "RepositoryPaths", ["D:\repos1\", ...
 %                                                 "D:\Project2\repos2\"]);
-%
 
 mIp = inputParser;
 mIp.addRequired("logstr", @(x) isempty(x) || isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));

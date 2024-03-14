@@ -17,9 +17,9 @@ function T = addTitle2Fig(varargin)
     mIp.addParameter("FontWeight", 'normal', @(x) any(validatestring(x, {'normal', 'bold'})));
     mIp.parse(Fig, varargin{:});
 
-    str = mIp.Results.str;
-    alignment = mIp.Results.HorizontalAlignment;
-    pos = mIp.Results.Position;
+    str = mIp.Results.str; % title string
+    alignment = mIp.Results.HorizontalAlignment; % left | center | right
+    pos = mIp.Results.Position; % normalized [x, y]
     fontSize = mIp.Results.FontSize;
     fontWeight = mIp.Results.FontWeight;
 
