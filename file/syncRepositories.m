@@ -19,9 +19,9 @@ function syncRepositories(logstr, varargin)
 %
 
 mIp = inputParser;
-mIp.addRequired("logstr", @(x) isempty(x) || isStringScalar(x) || (ischar(x) && isStringScalar(char(x))));
+mIp.addRequired("logstr", @(x) isempty(x) || isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));
 mIp.addParameter("SyncOption", false, @(x) isscalar(x) && islogical(x));
-mIp.addParameter("RepositoriesRootPath", [], @(x) isStringScalar(x) || (ischar(x) && isStringScalar(char(x))));
+mIp.addParameter("RepositoriesRootPath", [], @(x) isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));
 mIp.addParameter("RepositoryPaths", [], @(x) iscellstr(x) || isstring(x));
 mIp.parse(logstr, varargin{:});
 
