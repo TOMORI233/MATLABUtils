@@ -24,15 +24,15 @@ troughIdx = cell2mat(rowFcn(@istrough, data, "UniformOutput", false));
 return;
 end
 
+%%
 function y = ispeak(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == -2) + 1) = true;
 return;
 end
 
-function y = istrough(data, thr)
+function y = istrough(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == 2) + 1) = true;
-
 return;
 end
