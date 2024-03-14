@@ -1,6 +1,11 @@
 function path = getAbsPath(relativePath)
     relativePath = char(relativePath);
 
+    if isempty(char(relativePath)) 
+        path = evalin("caller", "fileparts(mfilename('fullpath'))");
+        return;
+    end
+
     if contains(relativePath, '..') % relative path
         currentPath = pwd;
         if ~exist(relativePath, "dir")
