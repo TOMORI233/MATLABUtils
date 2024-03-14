@@ -64,7 +64,7 @@ currentUser = split(currentUser, '\');
 currentUser = currentUser{2};
 
 for rIndex = 1:length(RepositoryPaths)
-    disp(['Current: ', RepositoryPaths{rIndex}]);
+    disp(['Current repository: ', RepositoryPaths{rIndex}]);
     cd(RepositoryPaths{rIndex});
     system("git add .");
 

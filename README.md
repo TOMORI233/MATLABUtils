@@ -210,11 +210,10 @@ end
 
 - 2024/03/14 by XHX - Incompatible
 
-  | Type |      |      |
-  | ---- | ---- | ---- |
-  |      |      |      |
-  |      |      |      |
-  |      |      |      |
+  | Type   | Target               | Content                                                 |
+  | ------ | -------------------- | ------------------------------------------------------- |
+  | Delete | `mCheckUpdate.m`     |                                                         |
+  | Add    | `syncRepositories.m` | 替代原来的`mCheckUpdate.m`，可以更新根目录下所有Git项目 |
 
 - 2024/03/11 by XHX - Compatible
 
