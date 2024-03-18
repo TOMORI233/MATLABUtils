@@ -2,7 +2,7 @@ function A = mCell2mat(C)
     % Elements of C can be cell/string/numeric
 
     if ~iscell(C)
-        error("Input should be cell");
+        error("mCell2mat(): Input should be cell");
     end
 
     [a, b] = size(C);

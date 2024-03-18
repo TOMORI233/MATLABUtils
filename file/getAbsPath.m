@@ -1,8 +1,11 @@
-function path = getAbsPath(relativePath)
+function P = getAbsPath(relativePath)
+    % Description: get absolute path from relative path
+    % NOTICE: If relative path does not exist, the folder will be created.
+
     relativePath = char(relativePath);
 
     if isempty(char(relativePath)) 
-        path = evalin("caller", "fileparts(mfilename('fullpath'))");
+        P = evalin("caller", "fileparts(mfilename('fullpath'))");
         return;
     end
 
@@ -13,11 +16,10 @@ function path = getAbsPath(relativePath)
             mkdir(relativePath);
         end
         evalin("caller", ['cd(''', relativePath, ''')']);
-        path = pwd;
+        P = pwd;
         cd(currentPath);
     else % absolute path
-        disp("Your input is already absolute path");
-        path = relativePath;
+        P = relativePath;
     end
 
     return;

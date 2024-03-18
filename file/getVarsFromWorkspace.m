@@ -1,10 +1,23 @@
-function res = getVarsFromWorkspace(regexpStr)
-    narginchk(0, 1);
+function res = getVarsFromWorkspace(varargin)
+    % Description: Search variable in workspace using regexp.
+    % Output: res.(Name) = Val;
+    % Example:
+    %     % To save all variables with names starting with "result_" or "output_"
+    %     varNames = fieldnames(getVarsFromWorkspace("result_*", "output_*"));
+    %     save("data.mat", varNames{:});
 
     if nargin < 1
         str = 'who;';
     else
-        str = strcat('who("-regexp", ''', regexpStr, ''');');
+
+        if ~any(cellfun(@(x) isempty(x) || isStringScalar(x) || (ischar(x) && isStringScalar(string(x))), varargin))
+            error("getVarsFromWorkspace(): Invalid regexp input");
+        end
+    
+        regexpstrs = cellfun(@(x) ['''', char(x), ''''], varargin, "UniformOutput", false);
+        regexpstrs = cellcat(1, join(regexpstrs, ','));
+    
+        str = strcat('who("-regexp", ', regexpstrs, ');');
     end
 
     varNames = evalin("caller", str);

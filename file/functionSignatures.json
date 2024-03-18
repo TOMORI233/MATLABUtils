@@ -1,87 +1,381 @@
 {
-    "_schemaVersion": "1.0.0",
-
-    "mSave": {
-        "inputs": [
-            {"name": "FILENAME", "kind": "required", "type": ["file=*.mat"]},
-            {"name": "variable", "kind": "required", "type": ["@(x) ~contains(x, '-')"], "repeating": true},
-            {"name": "option", "kind": "ordered", "type": ["@(x) contains(x, '-')"], "repeating": true}
-        ],
-        "description": "已存在则不保存"
-    },
-
-    "mPrint": {
-        "inputs": [
-            {"name": "target", "kind": "required", "type": ["@(x) isgraphics(x)"]},
-            {"name": "FILENAME", "kind": "required", "type": [["string"], ["char"]]},
-            {"name": "formattype", "kind": "ordered", "type": ["choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"]},
-            {"name": "resolution", "kind": "ordered", "type": ["string", "choices={'-r600', '-r300', '-r0'}"]}
-        ],
-        "description": "已存在则不保存"
-    },
-
-    "mLoad": {
-        "inputs": [
-            {"name": "FILENAME", "kind": "required", "type": [["file=*.mat"], ["@(arg) isempty(arg)"]]},
-            {"name": "variables", "kind": "ordered", "type": [["cell"], ["string"], ["char"]]}
-        ],
-        "description": "已存在则不加载"
-    },
-
-    "loadDailyData": {
-        "inputs": [
-            {"name": "ROOTPATH", "kind": "required", "type": ["@(x) isstring(x)"]},
-            {"name": "MATNAME", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
-            {"name": "DATE", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
-            {"name": "protocols", "kind": "namevalue", "type": ["@(x) isstring(x)"]},
-            {"name": "all_or", "kind": "namevalue", "type": ["@(x) isstring(x)"]}
-        ],
-        "description": "将特定路径下的同名MAT文件整合"
-    },
-
-    "dirItem": {
-        "inputs": [
-            {"name": "rootPath", "kind": "required", "type": ["folder"]},
-            {"name": "keyword", "kind": "required", "type": ["string"]},
-            {"name": "folderOrFile", "kind": "namevalue", "type": ["choices = {'all', 'file', 'folder'}"]}
-        ],
-        "description": "返回跟目录下包含特定字符串的路径/文件"
-    },
-
-    "renameItem": {
-        "inputs": [
-            {"name": "rootPath", "kind": "required", "type": ["folder"]},
-            {"name": "keyword", "kind": "required", "type": ["string"]},
-            {"name": "newName", "kind": "required", "type": ["string"]},
-            {"name": "folderOrFile", "kind": "namevalue", "type": ["choices = {'all', 'file', 'folder'}"]}
-        ],
-        "description": "重命名跟目录下包含特定字符串的路径/文件"
-    },
-
-    "pathManager": {
-        "inputs": [
-            {"name": "ROOTPATH", "kind": "required", "type": ["folder"]},
-            {"name": "subjects", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
-            {"name": "protocols", "kind": "namevalue", "type": [["cell"], ["string"], ["char"]]},
-            {"name": "matPat", "kind": "namevalue", "type": [["string"], ["char"]]},
-            {"name": "folderOnly", "kind": "namevalue", "type": ["logical", "scalar"]}
+  "x_schemaVersion": "1.0.0",
+  "mSave": {
+    "inputs": [
+      {
+        "name": "FILENAME",
+        "kind": "required",
+        "type": [
+          [
+            "file=*.mat"
+          ],
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
         ]
-    },
-
-    "getAbsPath": {
-        "inputs": [
-            {"name": "path", "kind": "required", "type": ["folder"]}
+      },
+      {
+        "name": "variable",
+        "kind": "required",
+        "type": [
+          "@(x) ~contains(x, '-')"
         ],
-        "description": "获取绝对路径"
-    },
-
-    "syncRepositories": {
-        "inputs": [
-            {"name": "logstr", "kind": "required", "type": [["string"], ["char"], ["@(x) isempty(x)"]]},
-            {"name": "SyncOption", "kind": "namevalue", "type": ["logical", "scalar"]},
-            {"name": "RepositoriesRootPath", "kind": "namevalue", "type": ["folder"]},
-            {"name": "RepositoryPaths", "kind": "namevalue", "type": [["string"], ["char"], ["cell"]]}
+        "repeating": true
+      },
+      {
+        "name": "option",
+        "kind": "ordered",
+        "type": [
+          "@(x) contains(x, '-')"
         ],
-        "description": "更新指定目录下所有Git项目"
-    }
+        "repeating": true
+      }
+    ],
+    "description": "已存在则不保存"
+  },
+  "mPrint": {
+    "inputs": [
+      {
+        "name": "target",
+        "kind": "required",
+        "type": [
+          "@(x) isscalar(x) && isgraphics(x)"
+        ]
+      },
+      {
+        "name": "FILENAME",
+        "kind": "required",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      },
+      {
+        "name": "formattype",
+        "kind": "ordered",
+        "type": [
+          "choices={'-djpeg', '-dpng', '-dtiff', '-dtiffn', '-dmeta'}"
+        ]
+      },
+      {
+        "name": "resolution",
+        "kind": "ordered",
+        "type": [
+          "string",
+          "choices={'-r600', '-r300', '-r0'}"
+        ]
+      }
+    ],
+    "description": "已存在则不保存"
+  },
+  "mLoad": {
+    "inputs": [
+      {
+        "name": "FILENAME",
+        "kind": "required",
+        "type": [
+          [
+            "file=*.mat"
+          ],
+          [
+            "@(arg) isempty(arg)"
+          ]
+        ]
+      },
+      {
+        "name": "variables",
+        "kind": "ordered",
+        "type": [
+          [
+            "cell"
+          ],
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      }
+    ],
+    "description": "已存在则不加载"
+  },
+  "loadDailyData": {
+    "inputs": [
+      {
+        "name": "ROOTPATH",
+        "kind": "required",
+        "type": [
+          "@(x) isstring(x)"
+        ]
+      },
+      {
+        "name": "MATNAME",
+        "kind": "namevalue",
+        "type": [
+          "@(x) isstring(x)"
+        ]
+      },
+      {
+        "name": "DATE",
+        "kind": "namevalue",
+        "type": [
+          "@(x) isstring(x)"
+        ]
+      },
+      {
+        "name": "protocols",
+        "kind": "namevalue",
+        "type": [
+          "@(x) isstring(x)"
+        ]
+      },
+      {
+        "name": "all_or",
+        "kind": "namevalue",
+        "type": [
+          "@(x) isstring(x)"
+        ]
+      }
+    ],
+    "description": "将特定路径下的同名MAT文件整合"
+  },
+  "dirItem": {
+    "inputs": [
+      {
+        "name": "rootPath",
+        "kind": "required",
+        "type": [
+          "folder"
+        ]
+      },
+      {
+        "name": "keyword",
+        "kind": "required",
+        "type": [
+          "string"
+        ]
+      },
+      {
+        "name": "folderOrFile",
+        "kind": "namevalue",
+        "type": [
+          "choices = {'all', 'file', 'folder'}"
+        ]
+      }
+    ],
+    "description": "返回跟目录下包含特定字符串的路径/文件"
+  },
+  "renameItem": {
+    "inputs": [
+      {
+        "name": "rootPath",
+        "kind": "required",
+        "type": [
+          "folder"
+        ]
+      },
+      {
+        "name": "keyword",
+        "kind": "required",
+        "type": [
+          "string"
+        ]
+      },
+      {
+        "name": "newName",
+        "kind": "required",
+        "type": [
+          "string"
+        ]
+      },
+      {
+        "name": "folderOrFile",
+        "kind": "namevalue",
+        "type": [
+          "choices = {'all', 'file', 'folder'}"
+        ]
+      }
+    ],
+    "description": "重命名跟目录下包含特定字符串的路径/文件"
+  },
+  "pathManager": {
+    "inputs": [
+      {
+        "name": "ROOTPATH",
+        "kind": "required",
+        "type": [
+          "folder"
+        ]
+      },
+      {
+        "name": "subjects",
+        "kind": "namevalue",
+        "type": [
+          [
+            "cell"
+          ],
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      },
+      {
+        "name": "protocols",
+        "kind": "namevalue",
+        "type": [
+          [
+            "cell"
+          ],
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      },
+      {
+        "name": "matPat",
+        "kind": "namevalue",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      },
+      {
+        "name": "folderOnly",
+        "kind": "namevalue",
+        "type": [
+          "logical",
+          "scalar"
+        ]
+      }
+    ]
+  },
+  "getAbsPath": {
+    "inputs": {
+      "name": "path",
+      "kind": "required",
+      "type": [
+        "folder"
+      ]
+    },
+    "description": "获取绝对路径"
+  },
+  "syncRepositories": {
+    "inputs": [
+      {
+        "name": "logstr",
+        "kind": "required",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ],
+          [
+            "@(x) isempty(x)"
+          ]
+        ]
+      },
+      {
+        "name": "SyncOption",
+        "kind": "namevalue",
+        "type": [
+          "logical",
+          "scalar"
+        ]
+      },
+      {
+        "name": "RepositoriesRootPath",
+        "kind": "namevalue",
+        "type": [
+          "folder"
+        ]
+      },
+      {
+        "name": "RepositoryPaths",
+        "kind": "namevalue",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ],
+          [
+            "cell"
+          ]
+        ]
+      }
+    ],
+    "description": "更新指定目录下所有Git项目"
+  },
+  "getVarsFromWorkspace": {
+    "inputs": {
+      "name": "regexp",
+      "kind": "ordered",
+      "type": [
+        [
+          "string"
+        ],
+        [
+          "char"
+        ],
+        [
+          "@(x) isempty(x)"
+        ]
+      ],
+      "repeating": true
+    },
+    "description": "使用正则表达式检索工作区变量"
+  },
+  "filewrite": {
+    "inputs": [
+      {
+        "name": "filepath",
+        "kind": "required",
+        "type": [
+          [
+            "file"
+          ],
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      },
+      {
+        "name": "content",
+        "kind": "required",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ]
+        ]
+      }
+    ],
+    "description": "将文本写入文件"
+  }
 }

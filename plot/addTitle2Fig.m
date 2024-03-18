@@ -10,7 +10,7 @@ function T = addTitle2Fig(varargin)
 
     mIp = inputParser;
     mIp.addRequired("Fig", @(x) isa(x, "matlab.ui.Figure"));
-    mIp.addRequired("str", @(x) isStringScalar(x) || ischar(x));
+    mIp.addRequired("str", @(x) isStringScalar(x) || (ischar(x) && isStringScalar(string(x))));
     mIp.addParameter("HorizontalAlignment", 'center', @(x) any(validatestring(x, {'left', 'right', 'center'})));
     mIp.addParameter("Position", [0.5, 1.1], @(x) validateattributes(x, {'numeric'}, {'numel', 2}));
     mIp.addParameter("FontSize", 14, @(x) validateattributes(x, {'numeric'}, {'scalar', 'integer', 'positive'}));

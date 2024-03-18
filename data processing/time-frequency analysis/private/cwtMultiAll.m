@@ -3,7 +3,10 @@ function [cwtres, f, coi] = cwtMultiAll(data, fs)
 % complex double matrix.
 % This procedure is for cross-spectral density matrix computation in 
 % nonparametric computation of granger causality.
-% The default wavelet used is 'morlet'.
+% The default wavelet used is 'morlet'. Wavelets available: 
+%     - 'amor' ('morlet', default)
+%     - 'morse'
+%     - 'bump'
 %
 % It can be encoded by gpucoder for parallel computation. See mGpucoder.m
 

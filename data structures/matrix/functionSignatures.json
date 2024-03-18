@@ -10,13 +10,12 @@
         "description": "将函数应用于矩阵每一行"
     },
 
-        "mNchoosek": {
+    "mNchoosek": {
         "inputs": [
             {"name": "data", "kind": "required", "type": ["2d"]},
             {"name": "nPool", "kind": "ordered", "type": ["2d"]},
             {"name": "header", "kind": "ordered", "type": ["2d"]}
-        ],
-        "description": "将函数应用于矩阵每一行"
+        ]
     }
 
 }
