@@ -268,13 +268,15 @@
     ]
   },
   "getAbsPath": {
-    "inputs": {
-      "name": "path",
-      "kind": "required",
-      "type": [
-        "folder"
-      ]
-    },
+    "inputs": [
+      {
+        "name": "path",
+        "kind": "required",
+        "type": [
+          "folder"
+        ]
+      }
+    ],
     "description": "获取绝对路径"
   },
   "syncRepositories": {
@@ -328,22 +330,24 @@
     "description": "更新指定目录下所有Git项目"
   },
   "getVarsFromWorkspace": {
-    "inputs": {
-      "name": "regexp",
-      "kind": "ordered",
-      "type": [
-        [
-          "string"
+    "inputs": [
+      {
+        "name": "regexp",
+        "kind": "ordered",
+        "type": [
+          [
+            "string"
+          ],
+          [
+            "char"
+          ],
+          [
+            "@(x) isempty(x)"
+          ]
         ],
-        [
-          "char"
-        ],
-        [
-          "@(x) isempty(x)"
-        ]
-      ],
-      "repeating": true
-    },
+        "repeating": true
+      }
+    ],
     "description": "使用正则表达式检索工作区变量"
   },
   "filewrite": {
