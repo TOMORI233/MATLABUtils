@@ -3,7 +3,7 @@ function res = getVarsFromWorkspace(varargin)
     % Output: res.(Name) = Val;
     % Example:
     %     % To save all variables with names starting with "result_" or "output_"
-    %     varNames = fieldnames(getVarsFromWorkspace("result_*", "output_*"));
+    %     varNames = fieldnames(getVarsFromWorkspace("result_\W*", "output_\W*"));
     %     save("data.mat", varNames{:});
 
     if nargin < 1
