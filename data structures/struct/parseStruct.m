@@ -5,11 +5,10 @@ function varargout = parseStruct(S, varargin)
     %     parseStruct(S, sIndex)
     %     parseStruct(S, fieldName1, fieldName2, ...)
     %     parseStruct(S, sIndex, fieldName1, fieldName2, ...)
-    %     [varName1, varName2, ...] = parseStruct(S, fieldName1, fieldName2, ...)
-    %     [varName1, varName2, ...] = parseStruct(S, sIndex, fieldName1, fieldName2, ...)
+    %     [varName1, varName2, ...] = parseStruct(...)
     % Input:
     %     S: struct vector or scalar
-    %     sIndex: index of S to parse (only S(sIndex) will be parsed)
+    %     sIndex: indices of S to parse (only S(sIndex) will be parsed)
     %             If not specified, sIndex=1:length(S).
     %             If numel(sIndex)>1, return vars in column vector.
     %     fieldNames: fieldnames of S to parse (default: parse all)
@@ -37,6 +36,7 @@ function varargout = parseStruct(S, varargin)
 
         if isnumeric(varargin{1}) && isvector(varargin{1})
             sIndex = varargin{1};
+            warning("parseStruct(): input [sIndex] is considered to be redundant and will be removed in a future release");
             varargin = varargin(2:end);
         else
             sIndex = 1:length(S);
