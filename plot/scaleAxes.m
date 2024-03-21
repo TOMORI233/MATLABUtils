@@ -1,4 +1,4 @@
-function axisRange = scaleAxes(varargin)
+function varargout = scaleAxes(varargin)
 % scaleAxes(axisName)
 % scaleAxes(axisName, axisRange)
 % scaleAxes(axisName, axisRange, cutoffRange)
@@ -221,6 +221,12 @@ end
 if strcmpi(uiOpt, "show")
     scaleAxesApp(allAxes, axisName, double(axisRange), double([axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]));
     drawnow;
+end
+
+if nargout == 1
+    varargout{1} = axisRange;
+elseif nargout > 1
+    error("scaleAxes(): the number of output should be no greater than 1");
 end
 
 return;
