@@ -7,7 +7,13 @@ function [res, folderNames] = getLastDirPath(P, N)
     end
 
     [FILEPATH, ~, EXT] = fileparts(P);
-    split = path2func(fullfile(matlabroot, 'toolbox/matlab/strfun/split.m'));
+
+    % In case of being shadowed by other toolboxes
+    if ~strcmp(which('split'), fullfile(matlabroot, 'toolbox/matlab/strfun/split.m'))
+        split = path2func(fullfile(matlabroot, 'toolbox/matlab/strfun/split.m'));
+    else
+        split = @split;
+    end
 
     if isempty(EXT) % P is folder path
         temp = split(P, '\');
