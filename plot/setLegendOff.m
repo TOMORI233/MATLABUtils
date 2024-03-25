@@ -1,4 +1,8 @@
 function setLegendOff(target)
-    set(get(get(target, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
+    for index = 1:numel(target)
+        set(get(get(target(index), 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+    end
+
     return;
 end
