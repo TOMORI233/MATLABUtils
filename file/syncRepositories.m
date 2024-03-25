@@ -28,49 +28,43 @@ SyncOption = mIp.Results.SyncOption;
 RepositoriesRootPath = mIp.Results.RepositoriesRootPath;
 RepositoryPaths = mIp.Results.RepositoryPaths;
 
-if isempty(RepositoryPaths)
-    disp(['Searching repositories in: ', getAbsPath(RepositoriesRootPath)]);
-    RepositoryPaths = dir(fullfile(RepositoriesRootPath, "**\.git\"));
-    RepositoryPaths = unique({RepositoryPaths.folder})';
-
-    if ~isempty(RepositoryPaths)
-        RepositoryPaths = cellfun(@(x) getRootDirPath(x, 1), RepositoryPaths, "UniformOutput", false);
-        disp('The following repositories are found: ');
-        cellfun(@disp, RepositoryPaths);
-    else
-        disp('No repositories found in this directory');
-        return;
-    end
-
-else
-
-    if ~isempty(RepositoryPaths)
-
-        if isstring(RepositoryPaths)
-            RepositoryPaths = arrayfun(@char, RepositoryPaths, "UniformOutput", false);
-        elseif ischar(RepositoryPaths)
-            RepositoryPaths = {RepositoryPaths};
-        end
-
-    else
-        error("syncRepositories(): repository paths should be user-specified if SearchMethod is set 'custom'.");
-    end
-
-end
-
 currentPath = pwd;
 [~, currentUser] = system("whoami");
 currentUser = strrep(currentUser, newline, '');
 currentUser = split(currentUser, '\');
 currentUser = currentUser{2};
 
-for rIndex = 1:length(RepositoryPaths)
-    disp(['Current repository: ', RepositoryPaths{rIndex}]);
-    cd(RepositoryPaths{rIndex});
+if isempty(RepositoryPaths)
+    disp(['Searching for GIT repositories in: >> ', getAbsPath(RepositoriesRootPath), ' >>']);
+    RepositoryPaths = dir(fullfile(RepositoriesRootPath, "**\.git\"));
+    RepositoryPaths = unique({RepositoryPaths.folder})';
 
-    % check whether everything is already committed
-    [~, res] = system('git status');
+    if ~isempty(RepositoryPaths)
+        RepositoryPaths = cellfun(@(x) getRootDirPath(x, 1), RepositoryPaths, "UniformOutput", false);
+        disp('The following GIT repositories are found: ');
+        cellfun(@disp, RepositoryPaths);
+    else
+        disp('No GIT repositories found in this directory.');
+        disp('Check whether current directory is in a GIT repository...');
+        RepositoryPaths = pwd;
+    end
+
+end
+
+RepositoryPaths = cellstr(RepositoryPaths);
+
+for rIndex = 1:length(RepositoryPaths)
+    cd(RepositoryPaths{rIndex});
+    [status, res] = system('git status');
+
+    if status ~= 0
+        disp('Current directory is not (in) a GIT repository.');
+        continue;
+    end
+
+    disp(['Current repository: ', RepositoryPaths{rIndex}]);
     disp(res);
+
     if ~contains(res, 'nothing to commit, working tree clean')
         system("git add .");
 
@@ -92,5 +86,6 @@ for rIndex = 1:length(RepositoryPaths)
 end
 
 cd(currentPath);
+
 return;
 end
