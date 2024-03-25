@@ -67,13 +67,20 @@ currentUser = currentUser{2};
 for rIndex = 1:length(RepositoryPaths)
     disp(['Current repository: ', RepositoryPaths{rIndex}]);
     cd(RepositoryPaths{rIndex});
-    system("git add .");
 
-    if nargin < 1 || isempty(char(logstr))
-        system(strcat("git commit -m ""update ", string(datetime), " by ", currentUser, """"));
-    else
-        logstr = strrep(logstr, '"', '""');
-        system(strcat("git commit -m """, logstr, """"));
+    % check whether everything is already committed
+    [~, res] = system('git status');
+    disp(res);
+    if ~contains(res, 'nothing to commit, working tree clean')
+        system("git add .");
+
+        if nargin < 1 || isempty(char(logstr))
+            system(strcat("git commit -m ""update ", string(datetime), " by ", currentUser, """"));
+        else
+            logstr = strrep(logstr, '"', '""');
+            system(strcat("git commit -m """, logstr, """"));
+        end
+
     end
 
     system("git pull");
