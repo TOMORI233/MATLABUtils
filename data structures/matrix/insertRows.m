@@ -1,5 +1,6 @@
 function res = insertRows(X, rows)
-    % insert 0 in y at specified rows
+    % To insert 0 in X at specified rows.
+
     nRows = size(X, 1) + numel(rows);
     res = zeros(nRows, size(X, 2));
     rowIdx = 1;
