@@ -21,7 +21,7 @@ function res = changeCellRowNum(cellData)
     %              200, 201, 202; ...
     %              300, 301, 302]}
 
-    cellData = reshape(cellData, [numel(cellData), 1]);
+    cellData = cellData(:);
     a = length(cellData);
     b = size(cellData{1}, 1);
     n = size(cellData{1}, 2);

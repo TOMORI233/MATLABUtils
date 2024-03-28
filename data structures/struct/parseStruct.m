@@ -32,6 +32,12 @@ function varargout = parseStruct(S, varargin)
     %     parseStruct(A, 2, "a1") returns a1=11 in workspace
     %     b1=parseStruct(A, "a1") returns b1=[1;11] in workspace (same as b1=vertcat(A.a1))
 
+    if isstruct(S)
+        S = S(:); % convert to column vector
+    else
+        error("parseStruct(): input [S] should be struct");
+    end
+
     if nargin > 1
 
         if isnumeric(varargin{1}) && isvector(varargin{1})
