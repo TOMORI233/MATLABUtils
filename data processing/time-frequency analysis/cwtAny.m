@@ -55,6 +55,11 @@ switch class(trialsData)
         error("Invalid data type");
 end
 
+if size(trialsData, 1) < segNum
+    disp(['Segment numebr > nCh*nTrial, set segNum = ', num2str(size(trialsData, 1))]);
+    segNum = size(trialsData, 1);
+end
+
 if mod(nTrial * nCh, segNum) == 0
     segIdx = segNum * ones(floor(nTrial * nCh / segNum), 1);
 else
