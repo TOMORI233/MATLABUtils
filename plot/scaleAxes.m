@@ -133,6 +133,7 @@ if strcmpi(autoScale, "on")
 
         if ~isempty(temp)
             temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
+            temp(isnan(temp)) = [];
             maxBinCount = length(temp) / 100;
             binCount = [inf, inf];
             binN = 10;
