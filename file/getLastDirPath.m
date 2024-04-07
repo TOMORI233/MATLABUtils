@@ -16,6 +16,12 @@ function [res, folderNames] = getLastDirPath(P, N)
     end
 
     if isempty(EXT) % P is folder path
+
+        if endsWith(P, '\')
+            P = char(P);
+            P = P(1:end - 1);
+        end
+
         temp = split(P, '\');
     else % P is full path of a file
         temp = split(FILEPATH, '\');
