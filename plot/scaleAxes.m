@@ -79,6 +79,9 @@ else
     allAxes = FigsOrAxes;
 end
 
+% exclude invisible axes
+allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+
 %% Best axis range
 axisLim = get(allAxes(1), axisLimStr);
 axisLimMin = axisLim(1);
