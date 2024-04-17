@@ -25,12 +25,16 @@ function v = getOrFull(s, default)
 %     >> D.a2 = 2
 %     >> D.a3 = 3
 
-if ~isstruct(default) || ~isstruct(s)
+if ~isstruct(default) || (~isstruct(s) && ~isempty(s))
     error("getOrFull(): inputs should be type struct");
 end
 
 if isscalar(default)
-    v = arrayfun(@(x) getOrFullScalar(x, default), s);
+    if isempty(s)
+        v = getOrFullScalar(s, default);
+    else
+        v = arrayfun(@(x) getOrFullScalar(x, default), s);
+    end
 else
     if numel(default) ~= numel(s)
         error("getOrFull(): [default] should be a scalar or of the same size as [s]");
