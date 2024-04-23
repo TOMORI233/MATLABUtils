@@ -1,15 +1,23 @@
-function x = replaceVal(x, newVal, condition)
-    % Replace [x] with newVal if [x] is in [condition] or satisfies condition(x).
-    %
-    % [x] is a scalar of any class.
-    % [newVal] is any.
-    % [condition] can be:
-    %     - numeric scalar/vector/matrix: 1, [1,2,3], [1,2;3,4]
-    %     - string scalar/vector/matrix: "a", ["a","b"], ["a","b";"c","d"]
-    %     - function_handle: @isinteger, @(x) x>0
-    %     - cell array composed of the above types: {1,2,3}, {"a","b"}, {@(x) x>0, @(x) mod(x,2)==0}
-    %     - multiclass cell array: {1, @(x) x<0}
-    %
+function res = replaceVal(x, newVal, conditions)
+    % Description:
+    %     Replace [x] with newVal if [x] is in [conditions] or satisfies conditions(x).
+    % Input:
+    %     - [x] is any.
+    %     - [newVal] is any.
+    %     - [conditions] can be:
+    %           - numeric scalar/vector/matrix: 1, [1,2,3], [1,2;3,4]
+    %           - string scalar/vector/matrix: "a", ["a","b"], ["a","b";"c","d"]
+    %           - char: 'a', ['a';'b']
+    %           - function_handle: @isinteger, @(x) x>0
+    %           - cell array composed of the above types: {1,2,3}, {"a","b"}, {@(x) x>0, @(x) mod(x,2)==0}
+    %           - multiclass cell array: {1, @(x) x<0}
+    % Output:
+    %     - [res]: [res] is [newVal] if the input [x] meets any of the
+    %              [conditions], or is [x] if no condition is satisfied.
+    % NOTICE:
+    %     Each element is treated independently in numeric/string comparison. 
+    %     For a overall comparison between vectors/matrices, use cell as input instead.
+    %     Among different conditions, the logical computation would be "or".
     % Example:
     %     X = [-2, -1, 0, 1, 2];
     %     A = {"a", 1, 2, "b"};
@@ -36,24 +44,32 @@ function x = replaceVal(x, newVal, condition)
     narginchk(2, 3);
     
     if nargin < 3
-        condition = [];
+        conditions = [];
     end
     
-    if isnumeric(condition)
-        condition = mat2cell(reshape(condition, [numel(condition), 1]), ones(numel(condition), 1));
-    elseif isa(condition, "function_handle")
-        condition = {condition};
+    if isnumeric(conditions)
+        conditions = mat2cell(conditions(:), ones(numel(conditions), 1));
+    elseif isa(conditions, "function_handle")
+        conditions = {conditions};
+    elseif ischar(conditions) || isstring(conditions)
+        conditions = cellstr(conditions);
+    elseif iscell(conditions)
+        % do nothing
+    else
+        error("replaceVal(): Invalid conditions input");
     end
     
-    % condition is a cell array
-    condition = reshape(condition, [numel(condition), 1]);
+    % vectorize
+    conditions = conditions(:);
     
-    % find function_handle in condition
-    idx = cellfun(@(y) isa(y, "function_handle"), condition);
+    % find function_handle in conditions
+    idx = cellfun(@(y) isa(y, "function_handle"), conditions);
     
     % replace value
-    if any(cell2mat(cellfun(@(y) y(x), condition(idx), "UniformOutput", false))) || any(cellfun(@(y) isequal(x, y), condition(~idx)))
-        x = newVal;
+    if any(cell2mat(cellfun(@(y) y(x), conditions(idx), "UniformOutput", false))) || any(cellfun(@(y) isequal(x, y), conditions(~idx)))
+        res = newVal;
+    else
+        res = x;
     end
     
     return;

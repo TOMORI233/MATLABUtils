@@ -1,4 +1,5 @@
 function syncXY(mAxe)
+    % link x-y range
     narginchk(0, 1);
 
     if nargin < 1

@@ -48,14 +48,20 @@ function [H, N, edges] = mHistogram(varargin)
     legendStrs = mIp.Results.DisplayName;
     BinWidth = mIp.Results.BinWidth;
     BinMethod = mIp.Results.BinMethod;
-
-    % Convert X to cell vector
-    if strcmp(class(X), "double")
-
+    
+    if isnumeric(X)
+        % Convert X to cell vector
         if isvector(X)
-            X = {reshape(X, [1, numel(X)])};
+            X = {X(:)'};
         else
+            % divide by rows
             X = mat2cell(X, ones(size(X, 1), 1));
+        end
+
+    elseif iscell(X)
+        
+        if ~any(cellfun(@(x) isvector(x) && isnumeric(x), X))
+            error("Each data group in X should be a numeric vector");
         end
 
     end
@@ -69,7 +75,8 @@ function [H, N, edges] = mHistogram(varargin)
     end
     
     if isempty(edges)
-        X_All = cell2mat(cellfun(@(x) reshape(x, [numel(x), 1]), X, "UniformOutput", false));
+        % trans cell array X into a numeric column vector
+        X_All = cell2mat(cellfun(@(x) x(:), X(:), "UniformOutput", false));
 
         if isempty(BinWidth)
             [~, edges] = histcounts(X_All, "BinMethod", BinMethod);

@@ -35,7 +35,7 @@ function mAxe = mRaster(varargin)
     hold(mAxe, "on");
 
     for index = 1:numel(rasterData)
-        X = reshape(rasterData(index).X, [numel(rasterData(index).X), 1]);
+        X = rasterData(index).X(:);
 
         if ~isfield(rasterData(index), "Y")
             Y = mat2cell((nTrials + 1:nTrials + length(rasterData(index).X))', ones(length(rasterData(index).X), 1));

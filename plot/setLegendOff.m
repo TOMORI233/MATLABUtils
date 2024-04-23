@@ -1,7 +1,7 @@
-function setLegendOff(target)
-
-    for index = 1:numel(target)
-        set(get(get(target(index), 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+function setLegendOff(targets)
+    % Hide legend of targets
+    for index = 1:numel(targets)
+        set(get(get(targets(index), 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
     end
 
     return;

@@ -56,18 +56,17 @@ function varargout = mSubplot(varargin)
 %     shape: 'auto'(default), 'square-min', 'square-max', 'fill'
 %            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
 %     alignment: how axes aligns to div.
-%                This option influences how the axes is expanded or shrinked 
-%                using [nSize] option.
+%                This option influences how the axes is expanded or shrinked using [nSize] option.
 %                Valid values:
-%                'top-left',
-%                'top-right',
-%                'bottom-left',
-%                'bottom-right',
-%                'center-left',
-%                'center-right',
-%                'top-center',
-%                'bottom-center',
-%                'center'(default).
+%                - 'top-left',
+%                - 'top-right',
+%                - 'bottom-left',
+%                - 'bottom-right',
+%                - 'center-left',
+%                - 'center-right',
+%                - 'top-center',
+%                - 'bottom-center',
+%                - 'center'(default).
 % Output:
 %     mAxe: subplot axes object
 
@@ -86,7 +85,10 @@ mIp.addRequired("index", @(x) validateattributes(x, 'numeric', {'numel', 1, 'pos
 mIp.addOptional("nSize0",    [], @(x) validateattributes(x, 'numeric', {'vector'}));
 mIp.addOptional("margins0",  [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
 mIp.addOptional("paddings0", [], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
-mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
+mIp.addOptional("shape0", [], @(x) any(validatestring(x, {'auto', ...
+                                                          'square-min', ...
+                                                          'square-max', ...
+                                                          'fill'})));
 mIp.addParameter("nSize", [1, 1], @(x) validateattributes(x, 'numeric', {'vector'}));
 mIp.addParameter("margins",  [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
 mIp.addParameter("paddings", [0.03, 0.03, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
@@ -154,7 +156,7 @@ divHeight = (1 - paddings(3) - paddings(4)) / row;
 rIndex = ceil(index / col);
 
 if rIndex > row
-    error('index > col * row');
+    error('mSubplot(): index > col * row');
 end
 
 cIndex = mod(index, col);
@@ -189,7 +191,7 @@ switch shape
         axeHeight = divHeight;
         margins   = zeros(1, 4);
     otherwise
-        error('Invalid shape input');
+        error('mSubplot(): Invalid shape input');
 end
 
 switch alignment
@@ -221,13 +223,15 @@ switch alignment
         axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
         axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
     otherwise
-        error('Invalid alignment input');
+        error('mSubplot(): Invalid alignment input');
 end
 
 mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight]);
 
 if nargout == 1
     varargout{1} = mAxe;
+elseif nargout > 1
+    error("mSubplot(): the number of output should be no greater than 1");
 end
 
 return;
