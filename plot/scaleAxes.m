@@ -131,13 +131,17 @@ if strcmpi(autoScale, "on")
     end
 
     if strcmpi(axisName, "c")
-        XLim = get(allAxes(1), "xlim");
-        temp = getObjVal(FigsOrAxes, "image", ["XData", "CData"]);
+        XLim = get(allAxes(1), "XLim");
+        YLim = get(allAxes(1), "YLim");
+        temp = getObjVal(FigsOrAxes, "image", ["XData", "YData", "CData"]);
 
         if ~isempty(temp)
-            temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
+            temp = arrayfun(@(x) x.CData(x.YData >= YLim(1) & x.YData <= YLim(2), x.XData >= XLim(1) & x.XData <= XLim(2)), temp, "UniformOutput", false);
+            temp = cellfun(@(x) x(:), temp, "UniformOutput", false);
+            temp = cat(1, temp{:});
             temp(isnan(temp)) = [];
-            maxBinCount = length(temp) / 100;
+            temp = sort(temp, "ascend");
+            maxBinCount = numel(temp) / 100;
             binCount = [inf, inf];
             binN = 10;
             while any(binCount > maxBinCount)
