@@ -1,4 +1,4 @@
-function [H, N, edges] = mHistogram(varargin)
+function varargout = mHistogram(varargin)
     % mHistogram(X)
     % mHistogram(X, edges)
     % mHistogram(..., "width", barWidthVal)
@@ -108,6 +108,16 @@ function [H, N, edges] = mHistogram(varargin)
 
     if ~isempty(legendStrs)
         legend(mAxe);
+    end
+    
+    if nargout == 1
+        varargout{1} = H;
+    elseif nargout == 2
+        varargout{2} = N;
+    elseif nargout == 3
+        varargout{3} = edges;
+    elseif nargout > 3
+        error("Too many outputs");
     end
     
     return;

@@ -202,7 +202,7 @@
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
                     {"name": "Color", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
+                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ],
@@ -212,7 +212,7 @@
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
                     {"name": "Color", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
+                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ]
