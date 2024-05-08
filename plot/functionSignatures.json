@@ -201,7 +201,9 @@
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "Color", "kind": "namevalue", "type": ["cell"]},
+                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
@@ -211,7 +213,9 @@
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "Color", "kind": "namevalue", "type": ["cell"]},
+                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
