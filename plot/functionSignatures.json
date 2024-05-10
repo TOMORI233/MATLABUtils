@@ -18,7 +18,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) isa(x, 'matlab.ui.Figure')"]},
@@ -26,7 +27,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ]
             ]}
         ]
