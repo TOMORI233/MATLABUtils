@@ -24,7 +24,7 @@ function varargout = scaleAxes(varargin)
 % Output:
 %     axisRange: axis limits applied
 
-if nargin > 0 && all(isgraphics(varargin{1}))
+if nargin > 0 && all(isgraphics(varargin{1}), "all")
     FigsOrAxes = varargin{1};
     varargin = varargin(2:end);
 else
@@ -43,7 +43,7 @@ if length(varargin) > 1
 end
 
 mIp = inputParser;
-mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
+mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x), "all"));
 mIp.addOptional("axisName", "y", @(x) any(validatestring(x, {'x', 'y', 'z', 'c'})));
 mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
@@ -74,9 +74,9 @@ else
 end
 
 if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
-    allAxes = findobj(FigsOrAxes, "Type", "axes");
+    allAxes = findobj(FigsOrAxes(:), "Type", "axes");
 else
-    allAxes = FigsOrAxes;
+    allAxes = FigsOrAxes(:);
 end
 
 % exclude invisible axes
