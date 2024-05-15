@@ -11,9 +11,10 @@ function [psth, edge, whole] = calPSTH(trials, windowPSTH, binSize, step)
 
     switch class(trials)
         case "cell"
-            trials = cellfun(@(x) reshape(x, [numel(x), 1]), trials, "UniformOutput", false);
-
-            psth = mHist(cell2mat(trials), edge, binSize) / (binSize / 1000) / length(trials); % Hz
+            trials = cellfun(@(x) x(:), trials, "UniformOutput", false);
+            temp = cat(1, trials{:});
+            nTrials = length(trials);
+            psth = mHist(temp, edge, binSize) / (binSize / 1000) / nTrials; % Hz
         case "struct"
             temp = arrayfun(@(x) reshape(x.spike, [numel(x.spike), 1]), trials, "UniformOutput", false);
             psth = mHist(vertcat(temp), edge, binSize) / (binSize / 1000) / length(trials); % Hz
