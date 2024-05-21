@@ -26,6 +26,14 @@
         ]
     },
 
+    "mPerms": {
+        "inputs": [
+            {"name": "v", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "k", "kind": "required", "type": ["scalar", "positive", "integer"]},
+            {"name": "sortCol", "kind": "ordered", "type": ["choices={'first', 'last'}"]}
+        ]
+    },
+
     "mTtest": {
         "inputs": [
             {"name": "x", "kind": "required", "type": ["numeric", "vector"]},

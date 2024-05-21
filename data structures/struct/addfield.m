@@ -10,7 +10,7 @@ function s = addfield(s, fName, fVal)
 mIp = inputParser;
 mIp.addRequired("s", @(x) isstruct(x) && isvector(x));
 mIp.addRequired("fName", @(x) isscalar(cellstr(x)));
-mIp.addRequired("fVal", @(x) (iscell(x) && numel(x) == numel(s)) || (ndims(x) == 2 && size(x, 1) == numel(s)));
+mIp.addRequired("fVal", @(x) (iscell(x) && numel(x) == numel(s)) || (isnumeric(x) && size(x, 1) == numel(s)));
 mIp.parse(s, fName, fVal);
 
 fName = cellstr(fName);
