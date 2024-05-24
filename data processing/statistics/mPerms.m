@@ -3,6 +3,22 @@ function res = mPerms(v, k, sortCol)
 % for vector [v], where N=numel(v).
 % If [sortCol] is set "first", [res] is sorted ascend according to the first column.
 % If [sortCol] is set "last", [res] is sorted ascend according to the last column.
+% 
+% e.g.
+%     v = 1:10;
+%     k = 3;
+%     cmb = mPerms(v, k, "first")
+%     >> cmb = [1, 1, 1
+%               1, 1, 2
+%               1, 1, 3
+%               ...
+%               5, 2, 1
+%               5, 2, 2
+%               5, 2, 3
+%               ...
+%               10, 10, 9
+%               10, 10, 10]
+
 
 narginchk(2, 3);
 
