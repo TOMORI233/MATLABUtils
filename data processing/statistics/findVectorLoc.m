@@ -1,6 +1,6 @@
 function locs = findVectorLoc(X, pat, direction)
     % Find location of vector [pat] in vector [X].
-    % [locs] is row vector of index numbers.
+    % [locs] is column vector of index numbers.
     % [X] and [pat] are either row vectors or column vectors.
     % [direction] specifies [locs] of the first or the last index of [pat].
     
@@ -14,7 +14,7 @@ function locs = findVectorLoc(X, pat, direction)
     X = X(:)';
     pat = pat(:)';
 
-    locs = strfind(X, pat);
+    locs = strfind(X, pat)';
 
     if strcmpi(direction, "last")
         locs = locs + length(pat) - 1;
