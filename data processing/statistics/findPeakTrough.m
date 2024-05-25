@@ -27,12 +27,49 @@ end
 function y = ispeak(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == -2) + 1) = true;
+% 遍历数据，寻找连续相等的序列
+i = 2;
+while i < length(data)
+    if data(i) == data(i-1)
+        % 找到连续相等值的开始和结束索引
+        start = i-1;
+        while i <= length(data) && data(i) == data(i-1)
+            i = i + 1;
+        end
+        finish = i - 1;
+
+        % 检查序列前后的值，判断是否为峰值
+        if (start == 1 || data(start-1) < data(start)) && (finish == length(data) || data(finish+1) < data(finish))
+            y(start) = true;
+        end
+    else
+        i = i + 1;
+    end
+end
 return;
 end
 
-function y = istrough(data, thr)
+function y = istrough(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == 2) + 1) = true;
+% 遍历数据，寻找连续相等的序列
+i = 2;
+while i < length(data)
+    if data(i) == data(i-1)
+        % 找到连续相等值的开始和结束索引
+        start = i-1;
+        while i <= length(data) && data(i) == data(i-1)
+            i = i + 1;
+        end
+        finish = i - 1;
 
+        % 检查序列前后的值，判断是否为波谷
+        if (start == 1 || data(start-1) > data(start)) && (finish == length(data) || data(finish+1) > data(finish))
+            y(start) = true;
+        end
+    else
+        i = i + 1;
+    end
+end
 return;
 end

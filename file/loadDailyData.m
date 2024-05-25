@@ -26,7 +26,12 @@ for pIndex = 1 : length(protocols)
     ProtPATH = MATPATH(mContains(MATPATH, DATE, "all_or", all_or) & mContains(MATPATH, protocols(pIndex)));
     PATHPART = cellfun(@(x) strsplit(x, "\"), ProtPATH, "UniformOutput", false);
     dateStrs = cellfun(@(x) x{end - 1}, PATHPART, "UniformOutput", false);
-    popRes.(protocols(pIndex)) = cell2mat(cellfun(@(x, y) mLoadData(x, y), ProtPATH, string(dateStrs), "uni", false));
+    try
+        popRes.(protocols(pIndex)) = cell2mat(cellfun(@(x, y) mLoadData(x, y), ProtPATH, string(dateStrs), "uni", false));
+    catch
+        popRes.(protocols(pIndex)) = cellfun(@(x, y) mLoadData(x, y), ProtPATH, string(dateStrs), "uni", false);
+    end
+
 end
 
     function res = mLoadData(ProtPATH, dateStr)
