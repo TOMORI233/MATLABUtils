@@ -177,7 +177,8 @@
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
             {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
-            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"}
+            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"},
+            {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical"]}
         ],
         "description": "将相同的坐标范围应用于指定图像或坐标区"
     },
