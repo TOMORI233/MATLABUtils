@@ -82,12 +82,13 @@
             {"name": "x", "kind": "required", "type": ["numeric", "2d"]},
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "dim", "kind": "ordered", "type": ["numeric", "choices={1, 2}"]}
+                    {"name": "dim", "kind": "ordered", "type": ["integer", "scalar", "positive"]}
                 ],
                 [
                     {"name": "dim", "kind": "ordered", "type": ["choices={'all'}"]}
                 ]
-            ]}
+            ]},
+            {"name": "omitnan", "kind": "ordered", "type": ["choices={'omitnan'}"]}
         ]
     }
 }

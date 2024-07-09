@@ -1,29 +1,33 @@
-function y = SE(x, dim)
+function y = SE(x, varargin)
     % Return standard error of [x] along [dim]
-    % [dim]=1 means row by row
-    % [dim]=2 means column by column
 
-    narginchk(1, 2);
+    mIp = inputParser;
+    mIp.addRequired("x");
+    mIp.addOptional("dim", [], @(x) isscalar(x) && (strcmpi(x, 'all') || (x > 0 && fix(x) == x)));
+    mIp.addOptional("omitnan", "omitnan", @(x) strcmpi(x, 'omitnan'));
+    mIp.parse(x, varargin{:})
 
-    if nargin < 2
+    dim = mIp.Results.dim;
+    omitnan = strcmpi(mIp.Results.omitnan, 'omitnan');
 
-        if isvector(x)
-            y = std(x) / sqrt(length(x));
-            return;
+    if isempty(dim)
+        if omitnan
+            stdVal = std(x, [], "omitnan");
+            nX = sum(~isnan(x));
         else
-            dim = 1;
+            stdVal = std(x);
+            nX = sum(ones(size(x)));
         end
-
-    end
-
-    if isa(dim, "double")
-        nX = size(x, dim);
-    elseif strcmp(dim, "all")
-        nX = numel(x);
     else
-        error("Invalid dim input");
+        if omitnan
+            stdVal = std(x, [], dim, "omitnan");
+            nX = sum(~isnan(x), dim);
+        else
+            stdVal = std(x, [], dim);
+            nX = sum(ones(size(x)), dim);
+        end
     end
-
-    y = std(x, [], dim) / sqrt(nX);
+    
+    y = stdVal ./ sqrt(nX);
     return;
 end
