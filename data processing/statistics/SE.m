@@ -24,7 +24,7 @@ function y = SE(x, varargin)
             nX = sum(~isnan(x), dim);
         else
             stdVal = std(x, [], dim);
-            nX = sum(ones(size(x)), dim);
+            nX = size(x, dim);
         end
     end
     
