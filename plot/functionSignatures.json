@@ -193,7 +193,8 @@
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ]
-            ]}
+            ]},
+            {"name": "ConstantLine", "kind": "namevalue", "type": ["logical", "scalar"], "purpose": "use xline/yline to create vertical/horizontal lines"}
         ]
     },
 
