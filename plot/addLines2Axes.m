@@ -9,18 +9,20 @@ function addLines2Axes(varargin)
     %                              [style],      % default = "--"
     %                              [marker],     % default = "none"
     %                              [markerSize], % default = 6
-    %                              [legend].     % default = []
-    %            If [X] or [Y] is left empty, then best x/y range will be
-    %            used.
-    %            If [X] or [Y] contains 1 element, then the line will be
-    %            vertical to x or y axis.
-    %            If not specified, line legend will not be shown.
+    %                              [legend],     % default = []
+    %                              [label],      % default = [], for ConstantLine
+    %                              [labelHorizontalAlignment], % default = 'right' (|'center'|'left')
+    %                              [labelVerticalAlignment],   % default = 'top' (|'middle'|'bottom')
+    %                              [labelOrientation].         % default = 'aligned' (|'horizontal')
+    %     ConstantLine: if set true (default), use xline/yline to create
+    %                   vertical/horizontal lines when [X] or [Y] is left empty.
+    % Notice:
+    %     If [X] or [Y] is left empty, then best x/y range will be used.
+    %     If [X] or [Y] contains 1 element, then the line will be vertical to x or y axis.
+    %     If not specified, line legend will not be shown.
     % Example:
     %     % Example 1: Draw lines to mark stimuli oneset and offset at t=0, t=1000 ms
-    %     scaleAxes(Fig, "y"); % apply the same ylim to all axes
-    %     lines(1).X = 0;
-    %     lines(2).X = 1000;
-    %     addLines2Axes(Fig, lines);
+    %     addLines2Axes(Fig, struct("X", {0; 1000}));
     %
     %     % Example 2: Draw a dividing line y=x for ROC in current axes
     %     syncXY(gca); % synchronize x&y range first
@@ -36,9 +38,11 @@ function addLines2Axes(varargin)
     mIp = inputParser;
     mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
     mIp.addOptional("lines", [], @(x) isempty(x) || isstruct(x));
+    mIp.addParameter("ConstantLine", true, @(x) islogical(x) && isscalar(x));
     mIp.parse(FigsOrAxes, varargin{:});
 
     lines = mIp.Results.lines;
+    ConstantLineOpt = mIp.Results.ConstantLine;
 
     if isempty(lines)
         lines.X = [];
@@ -59,36 +63,76 @@ function addLines2Axes(varargin)
             X = getOr(lines(lIndex), "X");
             Y = getOr(lines(lIndex), "Y");
             legendStr  = getOr(lines(lIndex), "legend");
-            color      = getOr(lines(lIndex), "color",  getOr(lines(1), "color", "k"),  true);
-            lineWidth  = getOr(lines(lIndex), "width",  getOr(lines(1), "width", 1),    true);
-            lineStyle  = getOr(lines(lIndex), "style",  getOr(lines(1), "style", "--"), true);
-            marker     = getOr(lines(lIndex), "marker", getOr(lines(1), "marker", "none"), true);
-            markerSize = getOr(lines(lIndex), "markerSize", getOr(lines(1), "markerSize", 6), true);
+            color      = getOr(lines(lIndex), "color",      getOr(lines(1), "color", "k"),     true);
+            lineWidth  = getOr(lines(lIndex), "width",      getOr(lines(1), "width", 1),       true);
+            lineStyle  = getOr(lines(lIndex), "style",      getOr(lines(1), "style", "--"),    true);
+            marker     = getOr(lines(lIndex), "marker",     getOr(lines(1), "marker", "none"), true);
+            markerSize = getOr(lines(lIndex), "markerSize", getOr(lines(1), "markerSize", 6),  true);
+            % for constant line
+            label                    = getOr(lines(lIndex), "label");
+            labelHorizontalAlignment = getOr(lines(lIndex), "labelHorizontalAlignment", getOr(lines(1), "labelHorizontalAlignment", "right"), true);
+            labelVerticalAlignment   = getOr(lines(lIndex), "labelVerticalAlignment",   getOr(lines(1), "labelVerticalAlignment", "top"),     true);
+            labelOrientation         = getOr(lines(lIndex), "labelOrientation",         getOr(lines(1), "labelOrientation", "aligned"),       true);
 
-            if numel(X) == 0
-                X = get(allAxes(aIndex), "xlim");
-            elseif numel(X) == 1
-                X = X * ones(1, 2);
+            if isempty(X) && isscalar(Y) % yline
+                if ConstantLineOpt
+                    h = yline(allAxes(aIndex), Y, "Color", color, ...
+                                                  "LineWidth", lineWidth, ...
+                                                  "LineStyle", lineStyle, ...
+                                                  "Label", label, ...
+                                                  "LabelHorizontalAlignment", labelHorizontalAlignment, ...
+                                                  "LabelVerticalAlignment", labelVerticalAlignment, ...
+                                                  "LabelOrientation", labelOrientation);
+                else
+                    X = get(allAxes(aIndex), "XLim");
+                    Y = repmat(Y, 1, 2);
+                    h = plot(allAxes(aIndex), X, Y, "Color", color, ...
+                                                    "Marker", marker, ...
+                                                    "MarkerSize", markerSize, ...
+                                                    "LineWidth", lineWidth, ...
+                                                    "LineStyle", lineStyle);
+                end
+            elseif isempty(Y) && isscalar(X) % xline
+                if ConstantLineOpt
+                    h = xline(allAxes(aIndex), X, "Color", color, ...
+                                                  "LineWidth", lineWidth, ...
+                                                  "LineStyle", lineStyle, ...
+                                                  "Label", label, ...
+                                                  "LabelHorizontalAlignment", labelHorizontalAlignment, ...
+                                                  "LabelVerticalAlignment", labelVerticalAlignment, ...
+                                                  "LabelOrientation", labelOrientation);
+                else
+                    Y = get(allAxes(aIndex), "YLim");
+                    X = repmat(X, 1, 2);
+                    h = plot(allAxes(aIndex), X, Y, "Color", color, ...
+                                                    "Marker", marker, ...
+                                                    "MarkerSize", markerSize, ...
+                                                    "LineWidth", lineWidth, ...
+                                                    "LineStyle", lineStyle);
+                end
+            elseif isempty(X) && isempty(Y) % diagonal
+                X = get(allAxes(aIndex), "XLim");
+                Y = get(allAxes(aIndex), "YLim");
+                h = plot(allAxes(aIndex), X, Y, "Color", color, ...
+                                                "Marker", marker, ...
+                                                "MarkerSize", markerSize, ...
+                                                "LineWidth", lineWidth, ...
+                                                "LineStyle", lineStyle);
+            else % custom
+                h = plot(allAxes(aIndex), X, Y, "Color", color, ...
+                                                "Marker", marker, ...
+                                                "MarkerSize", markerSize, ...
+                                                "LineWidth", lineWidth, ...
+                                                "LineStyle", lineStyle);
             end
-
-            if numel(Y) == 0
-                Y = get(allAxes(aIndex), "ylim");
-            elseif numel(Y) == 1
-                Y = Y * ones(1, 2);
-            end
-
-            h = plot(allAxes(aIndex), X, Y, "Color", color, ...
-                                            "Marker", marker, ...
-                                            "MarkerSize", markerSize, ...
-                                            "LineWidth", lineWidth, ...
-                                            "LineStyle", lineStyle);
 
             if ~isempty(legendStr)
                 set(h, "DisplayName", legendStr);
                 legend;
             else
-                set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+                setLegendOff(h);
             end
+
         end
 
     end

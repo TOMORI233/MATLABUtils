@@ -18,7 +18,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) isa(x, 'matlab.ui.Figure')"]},
@@ -26,7 +27,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ]
             ]}
         ]
@@ -175,7 +177,8 @@
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
             {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
-            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"}
+            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"},
+            {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical"]}
         ],
         "description": "将相同的坐标范围应用于指定图像或坐标区"
     },
@@ -190,7 +193,8 @@
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ]
-            ]}
+            ]},
+            {"name": "ConstantLine", "kind": "namevalue", "type": ["logical", "scalar"], "purpose": "use xline/yline to create vertical/horizontal lines"}
         ]
     },
 

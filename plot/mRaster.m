@@ -38,10 +38,11 @@ function mAxe = mRaster(varargin)
         X = rasterData(index).X(:);
 
         if ~isfield(rasterData(index), "Y")
-            Y = mat2cell((nTrials + 1:nTrials + length(rasterData(index).X))', ones(length(rasterData(index).X), 1));
+            Y = mat2cell((nTrials + 1:nTrials + numel(rasterData(index).X))', ones(numel(rasterData(index).X), 1));
             nTrials = nTrials + length(X);
             Y = cell2mat(cellfun(@(x, y) repmat(y, [length(x), 1]), X, Y, "UniformOutput", false));
-            X = cell2mat(cellfun(@(x) reshape(x, [length(x), 1]), X, "UniformOutput", false));
+            X = cellfun(@(x) x(:), X, "UniformOutput", false);
+            X = cat(1, X{:});
         end
 
         if isempty(X) || isempty(Y)

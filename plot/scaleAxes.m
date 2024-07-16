@@ -21,6 +21,8 @@ function varargout = scaleAxes(varargin)
 %     symOpt: symmetrical option - "min" or "max"
 %     type: "line" or "hist" for y scaling (default="line")
 %     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
+%     ignoreInvisible: if set true, invisible axes in the target figure
+%                      will be excluded from scaling (default=true)
 % Output:
 %     axisRange: axis limits applied
 
@@ -52,6 +54,7 @@ mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d',
 mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
+mIp.addParameter("ignoreInvisible", true, @(x) isscalar(x) && islogical(x));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
@@ -60,6 +63,7 @@ cutoffRange = getOr(mIp.Results, "cutoffRange0", mIp.Results.cutoffRange, true);
 symOpt = getOr(mIp.Results, "symOpts0", mIp.Results.symOpt, true);
 type = mIp.Results.type;
 uiOpt = mIp.Results.uiOpt;
+ignoreInvisible = mIp.Results.ignoreInvisible;
 
 if strcmpi(axisName, "x")
     axisLimStr = "xlim";
@@ -79,8 +83,10 @@ else
     allAxes = FigsOrAxes(:);
 end
 
-% exclude invisible axes
-allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+if ignoreInvisible
+    % exclude invisible axes
+    allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+end
 
 %% Best axis range
 axisLim = get(allAxes(1), axisLimStr);

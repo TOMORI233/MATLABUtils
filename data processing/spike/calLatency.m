@@ -6,6 +6,8 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
     % [windowBase] and [windowOnset] are two-element vectors in millisecond.
     % [th] for picking up [latency] from Poisson cumulative probability (default: 1e-6).
     % [nStart] for skipping (nStart-1) spikes at the beginning (default: 5).
+    %
+    % REFERENCE doi: 10.1073/pnas.0610368104
 
     narginchk(3, 5);
 
@@ -33,7 +35,7 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
     spikes = spikes(nStart:end);
     lambda = numel(trials) * sprate * spikes / 1000;
 
-    P = zeros(length(n), 1);
+    P = zeros(length(n), 1); % P(n>=k)=1-P(n<k)
     for index = 1:length(n)
         P(index) = 1 - poisscdf(n(index) - 1, lambda(index));
     end

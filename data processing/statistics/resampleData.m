@@ -1,8 +1,9 @@
 function dataResample = resampleData(data, fs0, fs)
     % Required: Signal Processing Toolbox for resample.m
-    % [data] can be a real vector or a cell array.
+    % [data] can be a vector, a matrix or a cell array.
     % If [data] is a cell array, each cell is a trial and each row of the
     % matrix in a cell is a channel.
+    % If [data] is a matrix, each column is treated as a channel.
     % The output is the same type as that of the input.
 
     [P, Q] = rat(fs / fs0);

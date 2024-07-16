@@ -19,11 +19,11 @@ if ~any(cellfun(@(x) isvector(x) && isstruct(x), S))
 end
 
 % Make sure all [S] are column vector
-S = cellfun(@(x) reshape(x, [numel(x), 1]), S, "UniformOutput", false)';
+S = cellfun(@(x) reshape(x, [numel(x), 1]), S(:), "UniformOutput", false);
 
-fNames = unique(cellcat(1, cellfun(@fieldnames, S, "UniformOutput", false)), "stable");
-emptyVals = cell(length(fNames), 1);
-temp = [fNames, emptyVals]';
+fNames = cellfun(@fieldnames, S, "UniformOutput", false);
+fNames = unique(cat(1, fNames{:}), "stable");
+temp = [fNames(:), cell(numel(fNames), 1)]';
 emptyStruct = struct(temp{:});
 S = cellfun(@(x) arrayfun(@(y) getOrFull(y, emptyStruct), x), S, "UniformOutput", false);
 S = cat(1, S{:});

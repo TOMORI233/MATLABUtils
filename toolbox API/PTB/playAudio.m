@@ -14,7 +14,7 @@ function playAudio(y, varargin)
     % [fsDevice] is samplerate of output device (default: []).
 
     mIp = inputParser;
-    mIp.addRequired("y", @(x) (isa(x, "double") && ndims(x) == 2) || ischar(x) || isstring(x));
+    mIp.addRequired("y", @(x) (isa(x, "double") && ismatrix(x)) || ischar(x) || isstring(x));
     mIp.addOptional("fs", [], @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
     mIp.addOptional("fsDevice", [], @(x) validateattributes(x, {'numeric'}, {'positive', 'scalar'}));
     mIp.parse(y, varargin{:});
@@ -40,10 +40,10 @@ function playAudio(y, varargin)
 
     [a, b] = size(y);
 
-    if a > b
-        y = y(:, 1)';
-    else
-        y = y(1, :);
+    if a == 1 || b == 1
+        y = repmat(y(:), [1, 2]);
+    elseif a < b
+        y = y';
     end
     
     if ~isempty(fsDevice) && ~isequal(fsSound, fsDevice)
@@ -51,7 +51,8 @@ function playAudio(y, varargin)
         y = resampleData(y, fsSound, fsDevice);
     end
 
-    y = repmat(y, [2, 1]);
+    % treat each row as a channel
+    y = y';
 
     %% Play Audio
     InitializePsychSound;

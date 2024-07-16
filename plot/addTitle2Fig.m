@@ -15,6 +15,7 @@ function T = addTitle2Fig(varargin)
     mIp.addParameter("Position", [0.5, 1.1], @(x) validateattributes(x, {'numeric'}, {'numel', 2}));
     mIp.addParameter("FontSize", 14, @(x) validateattributes(x, {'numeric'}, {'scalar', 'integer', 'positive'}));
     mIp.addParameter("FontWeight", 'normal', @(x) any(validatestring(x, {'normal', 'bold'})));
+    mIp.addParameter("Interpreter", "none", @(x) any(validatestring(x, {'none', 'tex', 'latex'})))
     mIp.parse(Fig, varargin{:});
 
     str = mIp.Results.str; % title string
@@ -22,9 +23,14 @@ function T = addTitle2Fig(varargin)
     pos = mIp.Results.Position; % normalized [x, y]
     fontSize = mIp.Results.FontSize;
     fontWeight = mIp.Results.FontWeight;
+    interpreter = mIp.Results.Interpreter;
 
     mAxes = mSubplot(Fig, 1, 1, 1);
-    T = text(mAxes, pos(1), pos(2), str, "FontSize", fontSize, "FontWeight", fontWeight, "HorizontalAlignment", alignment);
+    T = text(mAxes, pos(1), pos(2), str, ...
+             "FontSize", fontSize, ...
+             "FontWeight", fontWeight, ...
+             "HorizontalAlignment", alignment, ...
+             "Interpreter", interpreter);
     set(mAxes, "Visible", "off");
 
     return;
