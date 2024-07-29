@@ -1,5 +1,6 @@
-function chMean = calchMean(trialsData, padDir)
-% Return the weighted-average data [chMean] (nCh*xx*xx*...*nTime).
+function [chMean, trialsData] = calchMean(trialsData, padDir)
+% Return the weighted-average [chMean] (nCh*xx*xx*...*nTime) and 
+% nan-padded [trialsData].
 % 
 % [trialsData] is a nTrial*1 cell vector with nCh*xx*xx*...*nTime data.
 % 
