@@ -112,7 +112,7 @@ if strcmpi(autoScale, "on")
         XLim = get(allAxes(1), "xlim");
 
         if strcmpi(type, 'line')
-            temp = getObjVal(FigsOrAxes, "line", ["XData", "YData"], "LineStyle", "-");
+            temp = getObjVal(allAxes, "line", ["XData", "YData"], "LineStyle", "-");
             if ~isempty(temp)
                 temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
                 limTemp = [min(cell2mat(cellfun(@min, temp, "uni", false))), max(cell2mat(cellfun(@max, temp, "uni", false)))];
@@ -120,7 +120,7 @@ if strcmpi(autoScale, "on")
                 axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
             end
         else % Histogram
-            temp = getObjVal(FigsOrAxes, "Histogram", ["BinEdges", "Values"]);
+            temp = getObjVal(allAxes, "Histogram", ["BinEdges", "Values"]);
             if ~isempty(temp)
                 [temp.XData] = temp.BinEdges;
                 [temp.YData] = temp.Values;
@@ -139,7 +139,7 @@ if strcmpi(autoScale, "on")
     if strcmpi(axisName, "c")
         XLim = get(allAxes(1), "XLim");
         YLim = get(allAxes(1), "YLim");
-        temp = getObjVal(FigsOrAxes, "image", ["XData", "YData", "CData"]);
+        temp = getObjVal(allAxes, "image", ["XData", "YData", "CData"]);
 
         if ~isempty(temp)
             temp = arrayfun(@(x) x.CData(x.YData >= YLim(1) & x.YData <= YLim(2), x.XData >= XLim(1) & x.XData <= XLim(2)), temp, "UniformOutput", false);
