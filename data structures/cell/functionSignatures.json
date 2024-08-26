@@ -6,6 +6,12 @@
             {"name": "delSubCell", "kind": "ordered", "type": ["choices = {'simple', 'largest set', 'minimum set'}"]}
         ],
         "description": "适用于cell的unique"
-    }
+    },
 
+    "calchMean": {
+        "inputs": [
+            {"name": "trialsData", "kind": "required", "type": ["cell"]},
+            {"name": "padDir", "kind": "ordered", "type": ["choices = {'head', 'tail'}"]}
+        ]
+    }
 }
