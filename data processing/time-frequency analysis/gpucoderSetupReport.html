@@ -1,0 +1,118 @@
+<!DOCTYPE html> <html> <head> <title>GPU Code Generation Environment Check Report</title> <META http-equiv="Content-Type" content="text/html" charset="UTF-8"><style>br.br1 {
+    display: block; 
+    content: ""; 
+    margin-top: 7px;
+}
+
+table.table1{
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse:separate;
+    width: 70%;
+    margin: auto;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 1.4em;
+}
+
+table.table1 thead th{
+    padding:10px;
+    color:#fff;
+    font-size: 20px;
+    text-shadow:1px 1px 1px #1f789e;
+    border:1px solid #0084bd;
+    border-bottom:3px solid #008bc7;
+    background-color:#0076a8;
+    background:-webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.02, rgb(0, 118, 168)),
+        color-stop(0.51, rgb(0, 129, 184)),
+        color-stop(0.87, rgb(0, 146, 209))
+        );
+    background: -moz-linear-gradient(
+        center bottom,
+        rgb(0, 118, 168) 2%,
+        rgb(0, 129, 184) 51%,
+        rgb(0, 146, 209) 87%
+        );
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-radius:5px 5px 0px 0px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+table.table1 thead th:empty{
+    background:transparent;
+    border:none;
+}
+
+table.table1 th:nth-child(1) {
+  width: 40%;
+}
+
+table.table1 th:nth-child(2) {
+  width: 15%;
+}
+
+table.table1 th:nth-child(3) {
+  width: 45%;
+}
+
+table.table1 caption {
+  font-family: Arial, Helvetica, sans-serif;
+  color:#cb6015;
+  text-shadow:1px 1px 1px #fff;
+  font-size: 22px;
+  padding:14px;
+}
+
+table.table1 tbody td{
+    font-size: 18px;
+    padding:8px;
+    text-align: center;
+    background-color:#f5f5f5;
+    border: 2px solid #f7f6f3;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    color:#666;
+    text-shadow:1px 1px 1px #fff;
+}
+
+table.table1 td:nth-child(3) {
+  text-align: left;
+}
+
+table.table1 tbody span.pass::before{
+    content : url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsSAAALEgHS3X78AAAD6ElEQVRIx9WVX0ybVRjGn+/rH0op9iPA7HC4jjEYILRMWcfETRYNbLuwmg07IrPFICEzJvOC7EJvvMObmRgTYxbpRjZGjNEbjVzo51RgMmAFJpTCoGWFtoL0/9+v5ztekOBYppuKFzvJe3fe35PznrzPAzzqR7JVoOOd1VxpXYGnpG67zzHgsW2pQMM7Ok6lzObfb+/Sun1uo7qMdc0NeW1bInDk7UpOpczm3219T//k9kIYKp7FqH3UmFMudy384rP9J4FDHRUcpZR/w/i6/qk9JQimXJBIgfrqRoxOjxrVpbJr7L1NB9vKuIeBH2wr4wgR+faTZn1ttQ6riSmkxBCiggeMNIZOcyfSafHLTQI1lhKOEHFhf2up+UEChIjn2199TV/39D74YmNIkRAEEoVAIvAnZ/GBtQuE0LMbI6puKeayMpX82TfbtIKQNpJtKZdnfM12P/i+03u6O5pN5kP71+FpMQ4KERQEIgguXP0aI5N2y43uGasEACpPFXFZSiV/ptWiz9+mRnlxKW7ZZ4wKrczlm/RvEqlq3t194uiL5sbnD8ATGURKDG2Cf9bLY2DYbrnZM2sFAEnZSS1HKeWbjC/pd+7Kx/hv30Fk4mioPYbJabtRXii5tvJrwAkA5U3a7sOGGnPLK8dwJ/wzksQPCrIuQEVcvHIdg8NzH072zndt7EHO3seGWppO6CuqijDu+x4iFRAXglBmZOEFwxFMTjuMjIbpzy1Tmw7X1pw7c9oEZ+gHJEgQFAClIijSuHTFhsHhRav9c2fH3S9mSVpEQkhi3PsjUukUiEhBRIrb/jGERS/OvdXOZSoU/HOGZ853tJjgCo0gnAogTSjShEIQKQaG3BgYclsdX7gs9/4Xs/P4ExyllDc07NSXVOZByjKQSVhIWQZSlkFprgFMQg1Nfi4WQyMIJl2QsMxGjd3w4mrvtHXxm2XLfb0oOBtOqIpUfYsOf+OOYk6jzJIBDLNxwZ9cRm52HnyxWazGnX92UmBk2IPey1Nfub/1nPpbswvfjiQytVl989NrjQW71BqlSg4G2Ki15DJiQgCgWJ871uF9l6dslOLl6EI08UA3jS5EE9KCjP7ZW6vmHbs5hVIl/8slm58LoOfChI1SWr/KrwQe2q7jrlhAosnod0ysmAqLcxTKbPndEwEF4HGH0fPphC2VIvWBn34P/OM8SN6Je5Ev73c61kx7qx9XSGTsOhmAdymMix/ftMUiQn3kuj/wrwNHWEp4U2pJv3PGbyqpylNIZCy8SxFc+mgsEIum65MjQe+WpBSrU+k1RzW0+ZM6qjzA+VmdSr/lmcrqVGZWp/p/4I/E+QNO8s7Wu9Cb2wAAAABJRU5ErkJggg==)
+}
+
+table.table1 tbody span.fail::before{
+    content : url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA/tJREFUeNq0ln9sE2UYx58ibF35VQfKZFtA1Egw4zacDhNAVJAxGKsoKN3mnYo6mTNqNDH+Z0z0DzUQF0wFJFeH/gOJMuLEhMQ5RRkOKNYYMARW2sFw3XbdaHt3vbvX93m7Nj3u2PYPl7x933vez/P9Xt6fdRBC4FY+U+2C1W+2ilgf3dUiTCRAWTetOmkJ2PFT7MSXLbmb9zzxEJ8xmkicshzm2PI4RJmypmWX+J6vnYyqOklqhLQdO00wlsvksG5aAsggizmYeyOfbax45VPx7dbvKKiREcUgUdlgieLRHoJ9uUn03U1LAPuQQRZzMBc1cnn2Uyl8LL6+8yCFNBJTdPJvTCPnJI0MJNHEIPs6ThJkxlg3LQGMYR8yyGIO5qIGamV4Nsmymip/4J4S0AwHROIaGGMLqy+lwzzXbeBdWwkpTefL6j/EcHnzc2s5jEmKAdcSena4QymAkulTofjOQqaZXUWyoq3+zP9j55/nItyrDRtMc3Q5pkPxzGnQWP0wqCmdxxi2h2Qd+kZTljl9Z387dHUHz9Lmanx3ZPZB6ab32YpYVbXUYoLPgtl5MMeVXtWDCQ1CMdXCfHngByr+FxMPt38kmQzwuWPdu2mT5Uu5psZai8CiQierLw7Jlj5f2xHoOpEWH/jpEykTd9y4k2c+9hYzeXQ5xzU9Xzup3er7+gj8cuIsEx/9eaeU2+ewOypmrGxmJiuoyfbGunHF97Udht/GxK//ulua1FFB9PTkzZnhBEXVxzVAhvKB+O97pEmdRa4qgX39y9s2ci316+H8f3HoH1FsxYtm5cMHO56GubNdPM2DRLcojGvgqqxn4tu9m7hmbzVEhpMQGkzc9Ouxb/q0KYAsMXSe5kOi5xvB1qCgYgsTf8Hr4Zq8NRAaSkCwb8QkKMsyOJ1OU+x0WIKUMQswR9M1nupA8sxBwWRQUFbHxHnvZm6HdyOEogkIhM1DqlBxv88H8+bPh7qtW019PZeGQSslgLmGRk3K6iAZPCxkDegkdXpqq7nXGjxwKRqHUyGr+Ld7voBrV674r4ZD5bqmcRu2PGtiui8OgrbADaghSTHeuaQG5H86hPQQ6Wqgt7eXC16Owt/9cYv4ob27YeBqn18+f0xw3r/GHTx5vFPXVO7JZ7aZ2OMXohArSgLVQk3zPsi/d5U4965i3vNSC+Q5C1hMlZPw/VetEKXiyoWu7LhSlg3p4mVV3OObvVkDO9600fIXPiIWFpXwNS++wd479n8OQ/0Rv9L7h2X5UZaZ3FdRxa18qoGJ2/GWnZxX+qB4OzXB9jCF1fCpm97LlGUmpYs57ro0aMvbHhV5JRXsblUjZya89CmbvfTteMet/tvyvwADAIqjgnvliMisAAAAAElFTkSuQmCC)
+}
+
+table.table2{
+    font-family: Arial, Helvetica, sans-serif;;
+    width: 50%;
+    margin: auto;
+    font-style: normal;
+    font-weight: bold;
+}
+
+table.table2 tbody td{
+    font-size: 16px;
+    padding:0px;
+    text-align: left;
+    background-color:#f5f5f5;
+    color:#666;
+}
+
+table.table2 tbody span.pass_small::before{
+    content : url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAB70lEQVQ4y9VTzU8TcRB9+0FDjYUTxoPRxgQ1aWi3LYTixYPhxEGQ4sfB8FuJJ0+c+De8etDfelBTaJUlejGa1GgwBpAiB5YKWqvotlJLty5d9tMTikYT9GDinGYmeS/z5s0A/130jcVo31iM/hW4dzRC705f9aaeXfd6RyMUAPjdgk9cDtGR/gvkuNAJntkDx3GIaV7ZHUHPpWNUPJ0k3UIHVH0GTVwAhrUJ23K/E8SH2ykAzN14Je4Ex4fbqZgcJN3REIr1R2AYFi/my7iZfirNSHmRB4CO84fp2VMDhGUA00xj8fZrcbt/8UySJGJhFGpP4Hgacrl1TKQVaeHWqggA/NHBQ3Sof4BEIyFwLAPXA7lmpgAAI+eGSCIexkr1MWxXw0KujDuZvLQ0Ufg2JW/bLhqmgefvH8LfxKErdhKe6xKWYZDoDEOpZGG5Ghbny5jM5KVV+d0PErnqsiYXjLUgmm2hpY1FbUtF15EeHDywH0uVLBpWDbnZEjLjy9Lbe2vizwvmAEBbqcufHSvYvNcntLZx2NhS8WmzAN3aQG6uhMlxRfr4QBV/5RC3nehvdFltGEF/wCe07uNgOgZezpYwlVKkSnZd/J3F3M7CKDbkoqYH/S0+ofThC+6nFKk+XRX/+GT5aIDy0QD9J8/1Fe+L0k/GEofvAAAAAElFTkSuQmCC)
+}
+
+table.table2 tbody span.fail_small::before{
+    content : url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAttJREFUeNpsU01ME0EUftt/Sk3lp6n9SRsRwYMxa0jQg4AnMB60avSCwq6YWKOVP01UiAcDeFAEKSbVBLeiHtQENBhj0IMIF0+iB+MvCQRaGmhpQ9m2bOk4M1hSgi95eW+++b63M/PeMgghIHagwc3i8AF7w9tulxf+Y5jD4dCNfT/mjFOQFKiq72GveoaWQrEk6njyDuE1R/BMJ5h7YAwRDuESDf14ubOTbeodxGIJBeMpRGKjewBhfK0IyQmWySEaomVKajvCw57LegnJYCGBQKtgQKdIwfmOx/BrapYnp9xu2yLcu3YKokkZiEkEOWoGlEwKKp23InJ9cdnshD/kMNusAAwDorQCMgZfsqQIXn/84lAo5I6eKydhGeQQjCVBWknBbFiEB8/ew7c/M+cYckTb4RbObjUKrRerQZulpm9j3qQEKR6nuVKjAd+iRHMxloC2nqcwOR3gp161e5l0F/IqL3GGPL3QdPY42C1GihXkamicCK0WmpwJwJ37L2AuGOGDw7dpp9YKENNVuDhtlkZoaawFGy4iJ3fBtpJCMIXF7V2P8AnifHTEvdZmRWafkZQAdbYKDDoViHFp3QwQTC1LwRLmZJosnWhLa7itljyh72Y92E35ICaS65xgZI9wCDeto1fQ7j7Bsbt2CJ3XXRCOp+BHIEo3/T4/jSazicZiow42a2TQfMMN41+/8+Ln515Gs/MQV7Zvj9DaWAe+iAQT80uUHPD7od/joXmN0wlG02qRgvxsMOuV0NbVB6Njn3hGXVwZfjPg1f+cE2F6IUZJCdy+/rudEFkI0UHS5+QKNfXNoNasdsWakwVFBi0cPMpFGNW2ctZgto46Tl/QqTBhGYsH+9ww75/hE79H6GurCyu4fJNFOFLngjTn5cPe6JxvuozOuspeypr2HlvkPSPIVlGN8HrDz0SwwqoziHAIl2joCKQJSgvLYg9j3yDO4HD/OGwa+yvAAHullCgNr9g3AAAAAElFTkSuQmCC)
+}</style></head><body> <h1> <div style="color:#004b87" align="center">GPU Code Generation Environment Check Report</div> </h1><h2> <div style="color:#004b87" align="center">Results for Host GPU : </div> </h2><div style="height: 2px; background-color: #004b87"></div> <br><br><table class="table1">  <caption>ENVIRONMENT CHECKS</caption> <thead> <tr> <th scope="col">Check</th> <th scope="col">Result</th> <th scope="col">Message</th> </tr> </thead> <tbody> <tr> <td>Compatible GPU</td> <td><span class="fail"></span></td> <td>A compatible GPU device is not found on the host system. Execution and profiling of the generated GPU MEX will not be available.</td> </tr><tr><td>CUDA Environment<br><table class="table2"> <br class="br1"><tr><td>a. Runtime </td><td><span class="pass_small"></span></td> </tr><tr><td>b. cuFFT </td><td><span class="pass_small"></span></td> </tr><tr><td>c. cuSOLVER </td><td><span class="pass_small"></span></td> </tr><tr><td>d. cuBLAS </td><td><span class="pass_small"></span></td> </tr></tbody></table></td> <td><span class="pass"></span></td> <td></td></tr><tr> <td>Host Compiler</td> <td><span class="pass"></span></td> <td></td> </tr></tbody></table><table class="table1">  <caption>BASIC CODE GENERATION CHECKS</caption> <thead> <tr> <th scope="col">Check</th> <th scope="col">Result</th> <th scope="col">Message</th> </tr> </thead> <tbody> <tr> <td>Basic Code Generation</td> <td><span class="pass"></span></td> <td></td> </tr></tbody></table><table class="table1">  <caption>DEEP LEARNING CODE GENERATION CHECKS - CUDA </caption> <thead> <tr> <th scope="col">Check</th> <th scope="col">Result</th> <th scope="col">Message</th> </tr> </thead> <tbody> <tr> <td>Deep Learning (CUDA) Code Generation</td> <td><span class="fail"></span></td> <td>Code generation for 'CUDA' target library requires the GPU Coder Interface for Deep Learning Libraries support package. To install this support package, use the <a href="matlab: matlab.addons.supportpackage.internal.explorer.showSupportPackages('GPU_DEEPLEARNING_LIB', 'tripwire')">Add-On Explorer</a>.</td> </tr></tbody></table><br><br></body> </html>
