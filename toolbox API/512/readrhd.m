@@ -1,4 +1,4 @@
-function read_Intan_RHD2000_file
+function readrhd
 
 % read_Intan_RHD2000_file
 %
