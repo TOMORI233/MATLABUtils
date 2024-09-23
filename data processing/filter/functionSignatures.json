@@ -1,0 +1,17 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "mFilter": {
+        "description": "零相移滤波",
+        "inputs": [
+            {"name": "data", "kind": "required", "type": ["numeric", "2d"], "purpose": "data"},
+            {"name": "fs", "kind": "required", "type": ["numeric"], "purpose": "sample rate"},
+            {"name": "fhp", "kind": "namevalue", "type": ["numeric"], "purpose": "high-pass cutoff frequency"},
+            {"name": "flp", "kind": "namevalue", "type": ["numeric"], "purpose": "low-pass cutoff frequency"},
+            {"name": "fnotch", "kind": "namevalue", "type": ["numeric"], "purpose": "notch frequency"},
+            {"name": "order", "kind": "namevalue", "type": ["numeric"], "purpose": "order of Butterworth filter"},
+            {"name": "BW", "kind": "namevalue", "type": ["numeric"], "purpose": "band width of notch filter (Hz)"}
+        ]
+    }
+
+}

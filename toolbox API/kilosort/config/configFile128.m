@@ -1,13 +1,13 @@
 %% Common settings
 % path of chanMap.m
-ops.chanMap = 'D:\Education\Lab\kilosort files\Kilosort\configFiles\chan32_1_kilosortChanMap.mat';
+ops.chanMap = fullfile(fileparts(mfilename("fullpath")), 'chan128_1_kilosortChanMap.mat');
 % ops.chanMap = 1:ops.Nchan; % treated as linear probe if no chanMap file
 
 % total number of channels in your recording
-ops.NchanTOT = 32;
+ops.NchanTOT = 128;
 
 % sample rate, Hz
-ops.fs = 12207.03125;
+ops.fs = 20e3;
 
 % waveform length
 ops.nt0 = 61;
@@ -16,7 +16,7 @@ ops.nt0 = 61;
 ops.trange = [0 Inf];
 
 % threshold on projections (like in Kilosort1, can be different for last pass like [10 4])
-ops.Th = [10 9];
+ops.Th = [8 7];
 
 % frequency for high pass filtering (150)
 ops.fshigh = 300;
@@ -46,7 +46,7 @@ ops.ThPre = 8;
 ops.sig = 20;
 
 % blocks for registration. 0 turns it off, 1 does rigid registration. Replaces "datashift" option.
-ops.nblocks = 0;
+ops.nblocks = 1;
 
 %% danger, changing these settings can lead to fatal errors
 % options for determining PCs

@@ -42,11 +42,12 @@ function [A, f, Aoi, Phase] = mfft(X, fs, varargin)
     A(:, 2:end - 1) = 2 * A(:, 2:end - 1);
     f = linspace(0, fs / 2, N / 2 + 1);
     Phase = angle(Y(:, 1:N / 2 + 1));
+    
     if nargin < 5
         Aoi = [];
     else
 
-        if numel(foi) == 1
+        if isscalar(foi)
             [~, idx] = min(abs(f - foi));
         
             if f(idx) < foi
