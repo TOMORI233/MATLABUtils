@@ -1,0 +1,14 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "ctgen": {
+        "inputs": [
+            {"name": "ICIs", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "durs", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "fs", "kind": "required", "type": ["numeric", "scalar"]},
+            {"name": "type", "kind": "required", "type": ["choices = {'REG', 'IRREG'}"]},
+            {"name": "sigmas", "kind": "namevalue", "type": ["numeric", "vector"]},
+            {"name": "pulseLen", "kind": "namevalue", "type": ["numeric", "scalar"]}
+        ]
+    }
+}

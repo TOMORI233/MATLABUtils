@@ -223,7 +223,13 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
-- 2024/0906 by XHX - Compatible
+- 2024/10/16 by XHX - Compatible
+
+  | Type | Target    | Content                       |
+  | ---- | --------- | ----------------------------- |
+  | Add  | `ctgen.m` | 用于生成click train的通用函数 |
+
+- 2024/09/06 by XHX - Compatible
 
   | Type | Target              | Content  |
   | ---- | ------------------- | -------- |
