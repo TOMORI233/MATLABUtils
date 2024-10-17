@@ -122,7 +122,7 @@ function y = genClickTrainByICIseq(ICIseq, fs, pulseLen)
 nHigh = fix(pulseLen * fs);
 nEveryICI = fix(ICIseq .* fs);
 y = zeros(1, sum(nEveryICI));
-temp = cumsum(nEveryICI);
+temp = [0; cumsum(nEveryICI(1:end - 1))];
 
 for index = 1:length(temp)
     y(temp(index) + 1:temp(index) + nHigh) = 1;
