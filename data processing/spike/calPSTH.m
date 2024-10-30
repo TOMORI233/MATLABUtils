@@ -17,7 +17,7 @@ function [psth, edge, whole] = calPSTH(trials, windowPSTH, binSize, step)
             nTrials = length(trials);
             psth = mHist(temp, edge, binSize) / (binSize / 1000) / nTrials; % Hz
         case "struct"
-            temp = arrayfun(@(x) reshape(x.spike, [numel(x.spike), 1]), trials, "UniformOutput", false);
+            temp = arrayfun(@(x) x.spike(:), trials, "UniformOutput", false);
             psth = mHist(vertcat(temp), edge, binSize) / (binSize / 1000) / length(trials); % Hz
         case "double"
             if isvector(trials)

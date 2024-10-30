@@ -142,7 +142,7 @@ if ~isempty(padding_top)   , paddings(4) = padding_top   ; end
 % nSize = [nX, nY]
 nX = nSize(1);
 
-if numel(nSize) == 1
+if isscalar(nSize)
     nY = nSize(1);
 elseif numel(nSize) == 2
     nY = nSize(2);
