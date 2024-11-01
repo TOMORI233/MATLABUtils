@@ -8,6 +8,7 @@ function varargout = rowFcn(fcn, A, varargin)
 %     A: a 2-D matrix or a vector of any type
 %     B1,...,Bn: other matrixes of any type
 %     "UniformOutput": true/false
+%     "ErrorHandler": function handle of error
 % Output:
 %     Ouputs of fcn with nRows=size(A, 1)
 % Example:
@@ -18,10 +19,10 @@ mIp = inputParser;
 mIp.addRequired("fcn", @(x) validateattributes(x, 'function_handle', {'scalar'}));
 mIp.addRequired("A");
 
-if isempty(find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1))
+if isempty(find(cellfun(@(x) all(strcmpi(x, "UniformOutput") | strcmpi(x, "ErrorHandler")), varargin), 1))
     bIdx = 1:length(varargin);
 else
-    bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput")), varargin), 1) - 1;
+    bIdx = 1:find(cellfun(@(x) all(strcmpi(x, "UniformOutput") | strcmpi(x, "ErrorHandler")), varargin), 1) - 1;
 end
 
 for n = 1:length(bIdx)
@@ -30,13 +31,17 @@ for n = 1:length(bIdx)
 end
 
 mIp.addParameter("UniformOutput", true, @(x) isscalar(x) && (islogical(x) || ismember(x, [0, 1])));
+mIp.addParameter("ErrorHandler", [], @(x) isscalar(x) && isa(x, "function_handle"));
 mIp.parse(fcn, A, varargin{:});
 
 %% Impl
 segIdx = ones(size(A, 1), 1);
 A = mat2cell(A, segIdx);
 varargin(bIdx) = cellfun(@(x) mat2cell(x, segIdx), varargin(bIdx), "UniformOutput", false);
-[varargout{1:nargout}] = cellfun(fcn, A, varargin{bIdx}, "UniformOutput", mIp.Results.UniformOutput);
+[varargout{1:nargout}] = cellfun(fcn, ...
+                                 A, varargin{bIdx}, ...
+                                 "UniformOutput", mIp.Results.UniformOutput, ...
+                                 "ErrorHandler", mIp.Results.ErrorHandler);
 
 return;
 end

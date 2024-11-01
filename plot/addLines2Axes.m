@@ -17,6 +17,7 @@ function addLines2Axes(varargin)
     %                              and other namevalue pairs: valid to function plot
     %     ConstantLine: if set true (default), use xline/yline to create
     %                   vertical/horizontal lines when [X] or [Y] is left empty.
+    %     Layer: 'top' (default) or 'bottom', layer to plot lines.
     % Notice:
     %     If [X] or [Y] is left empty, then best x/y range will be used.
     %     If [X] or [Y] contains 1 element, then the line will be vertical to x or y axis.
@@ -40,10 +41,12 @@ function addLines2Axes(varargin)
     mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
     mIp.addOptional("lines", [], @(x) isempty(x) || isstruct(x));
     mIp.addParameter("ConstantLine", true, @(x) islogical(x) && isscalar(x));
+    mIp.addParameter("Layer", "top", @(x) any(validatestring(x, {'top', 'bottom'})));
     mIp.parse(FigsOrAxes, varargin{:});
 
     lines = mIp.Results.lines;
     ConstantLineOpt = mIp.Results.ConstantLine;
+    Layer = mIp.Results.Layer;
 
     if isempty(lines)
         lines.X = [];
@@ -150,6 +153,7 @@ function addLines2Axes(varargin)
                 setLegendOff(h);
             end
 
+            setLayer(allAxes(aIndex), h, Layer);
         end
 
     end
