@@ -195,7 +195,8 @@
                 ]
             ]},
             {"name": "ConstantLine", "kind": "namevalue", "type": ["logical", "scalar"], "purpose": "use xline/yline to create vertical/horizontal lines"},
-            {"name": "Layer", "kind": "namevalue", "type": ["choices={'top', 'bottom'}"]}
+            {"name": "Layer", "kind": "namevalue", "type": ["choices={'top', 'bottom'}"]},
+            {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]}
         ]
     },
 
