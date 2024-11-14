@@ -1,6 +1,7 @@
 function setLayer(ax, tar, Layer)
     % search all children in ax
-    idx = allchild(ax) == tar;
+    axchild = ax.Children;
+    idx = axchild == tar;
 
     if ~any(idx)
         error("Target object is not in target axes");
