@@ -34,6 +34,24 @@
         ]
     },
 
+    "addSpecialTicks": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "axisName", "kind": "required", "type": ["choices={'x', 'y', 'z'}"]},
+                    {"name": "vals", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "labelStrs", "kind": "ordered", "type": [["string", "vector"], ["@iscellstr"]]}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
+                    {"name": "axisName", "kind": "required", "type": ["choices={'x', 'y', 'z'}"]},
+                    {"name": "vals", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "labelStrs", "kind": "ordered", "type": [["string", "vector"], ["@iscellstr"]]}
+                ]
+            ]}
+        ]
+    },
+
     "orderLine": {
         "inputs": [
             {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -114,18 +132,18 @@
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -137,18 +155,18 @@
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
                 ]
             ]}
         ]
@@ -215,7 +233,7 @@
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ],
                 [
-                    {"name": "axes", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},

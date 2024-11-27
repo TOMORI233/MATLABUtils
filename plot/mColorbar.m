@@ -2,28 +2,27 @@ function cb = mColorbar(varargin)
 % Create a colorbar outside the tightPosition("IncludeLabels", true)
 % Use `colorbar` for input hint and modify function name to `mColorbar`
 
-if nargin == 0 % no input
+% Find "location" input
+if isempty(varargin)
+    idx = [];
     ax = gca;
 else
-
+    idx = cellfun(@(x) (ischar(x) || isStringScalar(x)) && strcmpi(x, "Location"), varargin);
+    
     if strcmp(class(varargin{1}), "matlab.graphics.axis.Axes")
         ax = varargin{1};
     else
         ax = gca;
     end
-
+    
 end
 
-% Find "location" input
-idx = cellfun(@(x) (ischar(x) || isStringScalar(x)) && strcmpi(x, "Location"), varargin);
-
-if ~any(idx)
-    loc = "eastoutside";
-else
+if any(idx)
     loc = varargin{find(idx, 1) + 1};
+else
+    loc = "eastoutside";
 end
 
-% Create colorbar
 pos0 = tightPosition(ax, "IncludeLabels", true);
 pos = get(ax, "Position"); % axes size
 otherParams = varargin(~idx);
