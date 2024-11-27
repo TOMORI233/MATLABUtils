@@ -12,6 +12,8 @@ function mKilosort(binFullPath, ops, SAVEPATH)
 
 narginchk(2, 3);
 
+checkPyVersion;
+
 if nargin < 3
     SAVEPATH = fileparts(binFullPath);
 end
