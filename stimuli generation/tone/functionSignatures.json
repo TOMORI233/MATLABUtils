@@ -1,0 +1,26 @@
+{
+    "_schemaVersion": "1.0.0",
+
+    "tonegen": {
+        "inputs": [
+            {"name": "f", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "durs", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "fs", "kind": "required", "type": ["numeric", "scalar"]},
+            {"name": "fsDevice", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "harmonics", "kind": "namevalue", "type": ["numeric", "vector"]},
+            {"name": "amps", "kind": "namevalue", "type": ["numeric"], "purpose": "row for frequency, column for harmonic"},
+            {"name": "rfTime", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "rfOpt", "kind": "namevalue", "type": ["choices = {'both', 'rise', 'fall'}"]},
+            {"name": "normOpt", "kind": "namevalue", "type": ["scalar", "logical"]}
+        ]
+    },
+
+    "genRiseFallEdge": {
+        "inputs": [
+            {"name": "y", "kind": "required", "type": ["numeric"], "purpose": "[nch,nsample]"},
+            {"name": "fs", "kind": "required", "type": ["numeric", "scalar"]},
+            {"name": "rfTime", "kind": "required", "type": ["numeric", "scalar"], "purpose": "rise-fall time, in sec"},
+            {"name": "rfOpt", "kind": "ordered", "type": ["choices = {'both', 'rise', 'fall'}"]}
+        ]
+    }
+}
