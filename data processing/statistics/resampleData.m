@@ -6,6 +6,11 @@ function dataResample = resampleData(data, fs0, fs)
     % If [data] is a matrix, each column is treated as a channel.
     % The output is the same type as that of the input.
 
+    if isempty(data)
+        dataResample = [];
+        return;
+    end
+
     [P, Q] = rat(fs / fs0);
 
     if iscell(data)

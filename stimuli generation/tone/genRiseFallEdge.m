@@ -9,7 +9,7 @@ function y = genRiseFallEdge(y, fs, rfTime, rfOpt)
         y = y(:)';
     end
 
-    if rfTime == 0
+    if rfTime == 0 || isempty(y)
         return;
     end
 
