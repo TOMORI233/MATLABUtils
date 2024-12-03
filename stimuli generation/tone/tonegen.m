@@ -29,7 +29,7 @@ function [y, y_section, durs] = tonegen(f, durs, fs, varargin)
 mIp = inputParser;
 mIp.addRequired("f", @(x) validateattributes(x, {'numeric'}, {'vector', 'nonnegative'}));
 mIp.addRequired("durs", @(x) validateattributes(x, {'numeric'}, {'vector', 'positive', 'numel', numel(f)}));
-mIp.addRequired("fs", @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive', 'integer'}));
+mIp.addRequired("fs", @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 mIp.addParameter("fsDevice", fs, @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 mIp.addParameter("harmonics", 1, @(x) validateattributes(x, {'numeric'}, {'vector', 'positive'}));
 mIp.addParameter("amps", [], @(x) validateattributes(x, {'numeric'}, {'vector'}));
