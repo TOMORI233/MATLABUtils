@@ -13,5 +13,12 @@
             {"name": "trialsData", "kind": "required", "type": ["cell"]},
             {"name": "padDir", "kind": "ordered", "type": ["choices = {'head', 'tail'}"]}
         ]
+    },
+
+    "checkTrialsData": {
+        "inputs": [
+            {"name": "trialsData", "kind": "required", "type": ["cell"], "repeating": true}
+        ],
+        "description": "校验trialsData"
     }
 }
