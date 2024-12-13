@@ -37,8 +37,8 @@ autoScale = "off";
 
 if length(varargin) > 1
 
-    if isequal(varargin{2}, "on")
-        autoScale = "on";
+    if isequal(varargin{2}, "on") || isequal(varargin{2}, "off")
+        autoScale = varargin{2};
         varargin(2) = [];
     end
 
