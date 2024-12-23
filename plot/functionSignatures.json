@@ -31,7 +31,8 @@
                     {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ]
             ]}
-        ]
+        ],
+        "description": "添加大标题"
     },
 
     "addSpecialTicks": {
@@ -49,7 +50,8 @@
                     {"name": "labelStrs", "kind": "ordered", "type": [["string", "vector"], ["@iscellstr"]]}
                 ]
             ]}
-        ]
+        ],
+        "description": "添加特殊tick"
     },
 
     "orderLine": {
@@ -169,7 +171,8 @@
                     {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
                 ]
             ]}
-        ]
+        ],
+        "description": "创建坐标区"
     },
 
     "scaleAxes": {
@@ -194,7 +197,6 @@
             {"name": "symOpt", "kind": "ordered", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
             {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
-            {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
             {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"},
             {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]}
         ],
@@ -215,7 +217,8 @@
             {"name": "ConstantLine", "kind": "namevalue", "type": ["logical", "scalar"], "purpose": "use xline/yline to create vertical/horizontal lines"},
             {"name": "Layer", "kind": "namevalue", "type": ["choices={'top', 'bottom'}"]},
             {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]}
-        ]
+        ],
+        "description": "为所有坐标区添加线条"
     },
 
     "mHistogram": {
@@ -262,6 +265,7 @@
                     {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
                 ]
             ]}
-        ]
+        ],
+        "description": "绘制散点图"
     }
 }
