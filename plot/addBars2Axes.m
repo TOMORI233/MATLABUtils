@@ -1,4 +1,13 @@
 function varargout = addBars2Axes(varargin)
+% Description:
+%     This function adds significant areas to axes (vertical bars).
+% Input:
+%     - ax: target axes (default: gca)
+%     - xval: X values, real vector
+%     - color: color of bars (default: "k")
+%     - alpha: Face alpha value of bars (default: 0.1)
+% Output:
+%     - h: bar object
 
 if isgraphics(varargin{1}, "axes")
     ax = varargin{1};
@@ -17,6 +26,11 @@ mIp.parse(ax, varargin{:});
 xval = mIp.Results.xval;
 color = validatecolor(mIp.Results.color);
 FaceAlpha = mIp.Results.alpha;
+
+if isempty(xval)
+    varargout{1} = [];
+    return;
+end
 
 children = get(ax, "Children");
 xdata = [];

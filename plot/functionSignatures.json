@@ -10,6 +10,24 @@
         ]
     },
 
+    "addBars2Axes": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "xval", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "color", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]},
+                    {"name": "alpha", "kind": "optional", "type": ["numeric", "scalar"], "purpose": "default 0.1"}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "xval", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "color", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]},
+                    {"name": "alpha", "kind": "optional", "type": ["numeric", "scalar"], "purpose": "default 0.1"}
+                ]
+            ]}
+        ]
+    },
+
     "addTitle2Fig": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
