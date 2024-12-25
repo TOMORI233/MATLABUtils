@@ -201,11 +201,11 @@
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args), 'all')"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args), 'all')"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ]
@@ -285,5 +285,14 @@
             ]}
         ],
         "description": "绘制散点图"
+    },
+
+    "mColorbar": {
+        "inputs": [
+            {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
+            {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"]},
+            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"]}
+        ]
     }
+
 }
