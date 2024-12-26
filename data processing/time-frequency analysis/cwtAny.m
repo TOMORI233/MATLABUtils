@@ -22,7 +22,7 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %     [cwtres, f, coi] = cwtAny(..., "outType", "raw | power | phase")
 %
 % Additional information:
-%     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL.
+%     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL
 %     2. There are potential risks of spectrum leakage resulted by coi at low frequencies, 
 %        especially at the borders. To avoid undesired results, tailor and pad your data.
 %        Here is an example for zero padding and continuous wavelet transform computation using CWTANY:
