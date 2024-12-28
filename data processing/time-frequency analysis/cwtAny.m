@@ -27,17 +27,7 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL
 %     2. There are potential risks of spectrum leakage resulted by coi at low frequencies, 
 %        especially at the borders. To avoid undesired results, tailor and pad your data.
-%        Here is an example for zero padding and continuous wavelet transform computation using CWTANY:
-% 
-%        % -----------demo script begins-----------%
-%        fs = 500; % Hz, sample rate
-%        t = 0:1/fs:3; % 3-sec data
-%        tNew = 0:1/fs:10; % pad to 10-sec data
-%        nPad = fix((length(tNew) - length(t)) / 2);
-%        trialsData = cellfun(@(x) wextend(2, 'zpd', x, [0, nPad]), trialsData, "UniformOutput", false);
-%        [cwtres, f, coi] = cwtAny(trialsData, fs);
-%        cwtres = cwtres(:, :, :, nPad + 1:nPad + length(t));
-%        % ----------- demo script ends----------- %
+%        (Update 20241228: padding procedure is now available using name-value input "tPad")
 % 
 % %% WARNING ISSUES %%
 %    If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the 
@@ -159,6 +149,7 @@ cwtres = temp;
 
 if ~isempty(tPad)
    cwtres = cwtres(:, :, :, nPad + 1:nPad + nTime0);
+   coi = coi(nPad + 1:nPad + nTime0);
 end
 
 switch type
