@@ -15,6 +15,14 @@
         ]
     },
 
+    "calchFunc": {
+        "inputs": [
+            {"name": "fcn", "kind": "required", "type": ["function_handle"]},
+            {"name": "trialsDatFunca", "kind": "required", "type": ["cell"]},
+            {"name": "padDir", "kind": "ordered", "type": ["choices = {'head', 'tail'}"]}
+        ]
+    },
+
     "checkTrialsData": {
         "inputs": [
             {"name": "trialsData", "kind": "required", "type": ["cell"], "repeating": true}

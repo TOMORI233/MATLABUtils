@@ -16,10 +16,12 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %     The output [f] is a descendent column vector.
 %
 % Example:
-%     [cwtres, f, coi] = cwtAny(trialsData, fs)
-%     [cwtres, f, coi] = cwtAny(trialsData, fs, segNum)
-%     [cwtres, f, coi] = cwtAny(..., "mode", "auto | CPU | GPU")
-%     [cwtres, f, coi] = cwtAny(..., "outType", "raw | power | phase")
+%     [cwtres, f, coi] = cwtAny(...)
+%     cwtAny(trialsData, fs)
+%     cwtAny(trialsData, fs, segNum)
+%     cwtAny(..., "mode", "auto | CPU | GPU")
+%     cwtAny(..., "outType", "raw | power | phase")
+%     cwtAny(..., "tPad", tPad)
 %
 % Additional information:
 %     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL
@@ -50,21 +52,24 @@ mIp.addRequired("fs", @(x) validateattributes(x, {'numeric'}, {'scalar', 'positi
 mIp.addOptional("segNum", 10, @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive', 'integer'}));
 mIp.addParameter("mode", "auto", @(x) any(validatestring(x, {'auto', 'CPU', 'GPU'})));
 mIp.addParameter("outType", "raw", @(x) any(validatestring(x, {'raw', 'power', 'phase'})));
+mIp.addParameter("tPad", [], @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 mIp.parse(trialsData, fs, varargin{:});
 
 segNum = mIp.Results.segNum;
 workMode = mIp.Results.mode;
 type = mIp.Results.outType;
+tPad = mIp.Results.tPad; % total duratio of padding
 
+% Prepare data
 switch class(trialsData)
     case "cell"
         trialsData = trialsData(:);
         nTrial = numel(trialsData);
-        [nCh, nTime] = size(trialsData{1});
+        [nCh, nTime0] = size(trialsData{1});
         trialsData = cat(1, trialsData{:});
     case "double"
         nTrial = 1;
-        [nCh, nTime] = size(trialsData);
+        [nCh, nTime0] = size(trialsData);
     otherwise
         error("Invalid data type");
 end
@@ -80,6 +85,20 @@ else
     segIdx = [segNum * ones(floor(nTrial * nCh / segNum), 1); mod(nTrial * nCh, segNum)];
 end
 trialsData = mat2cell(trialsData, segIdx);
+
+% Pad data
+if ~isempty(tPad)
+
+    if tPad <= nTime0 / fs
+        error("Total duration of padding should not be shorter than data duration.");
+    end
+
+    nPad = fix((tPad * fs - nTime0) / 2); % nPad for one side
+    trialsData = cellfun(@(x) wextend(2, 'zpd', x, [0, nPad]), trialsData, "UniformOutput", false);
+    nTime = nTime0 + 2 * nPad;
+else
+    nTime = nTime0;
+end
 
 if strcmpi(workMode, "auto")
     if exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
@@ -137,6 +156,10 @@ for index = 1:size(temp, 1)
     temp(index, :, :, :) = cwtres(nCh * (index - 1) + 1:nCh * index, :, :);
 end
 cwtres = temp;
+
+if ~isempty(tPad)
+   cwtres = cwtres(:, :, :, nPad + 1:nPad + nTime0);
+end
 
 switch type
     case "raw"
