@@ -10,6 +10,25 @@
         ]
     },
 
+    "addWaveErr": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "t", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "Y", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "E", "kind": "required", "type": ["numeric", "vector"]}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "t", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "Y", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "E", "kind": "required", "type": ["numeric", "vector"]}
+                ]
+            ]},
+            {"name": "C", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]}
+        ]
+    },
+
     "addBars2Axes": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
