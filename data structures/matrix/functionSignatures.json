@@ -3,12 +3,12 @@
     "rowFcn": {
         "inputs": [
             {"name": "fcn", "kind": "required", "type": ["function_handle"]},
-            {"name": "A", "kind": "required", "type": ["2d"]},
-            {"name": "B", "kind": "ordered", "type": ["2d"], "repeating": true},
+            {"name": "A", "kind": "required"},
+            {"name": "B", "kind": "ordered", "repeating": true},
             {"name": "UniformOutput", "kind": "namevalue", "type": ["logical", "scalar"]},
             {"name": "ErrorHandler", "kind": "namevalue", "type": ["scalar", "function_handle"]}
         ],
-        "description": "将函数应用于矩阵每一行"
+        "description": "将函数应用于每一行"
     },
 
     "mNchoosek": {
