@@ -19,12 +19,11 @@ for ch = 1 : length(selectChs)
     ylim([ymin ymax]);
 end
 %% sort
-% 
-% clusters = input('Input cluster numbers:');
-% for ch = 1:length(selectChs)
-%     waveData = TDTbin2mat(path,'TYPE',{'streams'},'CHANNEL',selectChs(ch));
-%     sortRes{selectChs(ch)} = mysort(waveData,[],'reselect',clusters(ch));
-% end
+clusters = input('Input cluster numbers:');
+for ch = 1:length(selectChs)
+    waveData = TDTbin2mat(path,'TYPE',{'streams'},'CHANNEL',selectChs(ch));
+    sortRes{selectChs(ch)} = mysort(waveData,[],'reselect',clusters(ch));
+end
 
 
  

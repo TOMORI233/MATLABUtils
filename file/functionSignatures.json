@@ -124,7 +124,7 @@
         ]
       },
       {
-        "name": "DATE",
+        "name": "keyWord",
         "kind": "namevalue",
         "type": [
           "@(x) isstring(x)"
@@ -132,13 +132,6 @@
       },
       {
         "name": "protocols",
-        "kind": "namevalue",
-        "type": [
-          "@(x) isstring(x)"
-        ]
-      },
-      {
-        "name": "all_or",
         "kind": "namevalue",
         "type": [
           "@(x) isstring(x)"

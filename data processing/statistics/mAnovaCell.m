@@ -43,7 +43,7 @@ temp = cellfun(@(x, y) string(repmat(y, length(x), 1)), data, tag, "UniformOutpu
 tagTemp = vertcat(temp{:});
 
 % anova
-[p, ~, stats] = anova1(dataTemp, tagTemp, "off");
+[p, ~, stats] = anova1(dataTemp, tagTemp);
 h = double(p > 0.05);
 
 [c, ~, ~, gnames] = multcompare(stats, "Display", "off", "CriticalValueType", CriticalValueType);

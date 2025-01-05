@@ -306,11 +306,33 @@
         "description": "绘制散点图"
     },
 
+
     "mColorbar": {
         "inputs": [
             {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
             {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"]},
             {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"]}
+        ]
+    },
+    "mRaster_Blocked": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"},
+                    {"name": "scatterSize", "kind": "namevalue"},
+                    {"name": "window", "kind": "namevalue"}
+                ],
+                [
+                    {"name": "axes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"},
+                    {"name": "scatterSize", "kind": "namevalue"},
+                    {"name": "window", "kind": "namevalue"}
+                ]
+            ]}
         ]
     }
 
