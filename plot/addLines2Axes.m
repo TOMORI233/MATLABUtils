@@ -2,16 +2,18 @@ function addLines2Axes(varargin)
     % Description: add lines to all subplots in figures
     % Input:
     %     FigsOrAxes: figure object array or axes object array
-    %     lines: a struct array of [X], [Y], [color], [width], [style], [marker], [markerSize] and [legend]
+    %     lines: a struct array of [X],          % default = []
+    %                              [Y],          % default = []
+    %                              [color],      % default = "k"
+    %                              [width],      % default = 1
+    %                              [style],      % default = "--"
+    %                              [marker],     % default = "none"
+    %                              [markerSize], % default = 6
+    %                              [legend].     % default = []
     %            If [X] or [Y] is left empty, then best x/y range will be
     %            used.
     %            If [X] or [Y] contains 1 element, then the line will be
     %            vertical to x or y axis.
-    %            If not specified, line color will be black("k").
-    %            If not specified, line width will be 1.
-    %            If not specified, line style will be dashed line("--").
-    %            If not specified, marker will be "none".
-    %            If not specified, marker size will be 6.
     %            If not specified, line legend will not be shown.
     % Example:
     %     % Example 1: Draw lines to mark stimuli oneset and offset at t=0, t=1000 ms
@@ -20,8 +22,9 @@ function addLines2Axes(varargin)
     %     lines(2).X = 1000;
     %     addLines2Axes(Fig, lines);
     %
-    %     % Example 2: Draw a dividing line y=x for ROC
-    %     addLines2Axes(Fig);
+    %     % Example 2: Draw a dividing line y=x for ROC in current axes
+    %     syncXY(gca); % synchronize x&y range first
+    %     addLines2Axes(gca);
 
     if nargin > 0 && all(isgraphics(varargin{1}))
         FigsOrAxes = varargin{1};

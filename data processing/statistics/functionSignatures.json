@@ -12,7 +12,6 @@
         "inputs": [
             {"name": "X", "kind": "required", "type": ["numeric", "vector"]},
             {"name": "pat", "kind": "required", "type": ["numeric", "vector"]},
-            {"name": "n", "kind": "ordered", "type": [["numeric", "integer", "positive", "scalar"], ["@isempty"]]},
             {"name": "direction", "kind": "ordered", "type": ["choices={'first', 'last'}"]}
         ]
     },
@@ -23,6 +22,14 @@
             {"name": "tIndex", "kind": "namevalue", "type": ["numeric", "vector"]},
             {"name": "label", "kind": "namevalue"},
             {"name": "CriticalValueType", "kind": "namevalue", "type":["choices={'tukey-kramer', 'dunn-sidak', 'bonferroni', 'scheffe', 'dunnett'}"]}
+        ]
+    },
+
+    "mPerms": {
+        "inputs": [
+            {"name": "v", "kind": "required", "type": ["numeric", "vector"]},
+            {"name": "k", "kind": "required", "type": ["scalar", "positive", "integer"]},
+            {"name": "sortCol", "kind": "ordered", "type": ["choices={'first', 'last'}"]}
         ]
     },
 

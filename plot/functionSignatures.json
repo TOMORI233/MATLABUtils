@@ -18,7 +18,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) isa(x, 'matlab.ui.Figure')"]},
@@ -26,7 +27,8 @@
                     {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
                     {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
                     {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]}
+                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ]
             ]}
         ]
@@ -201,8 +203,10 @@
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "Color", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
+                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ],
@@ -211,8 +215,10 @@
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "Color", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["string"]},
+                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
+                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ]
@@ -232,6 +238,28 @@
                     {"name": "axes", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
                     {"name": "rasterData", "kind": "required", "type": ["struct"]},
                     {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
+                ]
+            ]}
+        ]
+    },
+
+    "mRaster_Blocked": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"},
+                    {"name": "scatterSize", "kind": "namevalue"},
+                    {"name": "window", "kind": "namevalue"}
+                ],
+                [
+                    {"name": "axes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"},
+                    {"name": "scatterSize", "kind": "namevalue"},
+                    {"name": "window", "kind": "namevalue"}
                 ]
             ]}
         ]

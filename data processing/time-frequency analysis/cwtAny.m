@@ -22,14 +22,27 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %     [cwtres, f, coi] = cwtAny(..., "outType", "raw | power | phase")
 %
 % Additional information:
-%     The wavelet used here is 'morlet'.
-%     For other wavelet types, please edit \private\cwtMultiAll.m.
+%     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL.
+%     2. There are potential risks of spectrum leakage resulted by coi at low frequencies, 
+%        especially at the borders. To avoid undesired results, tailor and pad your data.
+%        Here is an example for zero padding and continuous wavelet transform computation using CWTANY:
+% 
+%        % -----------demo script begins-----------%
+%        fs = 500; % Hz, sample rate
+%        t = 0:1/fs:3; % 3-sec data
+%        tNew = 0:1/fs:10; % pad to 10-sec data
+%        nPad = fix((length(tNew) - length(t)) / 2);
+%        trialsData = cellfun(@(x) wextend(2, 'zpd', x, [0, nPad]), trialsData, "UniformOutput", false);
+%        [cwtres, f, coi] = cwtAny(trialsData, fs);
+%        cwtres = cwtres(:, :, :, nPad + 1:nPad + length(t));
+%        % ----------- demo script ends----------- %
 % 
 % %% WARNING ISSUES %%
-% If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the recent-created folders 'Jobx' in
-% 'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
-% The setting files in these folders may not allow you to connect to the parallel pool, which is used in this function.
-% Tailor your data then, to avoid this problem.
+%    If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the 
+%    recent-created folders 'Jobx' in:
+%    'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
+%    The setting files in these folders may not allow you to connect to the parallel pool, 
+%    which is used in this function. Tailor your data then, to avoid this problem.
 
 mIp = inputParser;
 mIp.addRequired("trialsData");
@@ -45,14 +58,20 @@ type = mIp.Results.outType;
 
 switch class(trialsData)
     case "cell"
-        nTrial = length(trialsData);
+        trialsData = trialsData(:);
+        nTrial = numel(trialsData);
         [nCh, nTime] = size(trialsData{1});
-        trialsData = cell2mat(trialsData);
+        trialsData = cat(1, trialsData{:});
     case "double"
         nTrial = 1;
         [nCh, nTime] = size(trialsData);
     otherwise
         error("Invalid data type");
+end
+
+if size(trialsData, 1) < segNum
+    disp(['Segment numebr > nCh*nTrial, set segNum = ', num2str(size(trialsData, 1))]);
+    segNum = size(trialsData, 1);
 end
 
 if mod(nTrial * nCh, segNum) == 0
@@ -91,6 +110,7 @@ else
     error("Invalid mode");
 end
 
+t1 = tic;
 [~, f, coi] = cwtMultiAll(trialsData{1}', fs);
 disp(['Frequencies range from ', num2str(min(f)), ' to ', num2str(max(f)), ' Hz']);
 
@@ -129,7 +149,7 @@ switch type
         error("Invalid output type");
 end
 
-disp('Done.');
+disp(['Wavelet transform computation done in ', num2str(toc(t1)), ' sec.']);
 
 return;
 end

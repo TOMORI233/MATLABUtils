@@ -1,4 +1,4 @@
-function axisRange = scaleAxes(varargin)
+function varargout = scaleAxes(varargin)
 % scaleAxes(axisName)
 % scaleAxes(axisName, axisRange)
 % scaleAxes(axisName, axisRange, cutoffRange)
@@ -79,6 +79,9 @@ else
     allAxes = FigsOrAxes;
 end
 
+% exclude invisible axes
+allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+
 %% Best axis range
 axisLim = get(allAxes(1), axisLimStr);
 axisLimMin = axisLim(1);
@@ -133,6 +136,7 @@ if strcmpi(autoScale, "on")
 
         if ~isempty(temp)
             temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
+            temp(isnan(temp)) = [];
             maxBinCount = length(temp) / 100;
             binCount = [inf, inf];
             binN = 10;
@@ -221,6 +225,12 @@ end
 if strcmpi(uiOpt, "show")
     scaleAxesApp(allAxes, axisName, double(axisRange), double([axisRange(1) - 0.25 * diff(axisRange), axisRange(2) + 0.25 * diff(axisRange)]));
     drawnow;
+end
+
+if nargout == 1
+    varargout{1} = axisRange;
+elseif nargout > 1
+    error("scaleAxes(): the number of output should be no greater than 1");
 end
 
 return;

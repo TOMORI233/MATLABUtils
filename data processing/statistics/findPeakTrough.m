@@ -24,6 +24,7 @@ troughIdx = cell2mat(rowFcn(@istrough, data, "UniformOutput", false));
 return;
 end
 
+%%
 function y = ispeak(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == -2) + 1) = true;
@@ -52,6 +53,7 @@ end
 function y = istrough(data)
 y = false(1, length(data));
 y(find(diff(sign(diff(data))) == 2) + 1) = true;
+
 % 遍历数据，寻找连续相等的序列
 i = 2;
 while i < length(data)
@@ -71,5 +73,6 @@ while i < length(data)
         i = i + 1;
     end
 end
+
 return;
 end

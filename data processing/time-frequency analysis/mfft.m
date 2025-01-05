@@ -32,7 +32,7 @@ function [A, f, Aoi, Phase] = mfft(X, fs, varargin)
     end
 
     if isempty(N)
-        % N = 2 ^ nextpow2(size(X, 2));
+%         N = 2 ^ nextpow2(size(X, 2));
         N = floor(size(X, 2) / 2) * 2;
     end
 

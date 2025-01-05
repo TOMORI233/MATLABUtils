@@ -48,5 +48,20 @@
             ]}
         ],
         "description": "解析结构体数组"
+    },
+
+    "getOrFull": {
+        "inputs": [
+            {"name": "s", "kind": "required", "type": ["struct"], "purpose": "struct to complete"},
+            {"name": "default", "kind": "required", "type": ["struct"], "purpose": "struct with default values"}
+        ],
+        "description": "补全结构体"
+    },
+
+    "structcat": {
+        "inputs": [
+            {"name": "A", "kind": "required", "type": ["struct"], "repeating": true}
+        ],
+        "description": "拼接含有不同字段的结构体数组"
     }
 }

@@ -33,7 +33,7 @@ function [pAdj, fcAmp, nbrAmp] = fftFDR(FFTData, fFFT, pCrit, fcNbrN, tail)
     [~, p] = ttest(fcAmp, nbrAmp, "Tail", "right");
     [~, ~, ~, adj_p]=fdr_bh(p,pCrit,'pdep','no');
     try
-    pAdj = [reshape(fFFT(fcIdx(:, fcNbrN+1)), [], 1), adj_p'];
+        pAdj = [reshape(fFFT(fcIdx(:, fcNbrN+1)), [], 1), adj_p'];
     catch
         pAdj = 1;
     end

@@ -1,4 +1,4 @@
-function Path = dirItem(rootPath, keyword, varargin)
+function [Path , ROOTPATH]= dirItem(rootPath, keyword, varargin)
 % Description: find file or folder name in rootpath
 % Input:
 %       rootpath: ROOTPATH
@@ -28,4 +28,5 @@ elseif strcmpi(folderOrFile, "folder")
 elseif strcmpi(folderOrFile, "file")
     Path = cellstr(mPath(fileIndex));
 end
+ROOTPATH = cellfun(@(x) fileparts(x), Path, "UniformOutput", false);
 end
