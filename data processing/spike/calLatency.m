@@ -1,4 +1,4 @@
-function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, nStart)
+function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, nStart, tTh)
     % Return latency of neuron using spike data.
     %
     % If [trials] is a struct array, it should contain field [spike] for each trial.
@@ -9,7 +9,7 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
     %
     % REFERENCE doi: 10.1073/pnas.0610368104
 
-    narginchk(3, 5);
+    narginchk(3, 6);
 
     if nargin < 4
         th = 1e-6;
@@ -17,6 +17,10 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
 
     if nargin < 5
         nStart = 5;
+    end
+
+    if nargin < 6
+        tTh = 50;
     end
 
     trials = reshape(trials, [numel(trials), 1]);
@@ -40,6 +44,6 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
         P(index) = 1 - poisscdf(n(index) - 1, lambda(index));
     end
 
-    latency = spikes(find(P < th & spikes < 50, 1));
+    latency = spikes(find(P < th & spikes < tTh, 1));
     return;
 end

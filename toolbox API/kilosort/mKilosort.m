@@ -22,7 +22,22 @@ ops.fproc = fullfile(fileparts(binFullPath), 'temp_wh.dat'); % proc file on a fa
 ops.fbinary = binFullPath;
 
 %% this block runs all the steps of the algorithm
-rez = preprocessDataSub(ops);
+if ~exist(fullfile(fileparts(binFullPath), 'wh_rez.mat'), "file")
+    rez   = preprocessDataSub(ops);
+    save(fullfile(fileparts(binFullPath), 'wh_rez.mat'), "rez");
+else
+    load(fullfile(fileparts(binFullPath), 'wh_rez.mat'));
+end
+
+try
+    customInfo = evalin("base", "customInfo");
+catch
+    customInfo = [];
+end
+
+if getOr(customInfo, "reMerge", false)
+    return
+end
 rez = datashift2(rez, 1);
 
 [rez, st3, tF] = extract_spikes(rez);
