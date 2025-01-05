@@ -19,12 +19,13 @@ function varargout = scaleAxes(varargin)
 %     cutoffRange: if axisRange exceeds cutoffRange, axisRange will be
 %                  replaced by cutoffRange.
 %     symOpt: symmetrical option - "min" or "max"
-%     type: "line" or "hist" for y scaling (default="line")
 %     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
+%     ignoreInvisible: if set true, invisible axes in the target figure
+%                      will be excluded from scaling (default=true)
 % Output:
 %     axisRange: axis limits applied
 
-if nargin > 0 && all(isgraphics(varargin{1}))
+if nargin > 0 && all(isgraphics(varargin{1}), "all")
     FigsOrAxes = varargin{1};
     varargin = varargin(2:end);
 else
@@ -35,31 +36,31 @@ autoScale = "off";
 
 if length(varargin) > 1
 
-    if isequal(varargin{2}, "on")
-        autoScale = "on";
+    if isequal(varargin{2}, "on") || isequal(varargin{2}, "off")
+        autoScale = varargin{2};
         varargin(2) = [];
     end
 
 end
 
 mIp = inputParser;
-mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
+mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x), "all"));
 mIp.addOptional("axisName", "y", @(x) any(validatestring(x, {'x', 'y', 'z', 'c'})));
 mIp.addOptional("axisRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("cutoffRange0", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addOptional("symOpts0", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d', 'increasing'}));
 mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
-mIp.addParameter("type", "line", @(x) any(validatestring(x, {'line', 'hist'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
+mIp.addParameter("ignoreInvisible", true, @(x) isscalar(x) && islogical(x));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
 axisRange = mIp.Results.axisRange;
 cutoffRange = getOr(mIp.Results, "cutoffRange0", mIp.Results.cutoffRange, true);
 symOpt = getOr(mIp.Results, "symOpts0", mIp.Results.symOpt, true);
-type = mIp.Results.type;
 uiOpt = mIp.Results.uiOpt;
+ignoreInvisible = mIp.Results.ignoreInvisible;
 
 if strcmpi(axisName, "x")
     axisLimStr = "xlim";
@@ -74,13 +75,15 @@ else
 end
 
 if strcmp(class(FigsOrAxes), "matlab.ui.Figure") || strcmp(class(FigsOrAxes), "matlab.graphics.Graphics")
-    allAxes = findobj(FigsOrAxes, "Type", "axes");
+    allAxes = findobj(FigsOrAxes(:), "Type", "axes");
 else
-    allAxes = FigsOrAxes;
+    allAxes = FigsOrAxes(:);
 end
 
-% exclude invisible axes
-allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+if ignoreInvisible
+    % exclude invisible axes
+    allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+end
 
 %% Best axis range
 axisLim = get(allAxes(1), axisLimStr);
@@ -103,41 +106,44 @@ end
 if strcmpi(autoScale, "on")
 
     if strcmpi(axisName, "y")
-        XLim = get(allAxes(1), "xlim");
+        xRange = get(allAxes(1), "XLim");
 
-        if strcmpi(type, 'line')
-            temp = getObjVal(FigsOrAxes, "line", ["XData", "YData"], "LineStyle", "-");
-            if ~isempty(temp)
-                temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2)), {temp.XData}', {temp.YData}', "UniformOutput", false);
-                limTemp = [min(cell2mat(cellfun(@min, temp, "uni", false))), max(cell2mat(cellfun(@max, temp, "uni", false)))];
-                axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
-                axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
-            end
-        else % Histogram
-            temp = getObjVal(FigsOrAxes, "Histogram", ["BinEdges", "Values"]);
-            if ~isempty(temp)
-                [temp.XData] = temp.BinEdges;
-                [temp.YData] = temp.Values;
-                temp = rmfield(temp, ["BinEdges", "Values"]);
-                XData = arrayfun(@(x) x.XData(1:end - 1), temp, "UniformOutput", false);
-                [temp.XData] = XData{:};
-                temp = cellfun(@(x, y) y(x >= XLim(1) & x <= XLim(2))', {temp.XData}', {temp.YData}', "UniformOutput", false);
-                limTemp = [min(cell2mat(temp)), max(cell2mat(temp))];
-                axisLimMin = max([limTemp(1) - diff(limTemp) * 0.05, 0]);
-                axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
-            end
+        % search for all children in axes
+        children = get(allAxes, "Children");
+
+        if isscalar(allAxes)
+            children = {children};
+        end
+        
+        tempX = cellfun(@(x) arrayfun(@(y) get(y, "XData"), x, "UniformOutput", false, "ErrorHandler", @mErrorFcn), children, "UniformOutput", false);
+        tempY = cellfun(@(x) arrayfun(@(y) get(y, "YData"), x, "UniformOutput", false, "ErrorHandler", @mErrorFcn), children, "UniformOutput", false);
+        tempX = cat(1, tempX{:});
+        tempY = cat(1, tempY{:});
+        tempX = cellfun(@(x) x(:), tempX, "UniformOutput", false);
+        tempY = cellfun(@(x) x(:), tempY, "UniformOutput", false);
+        tempX = cat(1, tempX{:});
+        tempY = cat(1, tempY{:});
+        tempY = tempY(tempX >= xRange(1) & tempX <= xRange(2));
+        if ~isempty(tempY)
+            limTemp = [min(tempY), max(tempY)];
+            axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
+            axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
         end
 
     end
 
     if strcmpi(axisName, "c")
-        XLim = get(allAxes(1), "xlim");
-        temp = getObjVal(FigsOrAxes, "image", ["XData", "CData"]);
+        xRange = get(allAxes(1), "XLim");
+        yRange = get(allAxes(1), "YLim");
+        temp = getObjVal(allAxes, "image", ["XData", "YData", "CData"]);
 
         if ~isempty(temp)
-            temp = sort(cell2mat(cellfun(@(x, y) reshape(y(:, linspace(x(1), x(end), size(y, 2)) >= XLim(1) & linspace(x(1), x(end), size(y, 2)) <= XLim(2)), [], 1), {temp.XData}', {temp.CData}', "UniformOutput", false)));
+            temp = arrayfun(@(x) x.CData(x.YData >= yRange(1) & x.YData <= yRange(2), x.XData >= xRange(1) & x.XData <= xRange(2)), temp, "UniformOutput", false);
+            temp = cellfun(@(x) x(:), temp, "UniformOutput", false);
+            temp = cat(1, temp{:});
             temp(isnan(temp)) = [];
-            maxBinCount = length(temp) / 100;
+            temp = sort(temp, "ascend");
+            maxBinCount = numel(temp) / 100;
             binCount = [inf, inf];
             binN = 10;
             while any(binCount > maxBinCount)

@@ -7,7 +7,15 @@ function filewrite(filepath, A)
     %     filewrite("functionSignatures.json", json_text);
 
     fid = fopen(filepath, 'w');
-    fprintf(fid, '%s', A);
+
+    if isnumeric(A)
+        writematrix(A, filepath);
+    elseif isStringScalar(A) || ischar(A)
+        fprintf(fid, '%s', A);
+    else
+        error("Invalid content");
+    end
+    
     fclose(fid);
     return;
 end

@@ -47,6 +47,7 @@ ops.sig = 20;
 
 % blocks for registration. 0 turns it off, 1 does rigid registration. Replaces "datashift" option.
 ops.nblocks = 0;
+
 %% danger, changing these settings can lead to fatal errors
 % options for determining PCs
 ops.spkTh = -6; % spike threshold in standard deviations (-6)

@@ -13,7 +13,14 @@ function ROOTPATH = getRootDirPath(P, N)
     end
 
     split = path2func(fullfile(matlabroot, 'toolbox/matlab/strfun/split.m'));
-    temp = split(char(P), '\')';
+
+    P = char(P);
+    
+    if endsWith(P, '\')
+        P = P(1:end - 1);
+    end
+
+    temp = split(P, '\')';
 
     if length(temp) <= N
         error('getRootDirPath(): Could not backward any more.');

@@ -15,7 +15,8 @@ function res = getVarsFromWorkspace(varargin)
         end
     
         regexpstrs = cellfun(@(x) ['''', char(x), ''''], varargin, "UniformOutput", false);
-        regexpstrs = cellcat(1, join(regexpstrs, ','));
+        regexpstrs = join(regexpstrs, ',');
+        regexpstrs = cat(1, regexpstrs{:});
     
         str = strcat('who("-regexp", ', regexpstrs, ');');
     end

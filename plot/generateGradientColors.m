@@ -11,18 +11,18 @@ function rgb = generateGradientColors(n, rgbOpt, smin)
 
     switch rgbOpt
         case "r"
-            hsi = rgb2hsv([1, 0, 0]);
+            hsv = rgb2hsv([1, 0, 0]);
         case "g"
-            hsi = rgb2hsv([0, 1, 0]);
+            hsv = rgb2hsv([0, 1, 0]);
         case "b"
-            hsi = rgb2hsv([0, 0, 1]);
+            hsv = rgb2hsv([0, 0, 1]);
         otherwise
-            hsi = rgb2hsv(rgbOpt);
+            hsv = rgb2hsv(rgbOpt);
     end
 
-    hsi = repmat(hsi, [n, 1]);
-    hsi(:, 2, :) = linspace(smin, 1, n);
-    rgb = hsv2rgb(hsi);
+    hsv = repmat(hsv, [n, 1]);
+    hsv(:, 2, :) = linspace(smin, 1, n);
+    rgb = hsv2rgb(hsv);
     rgb = mat2cell(rgb, ones(size(rgb, 1), 1));
     return;
 end

@@ -13,7 +13,7 @@ function [secs, key] = KbGet(validKeycode, limit)
     x = [];
 
     while isempty(x) || ~any(validKeycode == x)
-        [secs, keyCode, ~] = KbWait([], 2, limit);
+        [secs, keyCode, ~] = KbWait([], 2, 1e-2);
         x = find(keyCode > oldKeyCode);
         oldKeyCode = keyCode;
         

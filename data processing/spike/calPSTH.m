@@ -1,6 +1,7 @@
 function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
     % If [trials] is a struct array, it should contain field [spike] for each trial.
     % If [trials] is a cell array, its element contains spikes of each trial.
+    % If [trials] is a numeric vector, it represents spike times in one trial.
     % [psth] will be returned as a column vector.
     % [windowPSTH] is a two-element vector in millisecond.
     % [binSize] and [step] are in millisecond.
@@ -20,9 +21,16 @@ function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
             nTrials = length(trials);
             psth = mHist(temp, edge, binSize) / (binSize / 1000) / nTrials; % Hz
         case "struct"
-            temp = arrayfun(@(x) reshape(x.spike, [numel(x.spike), 1]), trials, "UniformOutput", false);
-            frRaw = cell2mat(cellfun(@(x) mHist(x, edge, binSize), temp, "UniformOutput", false)') * 1000 / binSize;
+            temp = arrayfun(@(x) x.spike(:), trials, "UniformOutput", false);
             psth = mHist(vertcat(temp), edge, binSize) / (binSize / 1000) / length(trials); % Hz
+            frRaw = cell2mat(cellfun(@(x) mHist(x, edge, binSize), temp, "UniformOutput", false)') * 1000 / binSize;
+
+        case "double"
+            if isvector(trials)
+                psth = mHist(trials, edge, binSize) / (binSize / 1000);
+            else
+                error("Invalid trials input");
+            end
     end
     whole = [edge', psth];
     return;

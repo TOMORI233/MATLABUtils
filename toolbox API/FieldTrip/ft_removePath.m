@@ -9,8 +9,6 @@ try
     toRm = pathsAll(contains(pathsAll, 'fieldtrip', 'IgnoreCase', true));
     ftRootPath = fileparts(which("ft_defaults"));
     
-    ftRootPath = fileparts(which("ft_defaults"));
-    
     % clear existing FieldTrip paths
     rmpath(toRm{:});
 

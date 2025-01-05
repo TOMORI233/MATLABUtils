@@ -2,7 +2,7 @@ function varargout = getObjVal(FigsOrAxes, ObjType, varargin)
 
 mIp = inputParser;
 mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
-mIp.addRequired("ObjType", @(x) any(validatestring(x, {'line', 'image', 'axes', 'figure', 'FigOrAxes', 'Histogram'})));
+mIp.addRequired("ObjType", @(x) any(validatestring(x, {'line', 'patch', 'bar', 'image', 'axes', 'figure', 'FigOrAxes', 'Histogram'})));
 mIp.addOptional("getParams", [], @(x) any(isempty(x) | all(isstring(x))));
 mIp.addOptional("searchParams", [], @(x) isstring(x));
 mIp.addOptional("searchValue", [], @(x) any(isnumeric(x)|isstring(x)));

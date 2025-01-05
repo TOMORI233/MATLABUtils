@@ -10,6 +10,24 @@
         ]
     },
 
+    "addBars2Axes": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "xval", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "color", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]},
+                    {"name": "alpha", "kind": "optional", "type": ["numeric", "scalar"], "purpose": "default 0.1"}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "xval", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "color", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]},
+                    {"name": "alpha", "kind": "optional", "type": ["numeric", "scalar"], "purpose": "default 0.1"}
+                ]
+            ]}
+        ]
+    },
+
     "addTitle2Fig": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
@@ -31,7 +49,27 @@
                     {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
                 ]
             ]}
-        ]
+        ],
+        "description": "添加大标题"
+    },
+
+    "addSpecialTicks": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "axisName", "kind": "required", "type": ["choices={'x', 'y', 'z'}"]},
+                    {"name": "vals", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "labelStrs", "kind": "ordered", "type": [["string", "vector"], ["@iscellstr"]]}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
+                    {"name": "axisName", "kind": "required", "type": ["choices={'x', 'y', 'z'}"]},
+                    {"name": "vals", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "labelStrs", "kind": "ordered", "type": [["string", "vector"], ["@iscellstr"]]}
+                ]
+            ]}
+        ],
+        "description": "添加特殊tick"
     },
 
     "orderLine": {
@@ -114,18 +152,18 @@
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -137,21 +175,22 @@
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]"},
+                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
+                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
                     {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"]},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"]}
+                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
                 ]
             ]}
-        ]
+        ],
+        "description": "创建坐标区"
     },
 
     "scaleAxes": {
@@ -176,8 +215,8 @@
             {"name": "symOpt", "kind": "ordered", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "cutoffRange", "kind": "namevalue", "type": [["numeric", "numel=2"], ["@(args) isempty(args)"]]},
             {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
-            {"name": "type", "kind": "namevalue", "type": ["choices = {'line', 'hist'}"], "purpose": "graphics type for auto scaling"},
-            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"}
+            {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"},
+            {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]}
         ],
         "description": "将相同的坐标范围应用于指定图像或坐标区"
     },
@@ -192,8 +231,12 @@
                     {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "lines", "kind": "ordered", "type": ["struct"]}
                 ]
-            ]}
-        ]
+            ]},
+            {"name": "ConstantLine", "kind": "namevalue", "type": ["logical", "scalar"], "purpose": "use xline/yline to create vertical/horizontal lines"},
+            {"name": "Layer", "kind": "namevalue", "type": ["choices={'top', 'bottom'}"]},
+            {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]}
+        ],
+        "description": "为所有坐标区添加线条"
     },
 
     "mHistogram": {
@@ -211,7 +254,7 @@
                     {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
                 ],
                 [
-                    {"name": "axes", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
                     {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
@@ -240,7 +283,8 @@
                     {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
                 ]
             ]}
-        ]
+        ],
+        "description": "绘制散点图"
     },
 
     "mRaster_Blocked": {
