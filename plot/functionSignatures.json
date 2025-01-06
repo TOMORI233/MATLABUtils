@@ -310,8 +310,8 @@
     "mColorbar": {
         "inputs": [
             {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
-            {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"]},
-            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"]}
+            {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.01"},
+            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.01"}
         ]
     },
     "mRaster_Blocked": {

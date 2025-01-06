@@ -2,6 +2,10 @@ function [xv, yv, lines] = genPolygon(mAxe)
     % Description: draw a polygon in the axes. Return its endpoint
     %              coordinates and borderlines. It only works with 2-D
     %              axes.
+    % Right click to create a new endpoint.
+    % Press 'Z' to remove the latest endpoint.
+    % Press 'Enter' to finish polygon generation by connecting the first
+    % and the last endpoints.
 
     narginchk(0, 1);
 
