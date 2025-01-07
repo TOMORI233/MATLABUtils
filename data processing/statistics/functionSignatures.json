@@ -90,5 +90,13 @@
             ]},
             {"name": "omitnan", "kind": "ordered", "type": ["choices={'omitnan'}"]}
         ]
+    },
+
+    "prepareGroupData": {
+        "inputs": [
+            {"name": "data", "kind": "required", "type": ["numeric", "vector"], "repeating": true}
+        ],
+        "description": "prepare data for statistical analysis"
     }
+
 }

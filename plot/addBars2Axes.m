@@ -43,7 +43,7 @@ end
 xdata = unique(xdata);
 
 yRange = get(ax, "YLim");
-width = mode(diff(xdata));
+width = mode(diff(xdata)) / 2;
 
 if yRange(1) >= 0 % all positive
     h = bar(ax, xval, ones(numel(xval), 1) * yRange(2), width, "FaceColor", color, "FaceAlpha", FaceAlpha, "EdgeColor", "none");
