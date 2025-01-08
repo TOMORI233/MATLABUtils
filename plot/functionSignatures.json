@@ -10,6 +10,25 @@
         ]
     },
 
+    "addWaveErr": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "t", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "Y", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "E", "kind": "required", "type": ["numeric", "vector"]}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.Graphics')"]},
+                    {"name": "t", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "Y", "kind": "required", "type": ["numeric", "vector"]},
+                    {"name": "E", "kind": "required", "type": ["numeric", "vector"]}
+                ]
+            ]},
+            {"name": "C", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]}
+        ]
+    },
+
     "addBars2Axes": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
@@ -201,11 +220,11 @@
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args), 'all')"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]}
                 ],
                 [
-                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "FigOrAxes", "kind": "required", "type": ["@(args) all(isgraphics(args), 'all')"]},
                     {"name": "axisName", "kind": "ordered", "type": ["choices = {'x', 'y', 'c', 'z'}"]},
                     {"name": "autoScale", "kind": "ordered", "type": ["choices = {'on', 'off'}"], "purpose": "auto scale y/c from current axes"}
                 ]
@@ -287,6 +306,14 @@
         "description": "绘制散点图"
     },
 
+
+    "mColorbar": {
+        "inputs": [
+            {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
+            {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"]},
+            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"]}
+        ]
+    },
     "mRaster_Blocked": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
@@ -308,4 +335,5 @@
             ]}
         ]
     }
+
 }

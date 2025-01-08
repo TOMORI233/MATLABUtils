@@ -1,6 +1,7 @@
 function [cwtres, f, coi] = cwtMultiAll(data, fs)
-% Apply cwt to multi-channel data. The result is returned in a nTrial*nFreq*nTime
-% complex double matrix.
+% Apply cwt to multi-channel/trial data. The result is returned in a 
+% nTrial*nFreq*nTime complex double matrix.
+% 
 % This procedure is for cross-spectral density matrix computation in 
 % nonparametric computation of granger causality.
 % The default wavelet used is 'morlet'. Wavelets available: 

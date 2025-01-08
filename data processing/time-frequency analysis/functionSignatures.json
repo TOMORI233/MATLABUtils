@@ -27,7 +27,8 @@
             {"name": "fs", "kind": "required", "type": ["numeric", "scalar", "@(x) x > 0"], "purpose": "sample rate in Hz"},
             {"name": "segNum", "kind": "ordered", "type": ["numeric", "scalar", "@(x) x > 0 && fix(x) == x"]},
             {"name": "mode", "kind": "namevalue", "type": ["choices={'auto', 'GPU', 'CPU'}"]},
-            {"name": "outType", "kind": "namevalue", "type": ["choices={'raw', 'power', 'phase'}"]}
+            {"name": "outType", "kind": "namevalue", "type": ["choices={'raw', 'power', 'phase'}"]},
+            {"name": "tPad", "kind": "namevalue", "type": ["numeric", "scalar", "@(x) x > 0"], "purpose": "total duration after padding in sec"}
         ]
     }
 }
