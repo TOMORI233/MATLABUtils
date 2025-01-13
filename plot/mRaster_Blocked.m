@@ -30,7 +30,11 @@ for i = 1:size(cellData, 2)
     spikePlot = cell2mat(cellfun(@(x, y) [x, ones(size(x))*y], mCell2mat(dataTemp), num2cell(1:sum(cellfun(@length, dataTemp)))', "UniformOutput", false));
     yLine = [0; cumsum(cellfun(@length, dataTemp))];
     yTick = mean([yLine(1:end-1), yLine(2:end)], 2);
-    scatter(spikePlot(:, 1), spikePlot(:, end), scatterSize, mHex2Dec(color(i))/255, 'filled'); hold on;
+    if ~isnumeric(color)
+        scatter(spikePlot(:, 1), spikePlot(:, end), scatterSize, mHex2Dec(color(i))/255, 'filled'); hold on;
+    else
+        scatter(spikePlot(:, 1), spikePlot(:, end), scatterSize, mHex2Dec(color), 'filled'); hold on;
+    end
 end
 
 if isempty(window); window = get(gca, "XLim"); end
