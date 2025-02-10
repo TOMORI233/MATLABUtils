@@ -1,4 +1,5 @@
 function cm = mColormap(head, tail)
+% use white as middle
 narginchk(0, 2);
 
 if nargin < 1
