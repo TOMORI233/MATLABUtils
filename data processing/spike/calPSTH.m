@@ -8,7 +8,7 @@ function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
 
     edge = windowPSTH(1) + binSize / 2:step:windowPSTH(2) - binSize / 2; % ms
 
-    trials = reshape(trials, [numel(trials), 1]);
+    trials = trials(:);
     if any(cellfun(@ndims, trials) > 1)
         trials = cellfun(@(x) x(:, 1), trials, "UniformOutput", false);
     end
