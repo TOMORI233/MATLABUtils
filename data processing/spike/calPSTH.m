@@ -7,14 +7,15 @@ function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
     % [binSize] and [step] are in millisecond.
 
     edge = windowPSTH(1) + binSize / 2:step:windowPSTH(2) - binSize / 2; % ms
-
     trials = trials(:);
-    if any(cellfun(@ndims, trials) > 1)
-        trials = cellfun(@(x) x(:, 1), trials, "UniformOutput", false);
-    end
 
     switch class(trials)
         case "cell"
+
+            if any(cellfun(@(x) size(x, 2), trials) > 1)
+                trials = cellfun(@(x) x(:, 1), trials, "UniformOutput", false);
+            end
+
             trials = cellfun(@(x) x(:), trials, "UniformOutput", false);
             frRaw = cell2mat(cellfun(@(x) mHist(x, edge, binSize), trials, "UniformOutput", false)') * 1000 / binSize;
             temp = cat(1, trials{:});
@@ -24,14 +25,17 @@ function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
             temp = arrayfun(@(x) x.spike(:), trials, "UniformOutput", false);
             psth = mHist(vertcat(temp), edge, binSize) / (binSize / 1000) / length(trials); % Hz
             frRaw = cell2mat(cellfun(@(x) mHist(x, edge, binSize), temp, "UniformOutput", false)') * 1000 / binSize;
-
         case "double"
+
             if isvector(trials)
                 psth = mHist(trials, edge, binSize) / (binSize / 1000);
             else
                 error("Invalid trials input");
             end
+
     end
+
     whole = [edge', psth];
+    
     return;
 end
