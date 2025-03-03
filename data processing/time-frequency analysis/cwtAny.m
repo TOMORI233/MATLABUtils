@@ -3,12 +3,20 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %              multi-trial data using parallel computation on GPU.
 % Parameters:
 %     The input [trialsData] is a nTrial*1 cell, or a nCh*nTime matrix for a single trial.
-%     The input data should be type double.
-%     The input [segNum] specifies the number of waves to combine for computation in a single loop. (default = 10)
+%     The input data should be type 'double'.
+%
+%     The input [segNum] specifies the number of waves to combine for
+%     computation in a single loop. (default = 10)
+%     If the input [segNum] is set 1, work in non-parallel mode, which
+%     use "CPU" only and this setting is prior to [mode].
+%
 %     If the input [mode] is set "auto", cwtAny tries GPU first and then turn to CPU.
 %     If the input [mode] is set "CPU", use CPU only for computation.
 %     If the input [mode] is set "GPU", use GPU first and then turn to CPU for the rest part.
-%     
+%
+%     The input [tPad] specifies the total duration of two-sided zero
+%     padding, in sec (empty for no padding, default).
+%
 %     The output [cwtres] is a nTrial*nCh*nFreq*nTime matrix.
 %         If the input [outType] is "raw" (default), [cwtres] is a complex double matrix.
 %         If the input [outType] is "power", [cwtres] is returned as abs(cwtres).
@@ -25,15 +33,15 @@ function [cwtres, f, coi] = cwtAny(trialsData, fs, varargin)
 %
 % Additional information:
 %     1. The wavelet used here is 'morlet'. For other wavelet types, please edit private\CWTMULTIALL
-%     2. There are potential risks of spectrum leakage resulted by coi at low frequencies, 
+%     2. There are potential risks of spectrum leakage resulted by coi at low frequencies,
 %        especially at the borders. To avoid undesired results, tailor and pad your data.
 %        (Update 20241228: padding procedure is now available using name-value input "tPad")
-% 
+%
 % %% WARNING ISSUES %%
-%    If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the 
+%    If the error CUDA_ERROR_OUT_OF_MEMORY occurs, restart your computer and delete the
 %    recent-created folders 'Jobx' in:
 %    'C:\Users\[your account]\AppData\Roaming\MathWorks\MATLAB\local_cluster_jobs\R20xxx\'.
-%    The setting files in these folders may not allow you to connect to the parallel pool, 
+%    The setting files in these folders may not allow you to connect to the parallel pool,
 %    which is used in this function. Tailor your data then, to avoid this problem.
 
 mIp = inputParser;
@@ -90,56 +98,72 @@ else
     nTime = nTime0;
 end
 
-if strcmpi(workMode, "auto")
-    if exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
-        workMode = "GPU";
-        disp('Using GPU...');
-    else
-        workMode = "CPU";
-        disp('mex file is missing. Using CPU...');
-    end
-elseif strcmpi(workMode, "CPU")
-    disp('Using CPU...');
-elseif strcmpi(workMode, "GPU")
-    disp('Using GPU...');
-    if ~exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
-        disp('mex file is missing. Generating mex file...');
-        currentPath = pwd;
-        cd(fileparts(mfilename("fullpath")));
-        ft_removePath;
-        cfg = coder.gpuConfig('mex');
-        str = ['codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[', num2str(nTime), ' ', num2str(segNum), ']),coder.typeof(0)}'];
-        eval(str);
-        mkdir('private');
-        movefile('cwtMultiAll_mex.mexw64', ['private\cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64']);
-        cd(currentPath);
-        ft_defaults;
-    end
-else
-    error("Invalid mode");
-end
-
 t1 = tic;
-[~, f, coi] = cwtMultiAll(trialsData{1}', fs);
+[~, f, coi] = cwtMultiAll_np(trialsData{1}(1, :)', fs);
 disp(['Frequencies range from ', num2str(min(f)), ' to ', num2str(max(f)), ' Hz']);
 
-if strcmpi(workMode, "CPU")
-    cwtres = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
-else
-    cwtFcn = eval(['@cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex']);
-    if all(segIdx == segIdx(1))
-        cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
-        cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
+% check if work in non-parallel mode
+if segNum == 1 % non-parallel
+    disp("Work in non-parallel mode");
+    disp("Using CPU...");
+    trialsData = cat(1, trialsData{:})';
+    cwtres = cwtMultiAll_np(trialsData, fs); % (nTrial*nCh)*nFreq*nTime
+else % parallel
+    disp("Work in parallel mode");
+
+    if strcmpi(workMode, "auto")
+
+        if exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file') ...
+           && gpuDeviceCount >= 1
+            workMode = "GPU";
+            disp("Using GPU...");
+        else
+            workMode = "CPU";
+            warning("MEX file is missing or GPU device is unavailable");
+            disp("Using CPU...");
+        end
+
+    elseif strcmpi(workMode, "CPU")
+        disp("Using CPU...");
+    elseif strcmpi(workMode, "GPU")
+        disp("Using GPU...");
+
+        if ~exist(['cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64'], 'file')
+            disp("MEX file is missing. Generating MEX file...");
+            currentPath = pwd;
+            cd(fileparts(mfilename("fullpath")));
+            ft_removePath;
+            cfg = coder.gpuConfig('mex');
+            str = ['codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[', num2str(nTime), ' ', num2str(segNum), ']),coder.typeof(0)}'];
+            eval(str);
+            mkdir('private');
+            movefile('cwtMultiAll_mex.mexw64', ['private\cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64']);
+            cd(currentPath);
+            ft_defaults;
+        end
     else
-        cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData(1:end - 1), "UniformOutput", false);
-        cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
-        
-        disp('Computing the rest part using CPU...');
-        cwtres = [cwtres; {cwtMultiAll(trialsData{end}', fs)}];
+        error("Invalid mode");
     end
+
+    if strcmpi(workMode, "CPU")
+        cwtres = cellfun(@(x) cwtMultiAll(x', fs), trialsData, "UniformOutput", false);
+    else
+        cwtFcn = eval(['@cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex']);
+        if all(segIdx == segIdx(1))
+            cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData, "UniformOutput", false);
+            cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
+        else
+            cwtres = cellfun(@(x) cwtFcn(x', fs), trialsData(1:end - 1), "UniformOutput", false);
+            cwtres = cellfun(@gather, cwtres, "UniformOutput", false);
+
+            disp("Computing the rest part using CPU...");
+            cwtres = [cwtres; {cwtMultiAll(trialsData{end}', fs)}];
+        end
+    end
+
+    cwtres = cat(1, cwtres{:}); % (nTrial*nCh)*nFreq*nTime
 end
 
-cwtres = cat(1, cwtres{:});
 nFreq = size(cwtres, 2);
 temp = zeros(nTrial, nCh, nFreq, nTime);
 for index = 1:size(temp, 1)
@@ -148,8 +172,8 @@ end
 cwtres = temp;
 
 if ~isempty(tPad)
-   cwtres = cwtres(:, :, :, nPad + 1:nPad + nTime0);
-   coi = coi(nPad + 1:nPad + nTime0);
+    cwtres = cwtres(:, :, :, nPad + 1:nPad + nTime0);
+    coi = coi(nPad + 1:nPad + nTime0);
 end
 
 switch type
