@@ -6,6 +6,7 @@ function mAxe = mRaster(varargin)
     %         - X: x data, cell vector
     %         - Y: y data (If not specified, plot trial by trial)
     %         - color: scatter color
+    %         - marker: marker shape (default="o")
     %         - lines: lines to add to scatterplot, only X value is valid (see addLines2Axes.m)
     %     sz: scatter size (default = 40)
     % Example:
@@ -50,7 +51,11 @@ function mAxe = mRaster(varargin)
         end
 
         color = getOr(rasterData(index), "color", "k");
-        scatter(mAxe, X, Y, sz, color, "filled");
+        marker = getOr(rasterData(index), "marker", "o");
+        scatter(mAxe, X, Y, sz, "filled", ...
+                "Marker", marker, ...
+                "MarkerEdgeColor", "none", ...
+                "MarkerFaceColor", color);
 
         lines = getOr(rasterData(index), "lines");
         if ~isempty(lines)
