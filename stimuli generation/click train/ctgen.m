@@ -38,6 +38,8 @@ function [y, durs] = ctgen(ICIs, durs, fs, type, varargin)
 %   %    with ICI altering from 4 ms to 5 ms. Set standard deviation to be 
 %   %    0.01 of the mean ICI.
 %   y = ctgen([4, 5] * 1e-3, [1, 1], 48e3, "IRREG", "sigmas", 0.01);
+% NOTICE:
+%   Sound generated using this function starts with a pulse.
 
 mIp = inputParser;
 mIp.addRequired("ICIs", @(x) validateattributes(x, {'numeric'}, {'vector', 'positive'}));
