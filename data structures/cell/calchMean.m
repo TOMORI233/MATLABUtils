@@ -1,13 +1,15 @@
 function [chMean, trialsData] = calchMean(trialsData, padDir)
 % Return the weighted-average [chMean] (nCh*xx*xx*...*nTime) and 
-% nan-padded [trialsData].
+% NAN-padded [trialsData].
 % 
 % [trialsData] is a nTrial*1 cell vector with nCh*xx*xx*...*nTime data.
+% Trial data are averaged omitting NAN values (this is important when bad 
+% channels are different across days/subjects).
 % 
 % The last dimension is regarded as time.
-% [nTime] can be different for each trial.
-% If so, [padDir] specifies where to pad NAN values for weighted-average 
-% computation ("head" | "tail",  default="tail").
+% [nTime] can be different for each trial. If so, [padDir] specifies where 
+% to pad NAN values for weighted-average computation. Optional [padDir]: 
+% "head" and "tail" (default="tail").
 
 narginchk(1, 2);
 
@@ -39,7 +41,7 @@ end
 
 nTime = cellfun(@(x) size(x, dim), trialsData);
 if all(nTime == nTime(1)) % all trial data of the same size
-    chMean = mean(cat(dim + 1, trialsData{:}), dim + 1);
+    chMean = mean(cat(dim + 1, trialsData{:}), dim + 1, "omitnan");
 else % weighted-average
     nTimeMax = max(nTime);
     nTime = num2cell(nTime);
