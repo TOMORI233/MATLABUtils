@@ -31,7 +31,9 @@ function T = addTitle2Fig(varargin)
              "FontWeight", fontWeight, ...
              "HorizontalAlignment", alignment, ...
              "Interpreter", interpreter);
+    setLayer(Fig, mAxes, "bottom");
     set(mAxes, "Visible", "off");
+    mAxes.Toolbar.Visible = "off";
 
     return;
 end
