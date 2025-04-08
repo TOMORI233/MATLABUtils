@@ -6,6 +6,15 @@ function [res, trialsData] = calchFunc(fcn, trialsData, padDir)
 % Optional [fcn]: @mean, @SE, @std
 % To customize [fcn], it should receive at least two inputs: [data] and
 % [dim], and also include methods how to process nan-values.
+% e.g., 
+%   fcn = @(x, dim) std(x, [], dim, "omitnan"); % same as @std
+%   fcn = @(x, dim) mFcn(x, dim, "omitnan"); % custom
+%   
+%   function y = mFcn(x, dim, omitnanOpt)
+%   % [x] is N-dim data.
+%   % Compute along dimension [dim] of [x].
+%   % e.g., compute rms
+%   end
 % 
 % For detailed information, see calchMean.m
 
@@ -39,15 +48,9 @@ else
 end
 
 nTime = cellfun(@(x) size(x, dim), trialsData);
-if all(nTime == nTime(1)) % all trial data of the same size
+if ~all(nTime == nTime(1))
+    % not all trial data of the same size: weighted-average
 
-    if isequal(fcn, @std)
-        res = std(cat(dim + 1, trialsData{:}), [], dim + 1);
-    else
-        res = fcn(cat(dim + 1, trialsData{:}), dim + 1);
-    end
-
-else % weighted-average
     nTimeMax = max(nTime);
     nTime = num2cell(nTime);
 
@@ -60,14 +63,14 @@ else % weighted-average
         error("Invalid input of [padDir]. It should be either 'head' or 'tail'.");
     end
 
-    if isequal(fcn, @std)
-        res = std(cat(dim + 1, trialsData{:}), [], dim + 1, "omitnan");
-    elseif isequal(fcn, @mean) || isequal(fcn, @SE)
-        res = fcn(cat(dim + 1, trialsData{:}), dim + 1, "omitnan");
-    else
-        res = fcn(cat(dim + 1, trialsData{:}), dim + 1);
-    end
-    
+end
+
+if isequal(fcn, @std)
+    res = std(cat(dim + 1, trialsData{:}), [], dim + 1, "omitnan");
+elseif isequal(fcn, @mean) || isequal(fcn, @SE)
+    res = fcn(cat(dim + 1, trialsData{:}), dim + 1, "omitnan");
+else
+    res = fcn(cat(dim + 1, trialsData{:}), dim + 1);
 end
 
 return;
