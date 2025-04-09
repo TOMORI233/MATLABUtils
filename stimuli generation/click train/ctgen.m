@@ -1,4 +1,4 @@
-function [y, durs] = ctgen(ICIs, durs, fs, type, varargin)
+function [y, durs, ICIseq] = ctgen(ICIs, durs, fs, type, varargin)
 % Description: 
 %   Thie function generates regular/irregular click trains with
 %   specified [ICI1,ICI2,...ICIn] and [dur1,dur2,...,durn] for each section.
@@ -18,9 +18,12 @@ function [y, durs] = ctgen(ICIs, durs, fs, type, varargin)
 %                 sections. This parameter is valid only for type set as 
 %                 "IRREG". (default: 0.5)
 %     - "pulseLen": pulse duration of a click, in sec. (default: 2e-4)
+%     - "range": a vector [lower,upper] that specifies the ICI range for
+%                irregular click train, in sec.
 % Outputs:
 %   - [y]: sound stimulation, a row vector, in volt.
 %   - [durs]: the actual duration for each section, a column vector, in sec.
+%   - [ICIseq]: ICI sequence vector.
 % Example:
 %   % 1. Generate a 1-sec regular click train with a 4-ms ICI
 %   y = ctgen(4e-3, 1, 48e3, "REG");
@@ -48,9 +51,11 @@ mIp.addRequired("fs", @(x) validateattributes(x, {'numeric'}, {'scalar', 'positi
 mIp.addRequired("type", @(x) any(validatestring(x, {'REG', 'IRREG'})));
 mIp.addParameter("sigmas", 0.5, @(x) validateattributes(x, {'numeric'}, {'vector', 'positive'}));
 mIp.addParameter("pulseLen", 2e-4, @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
+mIp.addParameter("range", [], @(x) validateattributes(x, {'numeric'}, {'numel', 2, 'increasing', 'positive'}));
 mIp.parse(ICIs, durs, fs, type, varargin{:});
 sigmas = mIp.Results.sigmas;
 pulseLen = mIp.Results.pulseLen;
+range = mIp.Results.range;
 
 if isscalar(sigmas)
     sigmas = repmat(sigmas, [numel(ICIs), 1]);
@@ -91,15 +96,17 @@ else % IRREG
             elseif cIndex == 2
 
                 while ~(temp >= 0.3 * mu && temp <= 1.7 * mu) || ...
-                        ~(temp + ICIseq{index}(cIndex - 1) >= 1.2 * mu && temp + ICIseq{index}(cIndex - 1) <= 3.1 * mu)
+                      ~(temp + ICIseq{index}(cIndex - 1) >= 1.2 * mu && temp + ICIseq{index}(cIndex - 1) <= 3.1 * mu) || ...
+                      (~isempty(range) && ~(temp >= range(1) && temp <= range(2)))
                     temp = normrnd(mu, sigma, 1);
                 end
 
             else
 
                 while ~(temp >= 0.3 * mu && temp <= 1.7 * mu) || ...
-                        ~(temp + ICIseq{index}(cIndex - 1) >= 1.2 * mu && temp + ICIseq{index}(cIndex - 1) <= 3.1 * mu) || ...
-                        ~(temp + sum(ICIseq{index}(cIndex - 2:cIndex - 1)) >= 1.8 * mu && temp + sum(ICIseq{index}(cIndex - 2:cIndex - 1)) <= 4.6 * mu)
+                      ~(temp + ICIseq{index}(cIndex - 1) >= 1.2 * mu && temp + ICIseq{index}(cIndex - 1) <= 3.1 * mu) || ...
+                      ~(temp + sum(ICIseq{index}(cIndex - 2:cIndex - 1)) >= 1.8 * mu && temp + sum(ICIseq{index}(cIndex - 2:cIndex - 1)) <= 4.6 * mu) || ...
+                      (~isempty(range) && ~(temp >= range(1) && temp <= range(2)))
                     temp = normrnd(mu, sigma, 1);
                 end
 

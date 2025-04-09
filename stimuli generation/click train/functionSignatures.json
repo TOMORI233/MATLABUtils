@@ -8,7 +8,8 @@
             {"name": "fs", "kind": "required", "type": ["numeric", "scalar"]},
             {"name": "type", "kind": "required", "type": ["choices = {'REG', 'IRREG'}"]},
             {"name": "sigmas", "kind": "namevalue", "type": ["numeric", "vector"]},
-            {"name": "pulseLen", "kind": "namevalue", "type": ["numeric", "scalar"]}
+            {"name": "pulseLen", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "range", "kind": "namevalue", "type": ["numeric", "vector"]}
         ]
     }
 }
