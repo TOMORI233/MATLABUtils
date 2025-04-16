@@ -374,5 +374,13 @@
       }
     ],
     "description": "将文本写入文件"
+  },
+  "exportcolorbar": {
+    "inputs": [
+      {"name": "cRange", "kind": "required", "type": ["numeric"]},
+      {"name": "SAVEPATH", "kind": "required", "type": [["string"], ["char"]]},
+      {"name": "Colormap", "kind": "ordered"},
+      {"name": "ShowZero", "kind": "namevalue", "type": ["logical", "scalar"]}
+    ]
   }
 }
