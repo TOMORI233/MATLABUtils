@@ -1,6 +1,7 @@
-function [res, folderNames] = getLastDirPath(P, N)
-    % [res] return the last end-N+1:end folder path of path P
-    % [folderNames] return all folder names in [res] (from upper to lower)
+function [res, folderNames, path_Nth] = getLastDirPath(P, N)
+    % [res] returns the last end-N+1:end folder path of path P
+    % [folderNames] returns all folder names in [res] (from upper to lower)
+    % [path_Nth] returns the last N-th folder name
 
     if N <= 0
         error("getLastDirPath(): input N should be positive integer");
@@ -29,5 +30,6 @@ function [res, folderNames] = getLastDirPath(P, N)
     
     res = fullfile(temp{end - N + 1:end});
     folderNames = temp(end - N + 1:end);
+    path_Nth = temp{end - N + 1};
     return;
 end
