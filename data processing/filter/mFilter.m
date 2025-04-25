@@ -7,6 +7,7 @@ function data = mFilter(data, fs, varargin)
     % 
     % Input:
     %     data: [nch, nsample]
+    %     fs: sample rate, unit: Hz
     %     namevalue pairs:
     %         - "fhp": high-pass filter cutoff frequency, scalar, unit: Hz
     %         - "flp": low-pass filter cutoff frequency, scalar, unit: Hz
