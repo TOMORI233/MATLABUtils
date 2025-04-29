@@ -16,7 +16,6 @@
 6. 推荐使用matlab创建初始版本脚本/函数文件，使用vscode进行修改（尤其是注释添加）和GIT进行版本管理，这里推荐几个插件：
    - MATLAB
    - MATLAB Extension Pack（需要设置`mlint.exe`路径用于格式化代码）
-   - GitLens
    - Git History
    - Git Graph
 7. 不要上传任何数据。可以编辑`.gitignore`，加入自己可能会意外添加进项目中的数据文件及其路径。对于其他具体protocol的处理项目更是如此。
