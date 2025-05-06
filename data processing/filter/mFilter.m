@@ -1,7 +1,7 @@
 function data = mFilter(data, fs, varargin)
     % This function provides a general zero-phase filter for multi-channel
     % data based on matlab built-in functions `butter`, `filtfilt` and 
-    % `designNotchPeakIIR`.
+    % `designNotchPeakIIR` (MATLAB ver > R2023b).
     %
     % If frequency not specified, corresponding filter will not be applied.
     % 

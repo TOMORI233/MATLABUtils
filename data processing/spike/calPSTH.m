@@ -23,7 +23,7 @@ function [psth, edge, whole, frRaw] = calPSTH(trials, windowPSTH, binSize, step)
             psth = mHist(temp, edge, binSize) / (binSize / 1000) / nTrials; % Hz
         case "struct"
             temp = arrayfun(@(x) x.spike(:), trials, "UniformOutput", false);
-            psth = mHist(vertcat(temp), edge, binSize) / (binSize / 1000) / length(trials); % Hz
+            psth = mHist(cat(1, temp{:}), edge, binSize) / (binSize / 1000) / length(trials); % Hz
             frRaw = cell2mat(cellfun(@(x) mHist(x, edge, binSize), temp, "UniformOutput", false)') * 1000 / binSize;
         case "double"
 

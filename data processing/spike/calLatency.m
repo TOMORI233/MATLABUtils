@@ -6,6 +6,7 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
     % [windowBase] and [windowOnset] are two-element vectors in millisecond.
     % [th] for picking up [latency] from Poisson cumulative probability (default: 1e-6).
     % [nStart] for skipping (nStart-1) spikes at the beginning (default: 5).
+    % [tTh] defines the maximum latency to be accepted, in ms (default: 50).
     %
     % REFERENCE doi: 10.1073/pnas.0610368104
 
@@ -26,12 +27,12 @@ function [latency, P, spikes] = calLatency(trials, windowOnset, windowBase, th, 
     trials = reshape(trials, [numel(trials), 1]);
     switch class(trials)
         case "cell"
-            trials = cellfun(@(x) reshape(x, [numel(x), 1]), trials, "UniformOutput", false);
-            spikes = cell2mat(trials);
+            temp = cellfun(@(x) x(:), trials, "UniformOutput", false);
         case "struct"
-            spikes = vertcat(arrayfun(@(x) reshape(x.spike, [numel(x.spike), 1]), trials, "UniformOutput", false));
+            temp = arrayfun(@(x) x.spike(:), trials, "UniformOutput", false);
     end
 
+    spikes = cat(1, temp{:});
     sprate = mean(calFR(trials, windowBase));
     spikes = sort(spikes(spikes >= windowOnset(1) & spikes <= windowOnset(2)), "ascend");
     

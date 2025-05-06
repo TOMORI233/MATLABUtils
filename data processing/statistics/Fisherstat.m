@@ -1,5 +1,12 @@
 function [H, pFisher, chi_square_stat, sigLevel] = Fisherstat(p, dim, alphaVal)
 % Return joint p-value with Fisher's method
+% Perform Fisher's method along the N-th dimension of an N-D p-value
+% matrix [p].
+% For instance, paired t-tests are applied to five paired sample groups,
+% which produces a 5-element vector [p]. To tell whether there is a
+% difference between the paired samples considering all 5 groups, a joint
+% p-value is computed:
+% >> [~, pFisher] = Fisherstat(p(:))
 
 narginchk(1, 3);
 

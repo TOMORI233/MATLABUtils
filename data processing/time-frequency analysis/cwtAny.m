@@ -136,7 +136,9 @@ else % parallel
             cfg = coder.gpuConfig('mex');
             str = ['codegen cwtMultiAll -config cfg -args {coder.typeof(gpuArray(0),[', num2str(nTime), ' ', num2str(segNum), ']),coder.typeof(0)}'];
             eval(str);
-            mkdir('private');
+            if ~exist(fullfile(fileparts(mfilename("fullpath")), 'private'), "dir")
+                mkdir('private');
+            end
             movefile('cwtMultiAll_mex.mexw64', ['private\cwtMultiAll', num2str(nTime), 'x', num2str(segNum), '_mex.mexw64']);
             cd(currentPath);
             ft_defaults;
