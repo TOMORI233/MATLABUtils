@@ -53,6 +53,7 @@ mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d',
 mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.addParameter("ignoreInvisible", true, @(x) isscalar(x) && islogical(x));
+mIp.addParameter("autoTh", 0.01, @(x) validateattributes(x, {'numeric'}, {'scalar', 'real', '<=' 1, '>=', 0}));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
@@ -61,6 +62,7 @@ cutoffRange = getOr(mIp.Results, "cutoffRange0", mIp.Results.cutoffRange, true);
 symOpt = getOr(mIp.Results, "symOpts0", mIp.Results.symOpt, true);
 uiOpt = mIp.Results.uiOpt;
 ignoreInvisible = mIp.Results.ignoreInvisible;
+autoTh = mIp.Results.autoTh;
 
 if strcmpi(axisName, "x")
     axisLimStr = "xlim";
@@ -126,8 +128,8 @@ if strcmpi(autoScale, "on")
         tempY = tempY(tempX >= xRange(1) & tempX <= xRange(2));
         if ~isempty(tempY)
             limTemp = [min(tempY), max(tempY)];
-            axisLimMin = limTemp(1) - diff(limTemp) * 0.05;
-            axisLimMax = limTemp(2) + diff(limTemp) * 0.05;
+            axisLimMin = limTemp(1) - diff(limTemp) * autoTh;
+            axisLimMax = limTemp(2) + diff(limTemp) * autoTh;
         end
 
     end
@@ -155,8 +157,8 @@ if strcmpi(autoScale, "on")
                 [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
             end
             f = mapminmax(cumsum(binCount), 0, 1);
-            axisLimMin = xi(find(f >= 0.01, 1));
-            axisLimMax = xi(find(f >= 0.99, 1));
+            axisLimMin = xi(find(f >= autoTh, 1));
+            axisLimMax = xi(find(f >= 1 - autoTh, 1));
         end
 
     end
