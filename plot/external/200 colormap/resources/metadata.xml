@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addOn>
+  <identifier>580cfd72-613f-4755-84bc-b76679aedfff</identifier>
+  <displayType>Collection</displayType>
+  <translatedDisplayType>
+    <en_US>Collection</en_US>
+    <ja_JP>コレクション</ja_JP>
+    <ko_KR>컬렉션</ko_KR>
+    <zh_CN>集合</zh_CN>
+  </translatedDisplayType>
+  <name>200 colormap</name>
+  <author>Zhaoxu Liu / slandarer</author>
+  <version>1.1.0</version>
+  <downloadUrl>https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/580cfd72-613f-4755-84bc-b76679aedfff/cbb155dd-20dd-4b0b-b989-9020d5b8324f/packages/zip?src=addons_ml_desktop_install&amp;profile_id=20304499&amp;license=0&amp;release_family=R2023b</downloadUrl>
+  <licenseUrl>https://addons.mathworks.com/registry/v1/580cfd72-613f-4755-84bc-b76679aedfff/1.1.0/-/license</licenseUrl>
+  <previewImageUrl>https://www.mathworks.com/responsive_image/160/120/0/0/0/cache/matlabcentral/mlc-downloads/downloads/580cfd72-613f-4755-84bc-b76679aedfff/cbb155dd-20dd-4b0b-b989-9020d5b8324f/images/1667730427.png</previewImageUrl>
+  <releaseNotesUrl>https://www.mathworks.com/add-ons/580cfd72-613f-4755-84bc-b76679aedfff/cbb155dd-20dd-4b0b-b989-9020d5b8324f/releaseNotes</releaseNotesUrl>
+  <installationFolder>Collections</installationFolder>
+</addOn>
