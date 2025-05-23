@@ -9,7 +9,7 @@ function P = getAbsPath(relativePath)
         return;
     end
 
-    if contains(relativePath, '..') % relative path
+    if contains(relativePath, '..') || ~contains(relativePath, ':') % relative path
         currentPath = pwd;
         if ~exist(relativePath, "dir")
             disp(strcat(relativePath, ' does not exist. Create folder...'));
