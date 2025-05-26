@@ -22,6 +22,8 @@ function varargout = scaleAxes(varargin)
 %     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
 %     ignoreInvisible: if set true, invisible axes in the target figure
 %                      will be excluded from scaling (default=true)
+%     autoTh: threshold for auto scaling (default=0.01)
+%             To reserve all values within current axis range, set autoTh=0
 % Output:
 %     axisRange: axis limits applied
 
