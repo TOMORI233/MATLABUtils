@@ -21,7 +21,7 @@ end
 
 colormap(ax, colorMap);
 set(ax, "Visible", "off");
-exportgraphics(ax, SAVEPATH, "Resolution", 300);
+exportgraphics(ax, SAVEPATH, "Resolution", 600);
 close(Fig);
 
 return;
