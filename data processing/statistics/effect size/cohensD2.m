@@ -1,6 +1,5 @@
 function d = cohensD2(x1, x2)
-    % This function computes the effect size for two unpaired independent 
-    % samples.
+    % Effect size for two unpaired independent samples (unpaired t-test).
 
     % Compute means
     mean1 = mean(x1);
