@@ -1,6 +1,6 @@
-function r = rbcc(x, y)
-    % rank-biserial correlation coefficient of Wilcoxon signed rank test
-
+function r = rbcc_Wilcoxon(x, y)
+    % Rank-biserial correlation coefficient of Wilcoxon signed rank test 
+    % (non-parametric, paired)
     x = x(:);
     y = y(:);
 
