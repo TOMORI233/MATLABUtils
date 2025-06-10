@@ -18,7 +18,7 @@ T.Y = x;
 varNames = cell(1, nFactors);
 for index = 1:nFactors
     fname = ['F' num2str(index)];
-    T.(fname) = categorical(varargin{index});
+    T.(fname) = categorical(group{:, index});
     varNames{index} = fname;
 end
 
@@ -51,8 +51,7 @@ end
 
 % Bayes Factor
 try
-    bfOut = bf.anova(fullFormula, T);
-    bf10 = bfOut.BF10;
+    bf10 = bf.anova(T, fullFormula);
 catch
     warning('bf.anova failed. bf10 set to NaN.');
     bf10 = NaN;
