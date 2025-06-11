@@ -1,5 +1,5 @@
 function [p, h, stats, r] = mSignrank(X, Y, varargin)
-% This function performs Wilcoxon signed-rank test between paired samples.
+% This function performs Wilcoxon signed rank test between paired samples.
 % For matrices, mSignrank performs tests along each column of X, and returns 
 % a vector of results.
 % For more information, see signrank
@@ -7,8 +7,8 @@ function [p, h, stats, r] = mSignrank(X, Y, varargin)
 %     r: rank-biserial correlation coefficient of Wilcoxon signed rank test
 
 if isvector(X) && isvector(Y)
-    X = X(:)';
-    Y = Y(:)';
+    X = X(:);
+    Y = Y(:);
 end
 
 if ~isequal(size(X), size(Y))
