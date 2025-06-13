@@ -18,7 +18,11 @@ T.Y = x;
 varNames = cell(1, nFactors);
 for index = 1:nFactors
     fname = ['F' num2str(index)];
-    T.(fname) = categorical(group{:, index});
+    if isnumeric(group)
+        T.(fname) = categorical(group(:, index));
+    elseif iscell(group)
+        T.(fname) = categorical(group{:, index});
+    end
     varNames{index} = fname;
 end
 
