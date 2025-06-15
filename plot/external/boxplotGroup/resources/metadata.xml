@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addOn>
+  <identifier>22f93047-411d-4e54-8a7b-fa3ecbe823ed</identifier>
+  <displayType>Collection</displayType>
+  <translatedDisplayType>
+    <en_US>Collection</en_US>
+    <ja_JP>コレクション</ja_JP>
+    <ko_KR>컬렉션</ko_KR>
+    <zh_CN>集合</zh_CN>
+  </translatedDisplayType>
+  <name>boxplotGroup</name>
+  <author>Adam Danz</author>
+  <version>2.0.0</version>
+  <downloadUrl>https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/22f93047-411d-4e54-8a7b-fa3ecbe823ed/7e49baa6-0121-4a29-8fd5-ed73d94ed0ad/packages/zip?src=addons_ml_desktop_install&amp;profile_id=20304499&amp;license=40623085&amp;release_family=R2023b</downloadUrl>
+  <licenseUrl>https://addons.mathworks.com/registry/v1/22f93047-411d-4e54-8a7b-fa3ecbe823ed/2.0.0/-/license</licenseUrl>
+  <previewImageUrl>https://www.mathworks.com/responsive_image/160/120/0/0/0/cache/matlabcentral/mlc-downloads/downloads/22f93047-411d-4e54-8a7b-fa3ecbe823ed/7e49baa6-0121-4a29-8fd5-ed73d94ed0ad/images/screenshot.png</previewImageUrl>
+  <releaseNotesUrl>https://www.mathworks.com/add-ons/22f93047-411d-4e54-8a7b-fa3ecbe823ed/7e49baa6-0121-4a29-8fd5-ed73d94ed0ad/releaseNotes</releaseNotesUrl>
+  <installationFolder>Collections</installationFolder>
+</addOn>
