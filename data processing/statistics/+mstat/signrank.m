@@ -1,4 +1,4 @@
-function [p, stats, effectSize] = signrank(x, y, varargin)
+function [p, stats, effectSize, bf10] = signrank(x, y, varargin)
 % Wilcoxon signed rank test for paired samples [x] and [y].
 % [x] and [y] are vectors of the same length.
 
@@ -24,6 +24,9 @@ N = sum(x ~= y);
 
 % effect size r
 effectSize = stats.zval ./ sqrt(N);
+
+% Bayesian factor
+bf10 = nan;
 
 return;
 end
