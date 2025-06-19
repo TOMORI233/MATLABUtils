@@ -36,7 +36,7 @@ end
 if ~isempty(widthIdx)
     width = varargin{widthIdx+ 1};
 else
-    width = 0.01;
+    width = 0.05;
 end
 
 varargin([locIdx:locIdx + 1, intervalIdx:intervalIdx + 1, widthIdx:widthIdx + 1]) = [];
@@ -46,13 +46,13 @@ pos = get(ax, "Position"); % axes size
 
 switch loc
     case "northoutside"
-        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) + pos0(4) + interval, pos(3), width]);
+        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) + pos0(4) + interval * pos(4), pos(3), width * pos(4)]);
     case "southoutside"
-        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) - interval, pos(3), width]);
+        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) - interval * pos(4), pos(3), width * pos(4)]);
     case "eastoutside"
-        cb = colorbar(varargin{:}, "Position", [pos0(1) + pos0(3) + interval, pos(2), width, pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos0(1) + pos0(3) + interval * pos(3), pos(2), width * pos(3), pos(4)]);
     case "westoutside"
-        cb = colorbar(varargin{:}, "Position", [pos0(1) - interval, pos(2), width, pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos0(1) - interval * pos(3), pos(2), width * pos(3), pos(4)]);
 end
 
 return;

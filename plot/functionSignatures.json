@@ -236,7 +236,7 @@
             {"name": "symOpt", "kind": "namevalue", "type": ["choices = {'none', 'min', 'max', 'positive', 'negative'}"], "purpose": "symmetrical option"},
             {"name": "uiOpt", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "call an App for scaling"},
             {"name": "ignoreInvisible", "kind": "namevalue", "type": ["logical", "scalar"]},
-            {"name": "autoTh", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "threshold for auto scaling (default:0.01)"}
+            {"name": "autoTh", "kind": "namevalue", "type": ["numel=2", "numeric"], "purpose": "quantiles of range for auto scaling (default:[0.01,0.99])"}
         ],
         "description": "将相同的坐标范围应用于指定图像或坐标区"
     },
@@ -312,7 +312,7 @@
         "inputs": [
             {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
             {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.01"},
-            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.01"}
+            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.05"}
         ]
     },
     "mRaster_Blocked": {
