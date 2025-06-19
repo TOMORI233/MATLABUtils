@@ -13,7 +13,7 @@ end
 mIp = inputParser;
 mIp.addRequired("FigsOrAxes", @(x) all(isgraphics(x)));
 mIp.addRequired("cellData", @iscell);
-mIp.addParameter("color", "black");
+mIp.addParameter("color", "#000000");
 mIp.addParameter("labelStr", []);
 mIp.addParameter("window", []);
 mIp.addParameter("scatterSize", 3)

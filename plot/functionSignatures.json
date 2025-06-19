@@ -335,6 +335,29 @@
                 ]
             ]}
         ]
+    },
+    "mPSTH_Blocked": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "cellData", "kind": "required", "type": ["cell"]},
+                    {"name": "PSTHWindow", "kind": "required"},
+                    {"name": "binsize", "kind": "required"},
+                    {"name": "binstep", "kind": "required"},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"}
+                ],
+                [
+                    {"name": "axes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
+                    {"name": "cellData", "kind": "required", "type": ["cell"]},
+                    {"name": "PSTHWindow", "kind": "required"},
+                    {"name": "binsize", "kind": "required"},
+                    {"name": "binstep", "kind": "required"},
+                    {"name": "color", "kind": "namevalue"},
+                    {"name": "labelStr", "kind": "namevalue"}
+                ]
+            ]}
+        ]
     }
 
 }
