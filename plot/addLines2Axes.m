@@ -90,7 +90,7 @@ for lIndex = 1:length(lines)
         % other namevalue pairs
         allParams = string(fieldnames(lines(lIndex)));
         builtinParams = ["X", "Y", "color", "width", "style", "marker", "markerSize", "legend", "label", ...
-                        "labelHorizontalAlignment", "labelVerticalAlignment", "labelOrientation"];
+                         "labelHorizontalAlignment", "labelVerticalAlignment", "labelOrientation"];
         otherParams = allParams(~contains(allParams, builtinParams));
         params = {};
         for pIndex = 1:length(otherParams)

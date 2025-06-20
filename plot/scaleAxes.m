@@ -22,8 +22,7 @@ function varargout = scaleAxes(varargin)
 %     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
 %     ignoreInvisible: if set true, invisible axes in the target figure
 %                      will be excluded from scaling (default=true)
-%     autoTh: threshold for auto scaling (default=0.01)
-%             To reserve all values within current axis range, set autoTh=0
+%     autoTh: quantiles of range for auto scaling (default=[0.01,0.99])
 % Output:
 %     axisRange: axis limits applied
 
@@ -55,7 +54,7 @@ mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d',
 mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.addParameter("ignoreInvisible", true, @(x) isscalar(x) && islogical(x));
-mIp.addParameter("autoTh", 0.01, @(x) validateattributes(x, {'numeric'}, {'scalar', 'real', '<=' 1, '>=', 0}));
+mIp.addParameter("autoTh", [0.01, 0.99], @(x) validateattributes(x, {'numeric'}, {'numel', 2, 'real', '<=' 1, '>=', 0}));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
@@ -87,6 +86,10 @@ end
 if ignoreInvisible
     % exclude invisible axes
     allAxes(cellfun(@(x) eq(x, matlab.lang.OnOffSwitchState.off), {allAxes.Visible}')) = [];
+
+    if isempty(allAxes)
+        error("No visible axes found. Please set [ignoreInvisible] to false");
+    end
 end
 
 %% Best axis range
@@ -129,9 +132,8 @@ if strcmpi(autoScale, "on")
         tempY = cat(1, tempY{:});
         tempY = tempY(tempX >= xRange(1) & tempX <= xRange(2));
         if ~isempty(tempY)
-            limTemp = [min(tempY), max(tempY)];
-            axisLimMin = limTemp(1) - diff(limTemp) * autoTh;
-            axisLimMax = limTemp(2) + diff(limTemp) * autoTh;
+            axisLimMin = quantile(tempY, autoTh(1));
+            axisLimMax = quantile(tempY, autoTh(2));
         end
 
     end
@@ -159,8 +161,8 @@ if strcmpi(autoScale, "on")
                 [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
             end
             f = mapminmax(cumsum(binCount), 0, 1);
-            axisLimMin = xi(find(f >= autoTh, 1));
-            axisLimMax = xi(find(f >= 1 - autoTh, 1));
+            axisLimMin = xi(find(f >= autoTh(1), 1));
+            axisLimMax = xi(find(f >= autoTh(2), 1));
         end
 
     end
