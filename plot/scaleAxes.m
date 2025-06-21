@@ -149,20 +149,31 @@ if strcmpi(autoScale, "on")
             temp = cat(1, temp{:});
             temp(isnan(temp)) = [];
             temp = sort(temp, "ascend");
-            maxBinCount = numel(temp) / 100;
-            binCount = [inf, inf];
-            binN = 10;
-            while any(binCount > maxBinCount)
-                binN = binN * 10;
-                if binN >= 1e6
-                    [binCount, xi] = ksdensity(temp, linspace(min(temp), max(temp), 1e4));
-                    break;
+
+            if sum(temp == mode(temp)) / numel(temp) > 0.99
+                axisLimMin = 0;
+                axisLimMax = 0;
+            else
+                maxBinCount = numel(temp) / 100;
+                binCount = [inf, inf];
+                binN = 10;
+
+                while any(binCount > maxBinCount)
+                    binN = binN * 10;
+
+                    if binN >= 1e6
+                        [binCount, xi] = ksdensity(temp, linspace(min(temp), max(temp), 1e4));
+                        break;
+                    end
+                    
+                    [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
                 end
-                [binCount, xi] = histcounts(temp, linspace(min(temp), max(temp), binN));
+
+                f = mapminmax(cumsum(binCount), 0, 1);
+                axisLimMin = xi(find(f >= autoTh(1), 1));
+                axisLimMax = xi(find(f >= autoTh(2), 1));
             end
-            f = mapminmax(cumsum(binCount), 0, 1);
-            axisLimMin = xi(find(f >= autoTh(1), 1));
-            axisLimMax = xi(find(f >= autoTh(2), 1));
+
         end
 
     end
