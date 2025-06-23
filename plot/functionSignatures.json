@@ -271,7 +271,8 @@
                     {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
-                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
+                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]},
+                    {"name": "DistributionCurve", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
                 ],
                 [
                     {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
@@ -283,7 +284,8 @@
                     {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
                     {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
                     {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
-                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]}
+                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]},
+                    {"name": "DistributionCurve", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
                 ]
             ]}
         ],

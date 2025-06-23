@@ -8,6 +8,7 @@ function varargout = mHistogram(varargin)
 % mHistogram(..., "DisplayName", legendStrCellArray)
 % mHistogram(..., "BinWidth", binWidthVal)
 % mHistogram(..., "BinMethod", methodName)
+% mHistogram(..., "DistributionCurve", "show")
 % [H, N, edges] = mHistogram(...)
 %
 % Input data X can be a double vector, a double matrix or a cell vector.
@@ -32,6 +33,7 @@ if strcmp(class(varargin{1}), "matlab.graphics.Graphics")
 else
     mAxe = gca;
 end
+hold(mAxe, "on");
 
 mIp = inputParser;
 mIp.addRequired("X", @(x) validateattributes(x, {'numeric', 'cell'}, {'2d'}));
@@ -43,6 +45,7 @@ mIp.addParameter("EdgeColor", [], @(x) iscell(x) || (isscalar(x) && strcmpi(x, "
 mIp.addParameter("DisplayName", [], @(x) iscell(x));
 mIp.addParameter("BinWidth", [], @(x) validateattributes(x, {'numeric'}, {'scalar', 'positive'}));
 mIp.addParameter("BinMethod", "auto", @(x) any(validatestring(x, {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'})));
+mIp.addParameter("DistributionCurve", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.parse(varargin{:});
 
 X = mIp.Results.X;
@@ -54,6 +57,7 @@ EdgeColors = mIp.Results.EdgeColor;
 legendStrs = mIp.Results.DisplayName;
 BinWidth = mIp.Results.BinWidth;
 BinMethod = mIp.Results.BinMethod;
+DistributionCurve = mIp.Results.DistributionCurve;
 
 if isnumeric(X)
     % Convert X to cell vector
@@ -104,16 +108,31 @@ if isempty(edges)
 
 end
 
+BinWidth = mode(diff(edges));
+
 N = zeros(numel(X), length(edges) - 1);
 for index = 1:numel(X)
     N(index, :) = histcounts(X{index}, edges);
 end
 
-H = bar(mAxe, edges(1:end - 1) + mode(diff(edges)) / 2, N, width, "grouped", "LineWidth", LineWidth);
+H = bar(mAxe, edges(1:end - 1) + BinWidth / 2, N, width, "grouped", "LineWidth", LineWidth);
+
+if strcmpi(DistributionCurve, "show")
+
+    for index = 1:length(H)
+        pd = fitdist(X{index}(:), "Kernel");
+        temp = linspace(min(edges) - std(X{index}(:)), max(edges) + std(X{index}(:)), 1e3);
+        L(index) = plot(mAxe, temp, pdf(pd, temp) * sum(N(index, :)) * BinWidth, "Color", "k", "LineWidth", 1);
+        setLegendOff(L(index));
+    end
+
+end
+
 for index = 1:length(H)
 
     if ~isempty(FaceColors) && ~isempty(FaceColors{index})
         H(index).FaceColor = FaceColors{index};
+        L(index).Color = FaceColors{index};
     end
 
     if ~isempty(EdgeColors) && ~isempty(EdgeColors{index})
@@ -131,6 +150,8 @@ end
 if ~isempty(legendStrs)
     legend(mAxe);
 end
+
+xlim(mAxe, [min(edges), max(edges)]);
 
 if nargout == 1
     varargout{1} = H;
