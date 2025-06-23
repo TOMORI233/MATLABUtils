@@ -22,7 +22,8 @@ function varargout = scaleAxes(varargin)
 %     uiOpt: "show" or "hide", call a UI control for scaling (default="hide")
 %     ignoreInvisible: if set true, invisible axes in the target figure
 %                      will be excluded from scaling (default=true)
-%     autoTh: quantiles of range for auto scaling (default=[0.01,0.99])
+%     autoTh: quantiles of range for auto scaling (default=[0.01,0.99] for 
+%             "c" scaling and [0,1] for "y" scaling)
 % Output:
 %     axisRange: axis limits applied
 
@@ -54,7 +55,7 @@ mIp.addParameter("cutoffRange", [], @(x) validateattributes(x, 'numeric', {'2d',
 mIp.addParameter("symOpt", [], @(x) any(validatestring(x, {'none', 'min', 'max', 'positive', 'negative'})));
 mIp.addParameter("uiOpt", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.addParameter("ignoreInvisible", true, @(x) isscalar(x) && islogical(x));
-mIp.addParameter("autoTh", [0.01, 0.99], @(x) validateattributes(x, {'numeric'}, {'numel', 2, 'real', '<=' 1, '>=', 0}));
+mIp.addParameter("autoTh", [], @(x) validateattributes(x, {'numeric'}, {'numel', 2, 'real', '<=' 1, '>=', 0}));
 mIp.parse(FigsOrAxes, varargin{:});
 
 axisName = mIp.Results.axisName;
@@ -69,10 +70,20 @@ if strcmpi(axisName, "x")
     axisLimStr = "xlim";
 elseif strcmpi(axisName, "y")
     axisLimStr = "ylim";
+
+    if isempty(autoTh)
+        autoTh = [0, 1];
+    end
+
 elseif strcmpi(axisName, "z")
     axisLimStr = "zlim";
 elseif strcmpi(axisName, "c")
     axisLimStr = "clim";
+
+    if isempty(autoTh)
+        autoTh = [0.01, 0.99];
+    end
+
 else
     error("Wrong axis name input");
 end
