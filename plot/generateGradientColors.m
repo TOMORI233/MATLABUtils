@@ -9,15 +9,19 @@ function rgb = generateGradientColors(n, rgbOpt, smin)
         smin = 0.2; % min saturation, [0, 1]
     end
 
-    switch rgbOpt
-        case "r"
-            hsv = rgb2hsv([1, 0, 0]);
-        case "g"
-            hsv = rgb2hsv([0, 1, 0]);
-        case "b"
-            hsv = rgb2hsv([0, 0, 1]);
-        otherwise
-            hsv = rgb2hsv(rgbOpt);
+    if isstring(rgbOpt) || ischar(rgbOpt)
+        switch rgbOpt
+            case "r"
+                hsv = rgb2hsv([1, 0, 0]);
+            case "g"
+                hsv = rgb2hsv([0, 1, 0]);
+            case "b"
+                hsv = rgb2hsv([0, 0, 1]);
+            otherwise
+                error("Invalid color string input");
+        end
+    elseif isnumeric(rgbOpt)
+        hsv = rgb2hsv(rgbOpt);
     end
 
     hsv = repmat(hsv, [n, 1]);
