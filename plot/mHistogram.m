@@ -148,7 +148,7 @@ for index = 1:length(H)
 end
 
 if ~isempty(legendStrs)
-    legend(mAxe);
+    legend(mAxe, "Location", "best");
 end
 
 xlim(mAxe, [min(edges), max(edges)]);
