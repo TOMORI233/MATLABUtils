@@ -46,13 +46,13 @@ pos = get(ax, "Position"); % axes size
 
 switch loc
     case "northoutside"
-        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) + pos0(4) + interval * pos(4), pos(3), width * pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) + pos0(4) + interval * pos(4), pos(3), width * pos(4)], "Location", "northoutside");
     case "southoutside"
-        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) - interval * pos(4), pos(3), width * pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos(1), pos0(2) - interval * pos(4), pos(3), width * pos(4)], "Location", "southoutside");
     case "eastoutside"
-        cb = colorbar(varargin{:}, "Position", [pos0(1) + pos0(3) + interval * pos(3), pos(2), width * pos(3), pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos0(1) + pos0(3) + interval * pos(3), pos(2), width * pos(3), pos(4)], "Location", "eastoutside");
     case "westoutside"
-        cb = colorbar(varargin{:}, "Position", [pos0(1) - interval * pos(3), pos(2), width * pos(3), pos(4)]);
+        cb = colorbar(varargin{:}, "Position", [pos0(1) - interval * pos(3), pos(2), width * pos(3), pos(4)], "Location", "westoutside");
 end
 
 return;
