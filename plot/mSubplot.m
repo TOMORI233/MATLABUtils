@@ -17,7 +17,7 @@ function varargout = mSubplot(varargin)
 %     mSubplot(1, 2, 2, "paddings", [1/9, 1/18, 2/9, 1/9], ...
 %                       "margins", zeros(1, 4), ...
 %                       "nSize", [1/4, 1/2], ...
-%                       "alignment", "bottom-left");
+%                       "alignment", "left-bottom");
 %     set(0, "DefaultAxesBox", "factory");
 %
 %  ____________________________________________________________________
@@ -57,20 +57,21 @@ function varargout = mSubplot(varargin)
 %            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
 %     alignment: how axes aligns to <div>, either preset string or a 2-element vector that 
 %                specifies center [x,y] relative to <div> (normalized).
-%                If set as a 2-element vector, [margins] will not work.
 %                If set positive, relative to left and bottom.
 %                If set negative, relative to right and top.
 %                This option influences how the axes is expanded or shrinked using [nSize] option.
-%                Optional preset values:
-%                - 'top-left'
-%                - 'top-right'
-%                - 'bottom-left'
-%                - 'bottom-right'
-%                - 'center-left'
-%                - 'center-right'
-%                - 'top-center'
-%                - 'bottom-center'
-%                - 'center'(default).
+%                Optional values:
+%                - 'left-bottom'
+%                - 'left-center'
+%                - 'left-top'
+%                - 'center-bottom'
+%                - 'center' (default)
+%                - 'center-top'
+%                - 'right-bottom'
+%                - 'right-center'
+%                - 'right-top'
+%                You can also specify [alignment_horizontal] and
+%                [alignment_vertical] separately (prior to [alignment]).
 % Output:
 %     mAxe: subplot axes object
 
@@ -213,7 +214,7 @@ if isempty(alignment_horizontal)
     else
         temp = split(alignment, '-');
         if isscalar(temp) % center
-            alignment_horizontal = 'center';
+            alignment_horizontal = 0.5;
         else
             alignment_horizontal = temp{1};
         end
@@ -226,7 +227,7 @@ if isempty(alignment_vertical)
     else
         temp = split(alignment, '-');
         if isscalar(temp) % center
-            alignment_vertical = 'center';
+            alignment_vertical = 0.5;
         else
             alignment_vertical = temp{2};
         end
@@ -235,35 +236,45 @@ end
 
 if isnumeric(alignment_horizontal)
     if alignment_horizontal >= 0
-        axeX = divX + (alignment_horizontal + margins(1)) * divWidth - axeWidth / 2;
+        axeX = divX + ((1 - margins(1) - margins(2)) * alignment_horizontal + margins(1)) * divWidth - axeWidth / 2;
+        X = (1 - margins(1) - margins(2)) * alignment_horizontal + margins(1);
     else
-        axeX = divX + (1 + alignment_horizontal - margins(2)) * divWidth - axeWidth / 2;
+        axeX = divX + ((1 - margins(1) - margins(2)) * (1 + alignment_horizontal) + margins(1)) * divWidth - axeWidth / 2;
+        X = (1 - margins(1) - margins(2)) * (1 + alignment_horizontal) + margins(1);
     end
 else
     switch alignment_horizontal
         case 'left'
             axeX = divX + margins(1) * divWidth;
+            X = margins(1) + axeWidth / divWidth / 2;
         case 'center'
-            axeX = divX + (1/2 + margins(1)) * divWidth - axeWidth / 2;
+            axeX = divX + (1 + margins(1) - margins(2)) * divWidth / 2 - axeWidth / 2;
+            X = (1 + margins(1) - margins(2)) / 2;
         case 'right'
             axeX = divX + divWidth  * (1 - margins(2)) - axeWidth;
+            X = 1 - margins(2) - axeWidth / divWidth / 2;
     end
 end
 
 if isnumeric(alignment_vertical)
     if alignment_vertical >= 0
-        axeY = divY + (alignment_vertical + margins(3)) * divHeight - axeHeight / 2;
+        axeY = divY + ((1 - margins(3) - margins(4)) * alignment_vertical + margins(3)) * divHeight - axeHeight / 2;
+        Y = (1 - margins(3) - margins(4)) * alignment_vertical + margins(3);
     else
-        axeY = divY + (1 + alignment_vertical - margins(4)) * divHeight - axeHeight / 2;
+        axeY = divY + ((1 - margins(3) - margins(4)) * (1 + alignment_vertical) + margins(3)) * divHeight - axeHeight / 2;
+        Y = (1 - margins(3) - margins(4)) * (1 + alignment_vertical) + margins(3);
     end
 else
     switch alignment_vertical
         case 'bottom'
             axeY = divY + margins(3) * divHeight;
+            Y = margins(3) + axeHeight / divHeight / 2;
         case 'center'
-            axeY = divY + (1/2 + margins(3)) * divHeight - axeHeight / 2;
+            axeY = divY + (1 + margins(3) - margins(4)) * divHeight / 2 - axeHeight / 2;
+            Y = (1 + margins(3) - margins(4)) / 2;
         case 'top'
             axeY = divY + divHeight * (1 - margins(4)) - axeHeight;
+            Y = 1 - margins(4) - axeHeight / divHeight / 2;
     end
 end
 
@@ -278,21 +289,36 @@ if strcmpi(divBox, "show")
     set(divAxe, "XTickLabels", num2str([0; 1]));
     set(divAxe, "YTickLabels", num2str([0; 1]));
 
-    if all(alignment >= 0 & alignment <= 1)
-        xline(divAxe, alignment_horizontal, "r--");
-        yline(divAxe, alignment_vertical, "r--");
-        addSpecialTicks(divAxe, "x", alignment_horizontal);
-        addSpecialTicks(divAxe, "y", alignment_vertical);
+    if ~isempty(X)
+        xline(divAxe, X, "r--");
+        addSpecialTicks(divAxe, "x", X);
+    end
+
+    if ~isempty(Y)
+        yline(divAxe, Y, "r--");
+        addSpecialTicks(divAxe, "y", Y);
     end
 
 end
 
 mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight]);
 
-if nargout == 1
+if nargout >= 1
     varargout{1} = mAxe;
-elseif nargout > 1
-    error("mSubplot(): the number of output should be no greater than 1");
+end
+
+if nargout == 2
+    opts.row = row;
+    opts.col = col;
+    opts.index = index;
+    opts.margins = margins;
+    opts.paddings = paddings;
+    opts.nSize = nSize;
+    opts.shape = shape;
+    opts.alignment = [X, Y];
+    opts.divPosition = [divX, divY, divWidth, divHeight];
+    opts.axesPosition = [axeX, axeY, axeWidth, axeHeight];
+    varargout{2} = opts;
 end
 
 return;
