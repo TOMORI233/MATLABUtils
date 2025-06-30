@@ -174,7 +174,9 @@
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": [["numeric"], ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]]},
+                    {"name": "alignment", "kind": "namevalue", "type": [["numeric"], ["choices = {'left-bottom', 'left-center', 'left-top', 'center-bottom', 'center', 'center-top', 'right-bottom', 'right-center', 'right-top'}"]], "purpose": "[horizontal,vertical]"},
+                    {"name": "alignment_horizontal", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'left', 'center', 'right'}"]]},
+                    {"name": "alignment_vertical", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'bottom', 'center', 'top'}"]]},
                     {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
                     {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
                     {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
@@ -182,7 +184,8 @@
                     {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
                     {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
                     {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "divBox", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -197,7 +200,9 @@
                     {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
                     {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
                     {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": [["numeric"], ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]]},
+                    {"name": "alignment", "kind": "namevalue", "type": [["numeric"], ["choices = {'left-bottom', 'left-center', 'left-top', 'center-bottom', 'center', 'center-top', 'right-bottom', 'right-center', 'right-top'}"]], "purpose": "[horizontal,vertical]"},
+                    {"name": "alignment_horizontal", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'left', 'center', 'right'}"]]},
+                    {"name": "alignment_vertical", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'bottom', 'center', 'top'}"]]},
                     {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
                     {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
                     {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
@@ -205,7 +210,8 @@
                     {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
                     {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
                     {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
+                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+                    {"name": "divBox", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
                 ]
             ]}
         ],
