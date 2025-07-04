@@ -17,7 +17,7 @@ function varargout = mSubplot(varargin)
 %     mSubplot(1, 2, 2, "paddings", [1/9, 1/18, 2/9, 1/9], ...
 %                       "margins", zeros(1, 4), ...
 %                       "nSize", [1/4, 1/2], ...
-%                       "alignment", "bottom-left");
+%                       "alignment", "left-bottom");
 %     set(0, "DefaultAxesBox", "factory");
 %
 %  ____________________________________________________________________
@@ -55,18 +55,23 @@ function varargout = mSubplot(varargin)
 %               - padding_top
 %     shape: 'auto'(default), 'square-min', 'square-max', 'fill'
 %            (NOTICE: 'fill' option is prior to [margins] and [nSize] options)
-%     alignment: how axes aligns to div.
+%     alignment: how axes aligns to <div>, either preset string or a 2-element vector that 
+%                specifies center [x,y] relative to <div> (normalized).
+%                If set positive, relative to left and bottom.
+%                If set negative, relative to right and top.
 %                This option influences how the axes is expanded or shrinked using [nSize] option.
-%                Valid values:
-%                - 'top-left',
-%                - 'top-right',
-%                - 'bottom-left',
-%                - 'bottom-right',
-%                - 'center-left',
-%                - 'center-right',
-%                - 'top-center',
-%                - 'bottom-center',
-%                - 'center'(default).
+%                Optional values:
+%                - 'left-bottom'
+%                - 'left-center'
+%                - 'left-top'
+%                - 'center-bottom'
+%                - 'center' (default)
+%                - 'center-top'
+%                - 'right-bottom'
+%                - 'right-center'
+%                - 'right-top'
+%                You can also specify [alignment_horizontal] and
+%                [alignment_vertical] separately (prior to [alignment]).
 % Output:
 %     mAxe: subplot axes object
 
@@ -93,15 +98,20 @@ mIp.addParameter("nSize", [1, 1], @(x) validateattributes(x, 'numeric', {'vector
 mIp.addParameter("margins",  [0.05, 0.05, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
 mIp.addParameter("paddings", [0.03, 0.03, 0.08, 0.05], @(x) validateattributes(x, 'numeric', {'vector', 'numel', 4}));
 mIp.addParameter("shape", "auto", @(x) any(validatestring(x, {'auto', 'square-min', 'square-max', 'fill'})));
-mIp.addParameter("alignment", 'center', @(x) any(validatestring(x, {'top-left', ...
-                                                                    'top-right', ...
-                                                                    'bottom-left', ...
-                                                                    'bottom-right', ...
-                                                                    'top-center', ...
-                                                                    'bottom-center', ...
-                                                                    'center-left', ...
-                                                                    'center-right', ...
-                                                                    'center'})));
+mIp.addParameter("alignment", 'center', @(x) (isnumeric(x) && isreal(x) && numel(x) == 2) || ...
+                                             any(validatestring(x, {'left-bottom', ...
+                                                                    'left-center', ...
+                                                                    'left-top', ...
+                                                                    'center-bottom', ...
+                                                                    'center', ...
+                                                                    'center-top', ...
+                                                                    'right-bottom', ...
+                                                                    'right-center', ...
+                                                                    'right-top'})));
+mIp.addParameter("alignment_horizontal", [], @(x) (isnumeric(x) && isscalar(x)) || ...
+                                                  any(validatestring(x, {'left', 'center', 'right'})));
+mIp.addParameter("alignment_vertical", [], @(x) (isnumeric(x) && isscalar(x)) || ...
+                                                  any(validatestring(x, {'top', 'center', 'bottom'})));
 mIp.addParameter("margin_left"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("margin_right"  , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("margin_bottom" , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
@@ -110,6 +120,7 @@ mIp.addParameter("padding_left"  , [], @(x) validateattributes(x, 'numeric', {'s
 mIp.addParameter("padding_right" , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("padding_bottom", [], @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("padding_top"   , [], @(x) validateattributes(x, 'numeric', {'scalar'}));
+mIp.addParameter("divBox", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
 mIp.parse(Fig, varargin{:})
 
 Fig            = mIp.Results.Fig      ;
@@ -129,6 +140,9 @@ padding_left   = mIp.Results.padding_left  ;
 padding_right  = mIp.Results.padding_right ;
 padding_bottom = mIp.Results.padding_bottom;
 padding_top    = mIp.Results.padding_top   ;
+divBox         = mIp.Results.divBox;
+alignment_horizontal = mIp.Results.alignment_horizontal;
+alignment_vertical   = mIp.Results.alignment_vertical;
 
 if ~isempty(margin_left)   , margins(1)  = margin_left   ; end
 if ~isempty(margin_right)  , margins(2)  = margin_right  ; end
@@ -194,44 +208,117 @@ switch shape
         error('mSubplot(): Invalid shape input');
 end
 
-switch alignment
-    case 'bottom-left'
-        axeX = divX + margins(1) * divWidth;
-        axeY = divY + margins(3) * divHeight;
-    case 'bottom-right'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
-        axeY = divY + margins(3) * divHeight;
-    case 'top-left'
-        axeX = divX + margins(1) * divWidth;
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
-    case 'top-right'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
-    case 'center-left'
-        axeX = divX + margins(1) * divWidth;
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
-    case 'center-right'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth);
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
-    case 'top-center'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight);
-    case 'bottom-center'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
-        axeY = divY + margins(3) * divHeight;
-    case 'center'
-        axeX = divX + margins(1) * divWidth  + (divWidth  * (1 - margins(1) - margins(2)) - axeWidth)  / 2;
-        axeY = divY + margins(3) * divHeight + (divHeight * (1 - margins(3) - margins(4)) - axeHeight) / 2;
-    otherwise
-        error('mSubplot(): Invalid alignment input');
+if isempty(alignment_horizontal)
+    if isnumeric(alignment)
+        alignment_horizontal = alignment(1);
+    else
+        temp = split(alignment, '-');
+        if isscalar(temp) % center
+            alignment_horizontal = 0.5;
+        else
+            alignment_horizontal = temp{1};
+        end
+    end
+end
+
+if isempty(alignment_vertical)
+    if isnumeric(alignment)
+        alignment_vertical = alignment(2);
+    else
+        temp = split(alignment, '-');
+        if isscalar(temp) % center
+            alignment_vertical = 0.5;
+        else
+            alignment_vertical = temp{2};
+        end
+    end
+end
+
+if isnumeric(alignment_horizontal)
+    if alignment_horizontal >= 0
+        axeX = divX + ((1 - margins(1) - margins(2)) * alignment_horizontal + margins(1)) * divWidth - axeWidth / 2;
+        X = (1 - margins(1) - margins(2)) * alignment_horizontal + margins(1);
+    else
+        axeX = divX + ((1 - margins(1) - margins(2)) * (1 + alignment_horizontal) + margins(1)) * divWidth - axeWidth / 2;
+        X = (1 - margins(1) - margins(2)) * (1 + alignment_horizontal) + margins(1);
+    end
+else
+    switch alignment_horizontal
+        case 'left'
+            axeX = divX + margins(1) * divWidth;
+            X = margins(1) + axeWidth / divWidth / 2;
+        case 'center'
+            axeX = divX + (1 + margins(1) - margins(2)) * divWidth / 2 - axeWidth / 2;
+            X = (1 + margins(1) - margins(2)) / 2;
+        case 'right'
+            axeX = divX + divWidth  * (1 - margins(2)) - axeWidth;
+            X = 1 - margins(2) - axeWidth / divWidth / 2;
+    end
+end
+
+if isnumeric(alignment_vertical)
+    if alignment_vertical >= 0
+        axeY = divY + ((1 - margins(3) - margins(4)) * alignment_vertical + margins(3)) * divHeight - axeHeight / 2;
+        Y = (1 - margins(3) - margins(4)) * alignment_vertical + margins(3);
+    else
+        axeY = divY + ((1 - margins(3) - margins(4)) * (1 + alignment_vertical) + margins(3)) * divHeight - axeHeight / 2;
+        Y = (1 - margins(3) - margins(4)) * (1 + alignment_vertical) + margins(3);
+    end
+else
+    switch alignment_vertical
+        case 'bottom'
+            axeY = divY + margins(3) * divHeight;
+            Y = margins(3) + axeHeight / divHeight / 2;
+        case 'center'
+            axeY = divY + (1 + margins(3) - margins(4)) * divHeight / 2 - axeHeight / 2;
+            Y = (1 + margins(3) - margins(4)) / 2;
+        case 'top'
+            axeY = divY + divHeight * (1 - margins(4)) - axeHeight;
+            Y = 1 - margins(4) - axeHeight / divHeight / 2;
+    end
+end
+
+if strcmpi(divBox, "show")
+    divAxe = axes(Fig, "Position", [divX, divY, divWidth, divHeight], "Box", "on");
+    set(divAxe, "LineWidth", 1);
+    set(divAxe, "TickLength", [0, 0]);
+    set(divAxe, "XLim", [0, 1]);
+    set(divAxe, "YLim", [0, 1]);
+    set(divAxe, "XTick", [0, 1]);
+    set(divAxe, "YTick", [0, 1]);
+    set(divAxe, "XTickLabels", num2str([0; 1]));
+    set(divAxe, "YTickLabels", num2str([0; 1]));
+
+    if ~isempty(X)
+        xline(divAxe, X, "r--");
+        addSpecialTicks(divAxe, "x", X);
+    end
+
+    if ~isempty(Y)
+        yline(divAxe, Y, "r--");
+        addSpecialTicks(divAxe, "y", Y);
+    end
+
 end
 
 mAxe = axes(Fig, "Position", [axeX, axeY, axeWidth, axeHeight]);
 
-if nargout == 1
+if nargout >= 1
     varargout{1} = mAxe;
-elseif nargout > 1
-    error("mSubplot(): the number of output should be no greater than 1");
+end
+
+if nargout == 2
+    opts.row = row;
+    opts.col = col;
+    opts.index = index;
+    opts.margins = margins;
+    opts.paddings = paddings;
+    opts.nSize = nSize;
+    opts.shape = shape;
+    opts.alignment = [X, Y];
+    opts.divPosition = [divX, divY, divWidth, divHeight];
+    opts.axesPosition = [axeX, axeY, axeWidth, axeHeight];
+    varargout{2} = opts;
 end
 
 return;

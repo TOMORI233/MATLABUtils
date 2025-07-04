@@ -222,6 +222,28 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2025/06/30 by XHX - Incompatible
+
+  | Type   | Target                                 | Content                                                      |
+  | ------ | -------------------------------------- | ------------------------------------------------------------ |
+  | Modify | `mSubplot.m`                           | 增加`alignment_horizontal`、`alignment_vertical`和`divBox`可选参数输入。调整`alignment`逻辑，支持normalized位置（如水平距离左侧1/4、上下居中：'alignment', [1/4, 1/2]），`alignment`支持的字符输入现在为`horizontal-vertical`，即'left-center', 'right-top'等 |
+  | Modify | `mHistogram.m`                         | 增加`DistributionCurve`选项，开启时将绘制分布曲线（基于`fitdist`使用'Kernel'找分布，可以换成'Normal'，即正态分布） |
+  | Debug  | `generateGradientColors.m`             | 现在可以使用任意颜色，生成其到白色的渐变色                   |
+  | Add    | `copyaxes.m`                           | 将坐标区中的图线等内容复制到另一个坐标区中，两个坐标区大小可以不一样，仅复制内容 |
+  | Add    | `addSpecialTicks.m`                    | 为坐标区在指定数值位置添加tick和tick label，默认为对应数值   |
+  | Add    | `mRaster.m`                            | 添加`border`选项，绘制Trial间的分割线                        |
+  | Add    | `mColorbar.m`                          | 在不改变目标坐标区大小的情况下添加colorbar                   |
+  | Add    | `scaleAxes.m`                          | 添加`autoTh`选项，[lower,upper]指定在`autoScale`开启时保留分布的区间，y 默认[0,1]，c 默认[0.01,0.99] |
+  | Add    | `addBars2Axes.m`                       | 为指定x区间添加垂直透明的bar，一般用于高亮显著性区间         |
+  | Add    | `addWaveErr.m`                         | 为线条添加shaded error bar，一般用于添加waveform的±SEM       |
+  | Add    | `exportcolorbar.m`                     | 导出指定colormap和cLim的colorbar图片，默认600dpi             |
+  | Add    | `mExportgraphics.m`                    | 用于导出多个可重叠的axes                                     |
+  | Delete | `calLatency.m`, `calPSTH.m`, `calFR.m` | 现已挪至`git@github.com:TOMORI233/spikeProcess.git`，并对`calPSTH`的性能进行了优化 |
+  | Add    | `+mstat`                               | 添加+mstat工具包，包含`ttest`,`ttest2`,`signrank`,`ranksum`,`anovan`，返回`p`, `effect size`, `BF10`以及统计量 |
+  | Add    | `slanCM.m`                             | plot\external\200 colormap，用于产生常用colormap，推荐使用'YlOrRd'和'RdYlBu' |
+  | Add    | `boxplotGroup.m`                       | plot\external\boxplotGroup，用于绘制分组箱型图               |
+  | Add    | `tonegen.m`                            | 用于生成具有谐波的复杂纯音                                   |
+
 - 2024/10/16 by XHX - Compatible
 
   | Type | Target    | Content                       |

@@ -51,23 +51,18 @@
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]},
-                    {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
-                    {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
-                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
+                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) isa(x, 'matlab.ui.Figure')"]},
-                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]},
-                    {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
-                    {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
-                    {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
+                    {"name": "str", "kind": "required", "type": [["string"], ["char"]]}
                 ]
-            ]}
+            ]},
+            {"name": "HorizontalAlignment", "kind": "namevalue", "type": ["choices = {'left', 'center', 'right'}"]},
+            {"name": "Position", "kind": "namevalue", "type": ["numeric", "vector"]},
+            {"name": "FontSize", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "FontWeight", "kind": "namevalue", "type": ["choices = {'normal', 'bold'}"]},
+            {"name": "Interpreter", "kind": "namevalue", "type": ["choices = {'none', 'latex', 'tex'}"]}
         ],
         "description": "添加大标题"
     },
@@ -169,20 +164,7 @@
                     {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
-                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
+                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]}
                 ],
                 [
                     {"name": "Fig", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
@@ -192,22 +174,25 @@
                     {"name": "nSize", "kind": "ordered", "type": ["numeric", "vector"]},
                     {"name": "margins", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
                     {"name": "paddings", "kind": "ordered", "type": ["numeric", "vector", "numel=4"]},
-                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
-                    {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
-                    {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
-                    {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
-                    {"name": "alignment", "kind": "namevalue", "type": ["choices = {'bottom-left', 'bottom-right', 'top-left', 'top-right', 'center-left', 'center-right', 'top-center', 'bottom-center', 'center'}"]},
-                    {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
-                    {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
-                    {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
-                    {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
-                    {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"}
+                    {"name": "shape", "kind": "ordered", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]}
                 ]
-            ]}
+            ]},
+            {"name": "nSize", "kind": "namevalue", "type": ["numeric", "vector"]},
+            {"name": "margins", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.05,.05,.08,.05])"},
+            {"name": "paddings", "kind": "namevalue", "type": ["numeric", "vector", "numel=4"], "purpose": "[left,right,bottom,top]([.03,.03,.08,.05])"},
+            {"name": "shape", "kind": "namevalue", "type": ["choices = {'auto', 'square-min', 'square-max', 'fill'}"]},
+            {"name": "alignment", "kind": "namevalue", "type": [["numeric"], ["choices = {'left-bottom', 'left-center', 'left-top', 'center-bottom', 'center', 'center-top', 'right-bottom', 'right-center', 'right-top'}"]], "purpose": "[horizontal,vertical]"},
+            {"name": "alignment_horizontal", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'left', 'center', 'right'}"]]},
+            {"name": "alignment_vertical", "kind": "namevalue", "type": [["numeric", "scalar"], ["choices = {'bottom', 'center', 'top'}"]]},
+            {"name": "margin_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+            {"name": "margin_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+            {"name": "margin_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+            {"name": "margin_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+            {"name": "padding_left", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+            {"name": "padding_right", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.03"},
+            {"name": "padding_bottom", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.08"},
+            {"name": "padding_top", "kind": "namevalue", "type": ["scalar"], "purpose": "default: 0.05"},
+            {"name": "divBox", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
         ],
         "description": "创建坐标区"
     },
@@ -264,30 +249,22 @@
             {"mutuallyExclusiveGroup": [
                 [
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
-                    {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
-                    {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
-                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
-                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]},
-                    {"name": "DistributionCurve", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
+                    {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]}
                 ],
                 [
                     {"name": "ax", "kind": "required", "type": ["@(args) strcmp(class(args), 'matlab.graphics.axis.Axes')"]},
                     {"name": "X", "kind": "required", "type": [["numeric"], ["cell"]]},
-                    {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]},
-                    {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
-                    {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
-                    {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
-                    {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
-                    {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
-                    {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]},
-                    {"name": "DistributionCurve", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
+                    {"name": "edges", "kind": "ordered", "type": ["numeric", "vector"]}
                 ]
-            ]}
+            ]},
+            {"name": "width", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "LineWidth", "kind": "namevalue", "type": ["numeric", "scalar"]},
+            {"name": "FaceColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+            {"name": "EdgeColor", "kind": "namevalue", "type": [["cell"], ["choices = {'none'}"]]},
+            {"name": "DisplayName", "kind": "namevalue", "type": ["cell"]},
+            {"name": "BinWidth", "kind": "namevalue", "type": ["numeric", "scalar", "positive"]},
+            {"name": "BinMethod", "kind": "namevalue", "type": ["choices = {'auto', 'scott', 'fd', 'integers', 'sturges', 'sqrt'}"]},
+            {"name": "DistributionCurve", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]}
         ],
         "description": "分组直方图绘制"
     },
@@ -304,7 +281,8 @@
                     {"name": "rasterData", "kind": "required", "type": ["struct"]},
                     {"name": "sz", "kind": "ordered", "type": ["scalar", "positive", "integer"]}
                 ]
-            ]}
+            ]},
+            {"name": "border", "kind": "namevalue", "type": ["logical", "scalar"]}
         ],
         "description": "绘制散点图"
     },
@@ -314,28 +292,25 @@
         "inputs": [
             {"name": "Location", "kind": "namevalue", "type": ["choices = {'northoutside', 'southoutside', 'eastoutside', 'westoutside'}"]},
             {"name": "Interval", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.01"},
-            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.05"}
+            {"name": "Width", "kind": "namevalue", "type": ["scalar", "numeric"], "purpose": "default:0.05"},
+            {"name": "Label", "kind": "namevalue", "type": [["string"], ["char"]]}
         ]
     },
     "mRaster_Blocked": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
                 [
-                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
-                    {"name": "color", "kind": "namevalue"},
-                    {"name": "labelStr", "kind": "namevalue"},
-                    {"name": "scatterSize", "kind": "namevalue"},
-                    {"name": "window", "kind": "namevalue"}
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]}
                 ],
                 [
                     {"name": "axes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
-                    {"name": "rasterData", "kind": "required", "type": ["cell"]},
-                    {"name": "color", "kind": "namevalue"},
-                    {"name": "labelStr", "kind": "namevalue"},
-                    {"name": "scatterSize", "kind": "namevalue"},
-                    {"name": "window", "kind": "namevalue"}
+                    {"name": "rasterData", "kind": "required", "type": ["cell"]}
                 ]
-            ]}
+            ]},
+            {"name": "color", "kind": "namevalue"},
+            {"name": "labelStr", "kind": "namevalue"},
+            {"name": "scatterSize", "kind": "namevalue"},
+            {"name": "window", "kind": "namevalue"}
         ]
     },
     "mPSTH_Blocked": {
@@ -345,20 +320,18 @@
                     {"name": "cellData", "kind": "required", "type": ["cell"]},
                     {"name": "PSTHWindow", "kind": "required"},
                     {"name": "binsize", "kind": "required"},
-                    {"name": "binstep", "kind": "required"},
-                    {"name": "color", "kind": "namevalue"},
-                    {"name": "labelStr", "kind": "namevalue"}
+                    {"name": "binstep", "kind": "required"}
                 ],
                 [
                     {"name": "axes", "kind": "required", "type": ["@(args) all(isgraphics(args))"]},
                     {"name": "cellData", "kind": "required", "type": ["cell"]},
                     {"name": "PSTHWindow", "kind": "required"},
                     {"name": "binsize", "kind": "required"},
-                    {"name": "binstep", "kind": "required"},
-                    {"name": "color", "kind": "namevalue"},
-                    {"name": "labelStr", "kind": "namevalue"}
+                    {"name": "binstep", "kind": "required"}
                 ]
-            ]}
+            ]},
+            {"name": "color", "kind": "namevalue"},
+            {"name": "labelStr", "kind": "namevalue"}
         ]
     }
 
