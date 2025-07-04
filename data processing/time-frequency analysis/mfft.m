@@ -26,7 +26,7 @@ dim = mIp.Results.dim;
 foi = mIp.Results.foi;
 
 if isvector(X)
-    X = reshape(X, [1, length(X)]);
+    X = X(:)';
 else
     X = permute(X, [3 - dim, dim]);
 end
