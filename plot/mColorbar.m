@@ -7,6 +7,7 @@ if isempty(varargin)
     locIdx = [];
     intervalIdx = [];
     widthIdx = [];
+    labelIdx = [];
     ax = gca;
 else
     locIdx = find(cellfun(@(x) (ischar(x) || isStringScalar(x)) && strcmpi(x, "Location"), varargin), 1);
