@@ -2,7 +2,7 @@ function [Path , ROOTPATH]= dirItem(rootPath, keyword, varargin)
 % Description: find file or folder name in rootpath
 % Input:
 %       rootpath: ROOTPATH
-%       keyword: the raw file or folder name used to find 
+%       keyword: the raw file or folder name used to find
 %       newName: the string to replace the raw name
 %       folderOrFile: decide rename file or folder
 
@@ -17,6 +17,12 @@ folderOrFile = mIp.Results.folderOrFile;
 rootPath = string(rootPath);
 keyword = string(keyword);
 temp = dir(strcat(rootPath, "\**\*"));
+if isempty(temp)
+    oldpath = cd;
+    cd(rootPath);
+    temp = dir(".\**\*");
+    cd(oldpath);
+end
 mPath = fullfile(string({temp.folder}'), string({temp.name}'));
 dirIndex = ~cellfun(@isempty, regexp(mPath, keyword)) & vertcat(temp.isdir) & ~ismember(string({temp.name}'), [".", ".."]);
 fileIndex =  ~cellfun(@isempty, regexp(mPath, keyword)) & ~vertcat(temp.isdir) & ~ismember(string({temp.name}'), [".", ".."]);
