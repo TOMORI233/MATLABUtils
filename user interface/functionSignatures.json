@@ -25,8 +25,8 @@
         "inputs": [
             {"name": "content", "kind": "required", "type": [["string", "char"], ["cell"]]},
             {"name": "title", "kind": "ordered", "type": ["string", "char"]},
-            {"name": "alignment", "kind": "ordered", "type": ["choices = {'center', 'top-left', 'top-right', 'top-center', 'center-left', 'center-right', 'bottom-left', 'bottom-right', 'bottom-center'}"]},
-            {"name": "Alignment", "kind": "namevalue", "type": ["choices = {'center', 'top-left', 'top-right', 'top-center', 'center-left', 'center-right', 'bottom-left', 'bottom-right', 'bottom-center'}"]},
+            {"name": "alignment", "kind": "ordered", "type": ["choices = {'center', 'left-top', 'right-top', 'center-top', 'left-center', 'right-center', 'left-bottom', 'right-bottom', 'center-bottom'}"]},
+            {"name": "Alignment", "kind": "namevalue", "type": ["choices = {'center', 'left-top', 'right-top', 'center-top', 'left-center', 'right-center', 'left-bottom', 'right-bottom', 'center-bottom'}"]},
             {"name": "TitleColor", "kind": "namevalue"},
             {"name": "ContentColor", "kind": "namevalue"},
             {"name": "TitleFontSize", "kind": "namevalue", "type": ["scalar", "positive"]},
