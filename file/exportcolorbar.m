@@ -15,9 +15,10 @@ cb.FontSize = 14;
 cb.FontWeight = "bold";
 clim(ax, cRange);
 
-if ShowZero && cRange(1) < 0 && cRange(2) > 0
-    cb.Ticks = [cRange(1), 0, cRange(2)];
-end
+cb.Ticks = [];
+% if ShowZero && cRange(1) < 0 && cRange(2) > 0
+%     cb.Ticks = [cRange(1), 0, cRange(2)];
+% end
 
 colormap(ax, colorMap);
 set(ax, "Visible", "off");
