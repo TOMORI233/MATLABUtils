@@ -10,9 +10,10 @@ function [A, f, Aoi, Phase] = mfft(X, fs, varargin)
 %          If [X] is a vector, [dim] input does not work.
 %     foi: frequency range of interest, one- or two-element vector
 % Output:
-%     A: single-sided amplitude spectrum
+%     A: amplitude of single-sided Fourier spectrum
 %     f: frequency vector of N-point single-sided fft
 %     Aoi: amplitude of foi
+%     Phase: phase of single-sided Fourier spectrum
 
 mIp = inputParser;
 mIp.addRequired("X", @(x) validateattributes(x, 'numeric', {'real', '2d'}));
@@ -27,6 +28,7 @@ foi = mIp.Results.foi;
 
 if isvector(X)
     X = X(:)';
+    dim = 2;
 else
     X = permute(X, [3 - dim, dim]);
 end

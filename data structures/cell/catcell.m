@@ -1,3 +1,3 @@
-function res = catcell(c, dim)
-res = cat(dim, c{:});
+function res = catcell(dim, c)
+    res = cat(dim, c{:});
 end

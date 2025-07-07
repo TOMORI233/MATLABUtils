@@ -222,6 +222,12 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2025/07/07 by XHX - Compatible
+
+  | Type | Target          | Content                                                      |
+  | ---- | --------------- | ------------------------------------------------------------ |
+  | Add  | `shuffleData.m` | 对N-D数据沿指定维进行打乱，每个slice的打乱顺序不同。需要相同的打乱顺序，请使用EEGLAB的`shuffle` |
+
 - 2025/06/30 by XHX - Incompatible
 
   | Type   | Target                                 | Content                                                      |
