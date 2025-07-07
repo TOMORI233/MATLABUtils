@@ -1,5 +1,5 @@
 function B = shuffleData(A, dim)
-% Shuffle 2-D matrix A along specific dimension, with each slice shuffled
+% Shuffle N-D matrix A along specific dimension, with each slice shuffled
 % independently.
 
 nd = ndims(A);
