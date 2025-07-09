@@ -1,6 +1,8 @@
 function B = shuffleData(A, dim)
 % Shuffle N-D matrix A along specific dimension, with each slice shuffled
-% independently.
+% independently. It is useful when performing permutation test for
+% correlation.
+% For slice shuffled with the same order, use `shuffle`.
 
 nd = ndims(A);
 
