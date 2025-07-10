@@ -4,17 +4,28 @@ function P = getAbsPath(relativePath)
 
     relativePath = char(relativePath);
 
-    if isempty(char(relativePath)) 
-        P = evalin("caller", "fileparts(mfilename('fullpath'))");
+    if isempty(char(relativePath))
+        currentPath = pwd;
+        evalin("caller", ['cd(''', pwd, ''')']);
+        P = pwd;
+        cd(currentPath);
         return;
     end
 
     if contains(relativePath, '..') || ~contains(relativePath, ':') % relative path
         currentPath = pwd;
+
+        if ~contains(relativePath, '\') && ~contains(relativePath, '/')
+            % Input is a single file name
+            P = fullfile(pwd, relativePath);
+            return;
+        end
+
         if ~exist(relativePath, "dir")
             disp(strcat(relativePath, ' does not exist. Create folder...'));
             mkdir(relativePath);
         end
+        
         evalin("caller", ['cd(''', relativePath, ''')']);
         P = pwd;
         cd(currentPath);
