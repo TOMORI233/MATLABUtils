@@ -1,4 +1,53 @@
 function varargout = mBoxplotGroup(varargin)
+% MBOXPLOTGROUP Custom grouped boxplot visualization with advanced styling options
+%
+%   ax = mBoxplotGroup(X) creates a grouped boxplot of the data in cell array X,
+%   where each cell contains a matrix representing one group (columns = categories).
+%   Returns the handle to the axes object.
+%
+%   ax = mBoxplotGroup(ax, X) plots into specified axes handle.
+%
+%   ax = mBoxplotGroup(..., Name, Value) specifies additional options:
+%
+%   DATA SPECIFICATION:
+%     'X'               - Cell array of matrices (required). Each cell represents a group, 
+%                         columns represent categories within groups.
+%
+%   GROUPING CONTROLS:
+%     'GroupLabels'     - Cell array of strings for group labels (primary labels)
+%     'CategoryLabels'  - Cell array of strings for category labels (secondary labels)
+%     'CategoryLegends' - Cell array of strings for legend entries (per category)
+%     'GroupSpace'      - Spacing between groups (default: 0.3)
+%     'CategorySpace'   - Spacing between categories within groups (default: 0.2)
+%     'GroupLines'      - Show vertical lines between groups (logical, default: false)
+%
+%   BOX APPEARANCE:
+%     'BoxEdgeType'     - Box edge calculation: 'SE', 'STD', or [low,high] percentiles
+%     'Whisker'         - Whisker percentiles [low,high] (default: [10,90])
+%     'Colors'          - Color specification (single color, cell array, or colormap)
+%     'BoxParameters'   - Cell array of patch properties for boxes
+%     'CenterLineParameters' - Properties for center lines (mean/median)
+%
+%   DATA POINTS:
+%     'IndividualDataPoint' - 'show' or 'hide' individual points (default: 'show')
+%     'SymbolParameters'    - Properties for individual data points
+%     'Jitter'             - Amount of horizontal jitter (default: 0.1)
+%
+%   EXAMPLE:
+%     data = {randn(50,2), randn(60,2)}; % 2 groups, 2 categories each
+%     mBoxplotGroup(data, ...
+%         'GroupLabels', {'Control','Treatment'}, ...
+%         'CategoryLabels', {'Method A','Method B'}, ...
+%         'BoxEdgeType', [25 75], ...
+%         'Whisker', [5 95], ...
+%         'Colors', lines(2));
+%
+%   NOTES:
+%     - For box edges: 'SE' uses mean±SE, 'STD' uses mean±STD, or specify percentiles
+%     - Category legends only shown if 'CategoryLegends' specified
+%     - Default point size is 36 (in points^2)
+
+% Copyright (c) 2025 HX Xu. All rights reserved.
 
 if isgraphics(varargin{1}(1), "axes")
     ax = varargin{1}(1);
@@ -6,6 +55,28 @@ if isgraphics(varargin{1}(1), "axes")
 else
     ax = gca;
 end
+
+defaultBoxParameters = {"LineStyle", "-", ...
+                        "LineWidth", 0.5, ...
+                        "FaceColor", "none", ...
+                        "FaceAlpha", 1};
+defaultCenterLineParameters = {"Type", "Mean", ...
+                               "LineStyle", "-", ...
+                               "LineWidth", 0.5, ...
+                               "Color", "auto"};
+defaultWhiskerParameters = {"LineStyle", "-", ...
+                            "LineWidth", 0.5, ...
+                            "Color", "auto"};
+defaultWhiskerCapParameters = {"LineStyle", "-", ...
+                               "LineWidth", 0.5, ...
+                               "Color", "auto", ...
+                               "Width", 0.4};
+defaultSymbolParameters = {"Marker", "o", ...
+                           "MarkerEdgeColor", "w", ...
+                           "MarkerFaceColor", "auto", ...
+                           "MarkerFaceAlpha", 0.3, ...
+                           "SizeData", 36, ...
+                           "LineWidth", 0.1};
 
 mIp = inputParser;
 mIp.addRequired("ax", @(x) isgraphics(x, "axes"));
@@ -19,27 +90,12 @@ mIp.addParameter("CategorySpace", 0.2, @(x) validateattributes(x, 'numeric', {'s
 mIp.addParameter("Colors", [1, 0, 0]);
 mIp.addParameter("BoxEdgeType", "SE");
 mIp.addParameter("Whisker", [10, 90]);
-mIp.addParameter("BoxParameters", {"LineStyle", "-", ...
-                                   "LineWidth", 0.5, ...
-                                   "FaceColor", "none", ...
-                                   "FaceAlpha", 0});
-mIp.addParameter("CenterLineParameters", {"Type", "Mean", ...
-                                          "LineStyle", "-", ...
-                                          "LineWidth", 0.5, ...
-                                          "Color", "auto"});
-mIp.addParameter("WhiskerParameters", {"LineStyle", "-", ...
-                                       "LineWidth", 0.5, ...
-                                       "Color", "auto"});
-mIp.addParameter("WhiskerCapParameters", {"LineStyle", "-", ...
-                                          "LineWidth", 0.5, ...
-                                          "Color", "auto", ...
-                                          "Width", 0.4});
+mIp.addParameter("BoxParameters", defaultBoxParameters, @(x) iscell(x));
+mIp.addParameter("CenterLineParameters", defaultCenterLineParameters, @(x) iscell(x));
+mIp.addParameter("WhiskerParameters", defaultWhiskerParameters, @(x) iscell(x));
+mIp.addParameter("WhiskerCapParameters", defaultWhiskerCapParameters, @(x) iscell(x));
 mIp.addParameter("IndividualDataPoint", "show", @(x) any(validatestring(x, {'show', 'hide'})));
-mIp.addParameter("SymbolParameters", {"Marker", "o", ...
-                                      "MarkerEdgeColor", "w", ...
-                                      "MarkerFaceColor", "r", ...
-                                      "MarkerFaceAlpha", 0.3, ...
-                                      "LineWidth", 0.1}, @(x) iscell(x));
+mIp.addParameter("SymbolParameters", defaultSymbolParameters, @(x) iscell(x));
 mIp.addParameter("Jitter", 0.1, @(x) validateattributes(x, 'numeric', {'scalar'}));
 
 mIp.parse(ax, varargin{:});
@@ -53,13 +109,13 @@ CategoryLegends = cellstr(mIp.Results.CategoryLegends);
 CategorySpace = mIp.Results.CategorySpace;
 Colors = mIp.Results.Colors;
 BoxEdgeType = mIp.Results.BoxEdgeType;
-BoxParameters = mIp.Results.BoxParameters;
-CenterLineParameters = mIp.Results.CenterLineParameters;
+BoxParameters = getOrCellParameters(mIp.Results.BoxParameters, defaultBoxParameters);
+CenterLineParameters = getOrCellParameters(mIp.Results.CenterLineParameters, defaultCenterLineParameters);
 Whisker = mIp.Results.Whisker;
-WhiskerParameters = mIp.Results.WhiskerParameters;
-WhiskerCapParameters = mIp.Results.WhiskerCapParameters;
+WhiskerParameters = getOrCellParameters(mIp.Results.WhiskerParameters, defaultWhiskerParameters);
+WhiskerCapParameters = getOrCellParameters(mIp.Results.WhiskerCapParameters, defaultWhiskerCapParameters);
 IndividualDataPoint = mIp.Results.IndividualDataPoint;
-SymbolParameters = mIp.Results.SymbolParameters;
+SymbolParameters = getOrCellParameters(mIp.Results.SymbolParameters, defaultSymbolParameters);
 Jitter = mIp.Results.Jitter;
 
 % Validate
@@ -111,13 +167,13 @@ elseif iscell(Colors)
     Colors = cellfun(@(x) validatecolor(x, 'multiple'), Colors(:), "UniformOutput", false);
 
     % specifies colors for each category in each group
-    if iseuqal(cellfun(@(x) size(x, 1), Colors), nCategory)
+    if isequal(cellfun(@(x) size(x, 1), Colors), nCategory)
         
     else % specifies colors for each category by looping assignment
         Colors = mCell2mat(Colors);
         Colors = repmat(Colors, ceil(sum(nCategory) / size(Colors, 1)), 1);
-        Colors = Colors(1:sum(nCategory));
-        Colors = mat2cell(Colors, nCategory, []);
+        Colors = Colors(1:sum(nCategory), :);
+        Colors = mat2cell(Colors, nCategory, size(Colors, 2));
     end
 
 end
@@ -146,8 +202,15 @@ for gIndex = 1:nGroup
 
         % plot individual data points
         if strcmpi(IndividualDataPoint, "show")
+            idx = find(cellfun(@(x) strcmpi(x, "MarkerFaceColor"), SymbolParameters), 1);
+            if ~isempty(idx) && strcmpi(SymbolParameters{idx + 1}, "auto")
+                params = SymbolParameters;
+                params{idx + 1} = Colors{gIndex}(cIndex, :);
+            else
+                params = SymbolParameters;
+            end
             swarmchart(boxCenter * ones(numel(X{gIndex}(:, cIndex)), 1), X{gIndex}(:, cIndex), ...
-                       "XJitterWidth", Jitter, SymbolParameters{:});
+                       "XJitterWidth", Jitter, params{:});
         end
         
         % plot box
@@ -179,6 +242,8 @@ for gIndex = 1:nGroup
         if ~isempty(idx) && strcmpi(CenterLineParameters{idx + 1}, "auto")
             params = CenterLineParameters;
             params{idx + 1} = Colors{gIndex}(cIndex, :);
+        else
+            params = CenterLineParameters;
         end
         line(ax, [left, right], [yCenterLine, yCenterLine], params{:});
 
@@ -189,6 +254,8 @@ for gIndex = 1:nGroup
             if ~isempty(idx) && strcmpi(WhiskerParameters{idx + 1}, "auto")
                 params = WhiskerParameters;
                 params{idx + 1} = Colors{gIndex}(cIndex, :);
+            else
+                params = WhiskerParameters;
             end
             line(ax, [boxCenter, boxCenter], [bottom, whiskerLower{gIndex}(cIndex)], params{:});
             line(ax, [boxCenter, boxCenter], [top,    whiskerUpper{gIndex}(cIndex)], params{:});
@@ -198,6 +265,8 @@ for gIndex = 1:nGroup
             if ~isempty(idx) && strcmpi(WhiskerCapParameters{idx + 1}, "auto")
                 params = WhiskerCapParameters;
                 params{idx + 1} = Colors{gIndex}(cIndex, :);
+            else
+                params = WhiskerCapParameters;
             end
             line(ax, [boxCenter - whiskerCapWidth(gIndex) / 2, boxCenter + whiskerCapWidth(gIndex) / 2], ...
                      [whiskerLower{gIndex}(cIndex), whiskerLower{gIndex}(cIndex)], params{:});
@@ -213,7 +282,6 @@ for gIndex = 1:nGroup
     end
 
 end
-hold(ax, 'off');
 
 if ~isempty(CategoryLegends)
     validHandles = isgraphics(legendHandles);
@@ -230,25 +298,36 @@ end
 return;
 end
 
+function A = getOrCellParameters(C, default)
+    params0 = cellstr(default(1:2:end));
+    params = cellstr(C(1:2:end));
+    A = C(:)';
+
+    for index = 1:numel(params0)
+        if ~ismember(params0(index), params)
+            A = [A, params0(index), default(2 * index)];
+        end
+    end
+
+    return;
+end
+
 function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
-    % 设置分组和类别标签
+    % label positions
+    groupCenters = cellfun(@(l, r) mean([l(:), r(:)], 2), boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
+    categoryCenters = cellfun(@(l, r) (l + r) / 2, boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
+
+    % remove current xticklabels
+    set(ax, 'XTickLabel', [], 'XTick', cat(2, categoryCenters{:}));
     
-    % 清除现有标签
-    set(ax, 'XTickLabel', [], 'XTick', []);
-    
-    % 计算标签位置
-    groupCenters = cellfun(@(l,r) mean([l(:), r(:)], 2), boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
-    categoryCenters = cellfun(@(l,r) (l + r)/2, boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
-    
-    % 获取当前坐标轴位置
-    axPos = get(ax, 'Position');
+    % current axes positions
     ylims = ylim(ax);
     labelYPos = ylims(1) - 0.01 * diff(ylims);
     
-    % 绘制分组标签 (主标签)
+    % group labels (secondary labels)
     if ~all(cellfun(@isempty, GroupLabels)) && numel(GroupLabels) == nGroup
         for g = 1:nGroup
-            text(ax, mean(groupCenters{g}), labelYPos, GroupLabels{g}, ...
+            text(ax, mean(groupCenters{g}), labelYPos - 0.01 * diff(ylims), GroupLabels{g}, ...
                  'HorizontalAlignment', 'center', ...
                  'VerticalAlignment', 'top', ...
                  'FontWeight', 'bold', ...
@@ -256,16 +335,17 @@ function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, Group
         end
     end
     
-    % 绘制类别标签 (次标签)
+    % category labels (primary labels)
     if ~all(cellfun(@isempty, CategoryLabels)) && numel(CategoryLabels) >= max(nCategory)
         for g = 1:nGroup
             for c = 1:nCategory(g)
-                text(ax, categoryCenters{g}(c), labelYPos - 0.01 * diff(ylims), CategoryLabels{c}, ...
+                text(ax, categoryCenters{g}(c), labelYPos, CategoryLabels{c}, ...
                      'HorizontalAlignment', 'center', ...
                      'VerticalAlignment', 'top', ...
-                     'FontSize', get(ax, 'FontSize') * 0.9);
+                     'FontSize', get(ax, 'FontSize'));
             end
         end
     end
 
+    return;
 end

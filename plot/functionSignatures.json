@@ -296,6 +296,7 @@
             {"name": "Label", "kind": "namevalue", "type": [["string"], ["char"]]}
         ]
     },
+
     "mRaster_Blocked": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
@@ -313,6 +314,7 @@
             {"name": "window", "kind": "namevalue"}
         ]
     },
+
     "mPSTH_Blocked": {
         "inputs": [
             {"mutuallyExclusiveGroup": [
@@ -333,6 +335,37 @@
             {"name": "color", "kind": "namevalue"},
             {"name": "labelStr", "kind": "namevalue"}
         ]
+    },
+
+    "mBoxplotGroup": {
+        "inputs": [
+            {"mutuallyExclusiveGroup": [
+                [
+                    {"name": "X", "kind": "required", "type": ["cell"], "purpose": "Each column is a category"}
+                ],
+                [
+                    {"name": "ax", "kind": "required", "type": ["@(args) isscalar(args) && all(isgraphics(args))"]},
+                    {"name": "X", "kind": "required", "type": ["cell"], "purpose": "Each column is a category"}
+                ]
+            ]},
+            {"name": "Colors", "kind": "namevalue", "type": [["numeric"], ["cell"]]},
+            {"name": "BoxEdgeType", "kind": "namevalue", "type": [["choices = {'SE', 'STD'}"], ["numeric", "numel=2"]]},
+            {"name": "BoxParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth',0.5,'FaceColor','none','FaceAlpha',1}"},
+            {"name": "CeterLineParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'Type','Mean','LineStyle','-','LineWidth',0.5,'Color','auto'}"},
+            {"name": "Whisker", "kind": "namevalue", "type": ["numeric", "numel=2"]},
+            {"name": "WhiskerParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth',0.5,'Color','auto'}"},
+            {"name": "WhiskerCapParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth',0.5,'Color','auto','Width',0.4}"},
+            {"name": "GroupLabels", "kind": "namevalue", "type": [["cell"], ["char"], ["string"]]},
+            {"name": "GroupLines", "kind": "namevalue", "type": ["logical", "scalar"]},
+            {"name": "GroupSpace", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.3"},
+            {"name": "CategoryLabels", "kind": "namevalue", "type": [["cell"], ["char"], ["string"]]},
+            {"name": "CategoryLegends", "kind": "namevalue", "type": [["cell"], ["char"], ["string"]]},
+            {"name": "CategorySpace", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.2"},
+            {"name": "IndividualDataPoint", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]},
+            {"name": "SymbolParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'Marker','o','SizeData',36,'MarkerEdgeColor','w','MarkerFaceColor','auto','MarkerFaceAlpha',0.3,'LineWidth',0.1}"},
+            {"name": "Jitter", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.1"}
+        ]
+        
     }
 
 }
