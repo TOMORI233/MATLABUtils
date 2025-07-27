@@ -316,6 +316,8 @@ if nargout == 2
     varargout{2} = labelAx;
 end
 
+% redirect gca to ax
+axes(ax);
 return;
 end
 
