@@ -289,10 +289,16 @@ if ~isempty(CategoryLegends)
            'Location', 'best', 'AutoUpdate', 'off');
 end
 
-setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
+xlim(ax, [0.5, nGroup + 0.5]);
+drawnow;
+labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels);
 
-if nargout == 1
+if nargout >= 1
     varargout{1} = ax;
+end
+
+if nargout == 2
+    varargout{2} = labelAx;
 end
 
 return;
@@ -312,24 +318,31 @@ function A = getOrCellParameters(C, default)
     return;
 end
 
-function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
+function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
     % label positions
-    groupCenters = cellfun(@(l, r) mean([l(:), r(:)], 2), boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
     categoryCenters = cellfun(@(l, r) (l + r) / 2, boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
 
     % remove current xticklabels
     set(ax, 'XTickLabel', [], 'XTick', cat(2, categoryCenters{:}));
-    
+
     % current axes positions
-    ylims = ylim(ax);
-    labelYPos = ylims(1) - 0.01 * diff(ylims);
-    
+    pos = get(ax, "Position");
+    labelAx = axes("Position", [pos(1), pos(2) - pos(4) * 0.15, pos(3), pos(4) * 0.15], "Visible", "off");
+
+    % label position
+    labelPosY_category = 0.8;
+    if ~all(cellfun(@isempty, CategoryLabels)) && ~all(cellfun(@isempty, GroupLabels))
+        labelPosY_group = 0.5;
+    elseif all(cellfun(@isempty, CategoryLabels)) && ~all(cellfun(@isempty, GroupLabels))
+        labelPosY_group = 0.8;
+    end
+
     % group labels (secondary labels)
     if ~all(cellfun(@isempty, GroupLabels)) && numel(GroupLabels) == nGroup
         for g = 1:nGroup
-            text(ax, mean(groupCenters{g}), labelYPos - 0.01 * diff(ylims), GroupLabels{g}, ...
+            text(labelAx, g, labelPosY_group, GroupLabels{g}, ...
                  'HorizontalAlignment', 'center', ...
-                 'VerticalAlignment', 'top', ...
+                 'VerticalAlignment', 'middle', ...
                  'FontWeight', 'bold', ...
                  'FontSize', get(ax, 'FontSize'));
         end
@@ -339,13 +352,15 @@ function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, Group
     if ~all(cellfun(@isempty, CategoryLabels)) && numel(CategoryLabels) >= max(nCategory)
         for g = 1:nGroup
             for c = 1:nCategory(g)
-                text(ax, categoryCenters{g}(c), labelYPos, CategoryLabels{c}, ...
+                text(labelAx, categoryCenters{g}(c), labelPosY_category, CategoryLabels{c}, ...
                      'HorizontalAlignment', 'center', ...
-                     'VerticalAlignment', 'top', ...
+                     'VerticalAlignment', 'middle', ...
                      'FontSize', get(ax, 'FontSize'));
             end
         end
     end
 
+    xlim(labelAx, [0.5, nGroup + 0.5]);
+    ylim(labelAx, [0, 1]);
     return;
 end
