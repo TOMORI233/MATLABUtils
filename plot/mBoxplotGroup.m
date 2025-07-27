@@ -336,26 +336,33 @@ function A = getOrCellParameters(C, default)
 end
 
 function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
+    hasGroupLabels = ~all(cellfun(@isempty, GroupLabels));
+    hasCategoryLabels = ~all(cellfun(@isempty, CategoryLabels));
+
     % label positions
     categoryCenters = (boxEdgeLeft + boxEdgeRight) / 2; % category-by-group
 
-    % remove current xticklabels
-    set(ax, 'XTickLabel', [], 'XTick', sort(categoryCenters(:), "ascend"));
+    if hasGroupLabels && ~hasCategoryLabels
+        set(ax, 'XTick', sort(categoryCenters(:), "ascend"), ...
+                'XTickLabel', repmat(GroupLabels(:)', 1, nCategory));
+        labelAx = [];
+    elseif ~hasGroupLabels && hasCategoryLabels
+        set(ax, 'XTick', 1:nCategory, ...
+                'XTickLabel', CategoryLabels);
+        labelAx = [];
+    elseif hasGroupLabels && hasCategoryLabels
+        % remove current xticklabels
+        set(ax, 'XTick', sort(categoryCenters(:), "ascend"), 'XTickLabel', []);
 
-    % current axes positions
-    pos = get(ax, "Position");
-    labelAx = axes("Position", [pos(1), pos(2) - pos(4) * 0.15, pos(3), pos(4) * 0.15], "Visible", "off");
+        % current axes positions
+        pos = get(ax, "Position");
+        labelAx = axes("Position", [pos(1), pos(2) - pos(4) * 0.15, pos(3), pos(4) * 0.15], "Visible", "off");
 
-    % label position
-    labelPosY_group = 0.8;
-    if ~all(cellfun(@isempty, CategoryLabels)) && ~all(cellfun(@isempty, GroupLabels))
+        % label position
+        labelPosY_group = 0.8;
         labelPosY_category = 0.5;
-    elseif ~all(cellfun(@isempty, CategoryLabels)) && all(cellfun(@isempty, GroupLabels))
-        labelPosY_category = 0.8;
-    end
 
-    % group labels (primary labels)
-    if ~all(cellfun(@isempty, GroupLabels)) && numel(GroupLabels) == nGroup
+        % group labels (primary labels)
         for gIndex = 1:nGroup
             for cIndex = 1:nCategory
                 text(labelAx, categoryCenters(cIndex, gIndex), labelPosY_group, GroupLabels{gIndex}, ...
@@ -365,10 +372,8 @@ function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRi
                      'FontSize', get(ax, 'FontSize'));
             end
         end
-    end
-    
-    % category labels (secondary labels)
-    if ~all(cellfun(@isempty, CategoryLabels)) && numel(CategoryLabels) == nCategory
+
+        % category labels (secondary labels)
         for cIndex = 1:nCategory
             text(labelAx, cIndex, labelPosY_category, CategoryLabels{cIndex}, ...
                  'HorizontalAlignment', 'center', ...
@@ -377,9 +382,10 @@ function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRi
                  'FontWeight', 'bold', ...
                  'FontSize', get(ax, 'FontSize'));
         end
+
+        xlim(labelAx, [0.5, nCategory + 0.5]);
+        ylim(labelAx, [0, 1]);
     end
 
-    xlim(labelAx, [0.5, nCategory + 0.5]);
-    ylim(labelAx, [0, 1]);
     return;
 end
