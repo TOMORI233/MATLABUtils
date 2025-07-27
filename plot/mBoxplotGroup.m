@@ -16,9 +16,9 @@ function varargout = mBoxplotGroup(varargin)
 %   GROUPING CONTROLS:
 %     'GroupLabels'     - Cell array of strings for group labels (primary labels)
 %     'CategoryLabels'  - Cell array of strings for category labels (secondary labels)
-%     'CategoryLegends' - Cell array of strings for legend entries (per category)
-%     'GroupSpace'      - Spacing between groups (default: 0.3)
-%     'CategorySpace'   - Spacing between categories within groups (default: 0.2)
+%     'GroupLegends'    - Cell array of strings for legend entries (per group)
+%     'GroupSpace'      - Spacing between groups (default: 0.1)
+%     'CategorySpace'   - Spacing between categories within groups (default: 0.4)
 %     'GroupLines'      - Show vertical lines between groups (logical, default: false)
 %
 %   BOX APPEARANCE:
@@ -43,6 +43,7 @@ function varargout = mBoxplotGroup(varargin)
 %         'Colors', lines(2));
 %
 %   NOTES:
+%     - For different category numbers across groups, use NAN values to fill the columns
 %     - For box edges: 'SE' uses mean±SE, 'STD' uses mean±STD, or specify percentiles
 %     - Category legends only shown if 'CategoryLegends' specified
 %     - Default point size is 36 (in points^2)
@@ -82,11 +83,11 @@ mIp = inputParser;
 mIp.addRequired("ax", @(x) isgraphics(x, "axes"));
 mIp.addRequired("X", @(x) validateattributes(x, 'cell', {'vector'}));
 mIp.addParameter("GroupLabels", '');
-mIp.addParameter("GroupSpace", 0.3, @(x) validateattributes(x, 'numeric', {'scalar'}));
+mIp.addParameter("GroupLegends", '');
+mIp.addParameter("GroupSpace", 0.1, @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("GroupLines", false, @(x) validateattributes(x, 'logical', {'scalar'}));
 mIp.addParameter("CategoryLabels", '');
-mIp.addParameter("CategoryLegends", '');
-mIp.addParameter("CategorySpace", 0.2, @(x) validateattributes(x, 'numeric', {'scalar'}));
+mIp.addParameter("CategorySpace", 0.4, @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("Colors", [1, 0, 0]);
 mIp.addParameter("BoxEdgeType", "SE");
 mIp.addParameter("Whisker", [10, 90]);
@@ -105,7 +106,7 @@ GroupLabels = cellstr(mIp.Results.GroupLabels);
 GroupSpace = mIp.Results.GroupSpace;
 GroupLines = mIp.Results.GroupLines;
 CategoryLabels = cellstr(mIp.Results.CategoryLabels);
-CategoryLegends = cellstr(mIp.Results.CategoryLegends);
+GroupLegends = cellstr(mIp.Results.GroupLegends);
 CategorySpace = mIp.Results.CategorySpace;
 Colors = mIp.Results.Colors;
 BoxEdgeType = mIp.Results.BoxEdgeType;
@@ -120,22 +121,29 @@ Jitter = mIp.Results.Jitter;
 
 % Validate
 X = X(:);
-nCategory = cellfun(@(x) size(x, 2), X);
+nCategory = cellfun(@(x) size(x, 2), X); % category number under each group
+if ~all(nCategory == nCategory(1))
+    error("All groups should contain the same categories. If not, please fill NAN values for that column.");
+end
+nCategory = nCategory(1);
 nGroup = numel(X);
+
 if ~isempty(Whisker)
     validateattributes(Whisker, 'numeric', {'numel', 2, 'increasing', 'positive', '<=', 100});
 end
 
-% Compute group edge - left & right
-groupEdgeLeft  = (1:nGroup)' - 0.5 + GroupSpace / 2;
-groupEdgeRight = (1:nGroup)' + 0.5 - GroupSpace / 2;
+% Compute group edge (left & right) for each group
+groupEdgeLeft  = (1:nCategory)' - 0.5 + CategorySpace / 2;
+groupEdgeRight = (1:nCategory)' + 0.5 - CategorySpace / 2;
 
 % Compute box width
-boxWidth = (1 - (nCategory - 1) * CategorySpace) ./ nCategory * (groupEdgeRight(1) - groupEdgeLeft(1));
+boxWidth = (1 - (nGroup - 1) * GroupSpace) / nGroup * (groupEdgeRight(1) - groupEdgeLeft(1));
 
-% Compute box edge - left & right
-boxEdgeLeft  = arrayfun(@(x, y, z) x:z + CategorySpace:y, groupEdgeLeft, groupEdgeRight, boxWidth, "UniformOutput", false);
-boxEdgeRight = arrayfun(@(x, y, z) x + z:z + CategorySpace:y + z, groupEdgeLeft, groupEdgeRight, boxWidth, "UniformOutput", false);
+% Compute box edge (left & right) for each category
+boxEdgeLeft  = arrayfun(@(x, y) x:boxWidth + GroupSpace * (groupEdgeRight(1) - groupEdgeLeft(1)):y, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
+boxEdgeRight = arrayfun(@(x, y) x + boxWidth:boxWidth + GroupSpace * (groupEdgeRight(1) - groupEdgeLeft(1)):y + boxWidth, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
+boxEdgeLeft  = cat(1, boxEdgeLeft {:}); % category-by-group
+boxEdgeRight = cat(1, boxEdgeRight{:}); % category-by-group
 
 % Compute box edge - top & bottom
 if strcmpi(BoxEdgeType, "se")
@@ -150,10 +158,14 @@ elseif isnumeric(BoxEdgeType) && numel(BoxEdgeType) == 2 && BoxEdgeType(2) > Box
 else
     error("[BoxEdgeType] should be 'SE', 'STD', or a 2-element percentile vector");
 end
+boxEdgeLower = cat(1, boxEdgeLower{:})'; % category-by-group
+boxEdgeUpper = cat(1, boxEdgeUpper{:})'; % category-by-group
 
 % Compute whisker
 whiskerLower = cellfun(@(x) prctile(x, Whisker(1), 1), X, "UniformOutput", false);
 whiskerUpper = cellfun(@(x) prctile(x, Whisker(2), 1), X, "UniformOutput", false);
+whiskerLower = cat(1, whiskerLower{:})'; % category-by-group
+whiskerUpper = cat(1, whiskerUpper{:})'; % category-by-group
 idx = find(cellfun(@(x) strcmpi(x, "Width"), WhiskerCapParameters), 1);
 if ~isempty(idx)
     whiskerCapWidth = WhiskerCapParameters{idx + 1} * boxWidth;
@@ -162,18 +174,21 @@ end
 
 % Colors
 if isnumeric(Colors) % single color for all boxes
-    Colors = arrayfun(@(x) repmat(validatecolor(Colors), x, 1), nCategory, "UniformOutput", false);
+    Colors = repmat(validatecolor(Colors), nCategory, 1);
 elseif iscell(Colors)
+    if numel(Colors) ~= nGroup
+        error("The number of colors should be equal to the number of groups.");
+    end
     Colors = cellfun(@(x) validatecolor(x, 'multiple'), Colors(:), "UniformOutput", false);
 
     % specifies colors for each category in each group
-    if isequal(cellfun(@(x) size(x, 1), Colors), nCategory)
-        
-    else % specifies colors for each category by looping assignment
-        Colors = mCell2mat(Colors);
-        Colors = repmat(Colors, ceil(sum(nCategory) / size(Colors, 1)), 1);
-        Colors = Colors(1:sum(nCategory), :);
-        Colors = mat2cell(Colors, nCategory, size(Colors, 2));
+    nColor = cellfun(@(x) size(x, 1), Colors);
+    for cIndex = 1:nGroup
+        if nColor == 1
+            Colors{cIndex} = repmat(Colors{cIndex}, nCategory, 1);
+        elseif nColor(cIndex) ~= nCategory
+            error("The number of colors should be equal to the number of categories.");
+        end
     end
 
 end
@@ -188,16 +203,16 @@ else
 end
 
 % Boxplot
-legendHandles = gobjects(1, max(nCategory));
-legendLabels = cell(1, max(nCategory));
+legendHandles = gobjects(1, nGroup);
+legendLabels = cell(1, nGroup);
 hold(ax, 'on');
-for gIndex = 1:nGroup
+for cIndex = 1:nCategory
 
-    for cIndex = 1:nCategory(gIndex)
-        left = boxEdgeLeft{gIndex}(cIndex);
-        right = boxEdgeRight{gIndex}(cIndex);
-        bottom = boxEdgeLower{gIndex}(cIndex);
-        top = boxEdgeUpper{gIndex}(cIndex);
+    for gIndex = 1:nGroup
+        left = boxEdgeLeft(cIndex, gIndex);
+        right = boxEdgeRight(cIndex, gIndex);
+        bottom = boxEdgeLower(cIndex, gIndex);
+        top = boxEdgeUpper(cIndex, gIndex);
         boxCenter = (left + right) / 2;
 
         % plot individual data points
@@ -214,14 +229,14 @@ for gIndex = 1:nGroup
         end
         
         % plot box
-        if gIndex == 1
+        if cIndex == 1
             % set legends
-            legendHandles(cIndex) = patch(ax, "XData", [left, right, right, left], ...
+            legendHandles(gIndex) = patch(ax, "XData", [left, right, right, left], ...
                                               "YData", [bottom, bottom, top, top], ...
                                               "EdgeColor", Colors{gIndex}(cIndex, :), ...
                                               BoxParameters{:});
-            if ~isempty(CategoryLegends) && numel(CategoryLegends) >= cIndex
-                legendLabels{cIndex} = CategoryLegends{cIndex};
+            if ~isempty(GroupLegends) && numel(GroupLegends) >= gIndex
+                legendLabels{gIndex} = GroupLegends{gIndex};
             end
         else
             patch(ax, "XData", [left, right, right, left], ...
@@ -257,8 +272,8 @@ for gIndex = 1:nGroup
             else
                 params = WhiskerParameters;
             end
-            line(ax, [boxCenter, boxCenter], [bottom, whiskerLower{gIndex}(cIndex)], params{:});
-            line(ax, [boxCenter, boxCenter], [top,    whiskerUpper{gIndex}(cIndex)], params{:});
+            line(ax, [boxCenter, boxCenter], [bottom, whiskerLower(cIndex, gIndex)], params{:});
+            line(ax, [boxCenter, boxCenter], [top,    whiskerUpper(cIndex, gIndex)], params{:});
             
             % whisker cap
             idx = find(cellfun(@(x) strcmpi(x, "Color"), WhiskerCapParameters), 1);
@@ -268,28 +283,28 @@ for gIndex = 1:nGroup
             else
                 params = WhiskerCapParameters;
             end
-            line(ax, [boxCenter - whiskerCapWidth(gIndex) / 2, boxCenter + whiskerCapWidth(gIndex) / 2], ...
-                     [whiskerLower{gIndex}(cIndex), whiskerLower{gIndex}(cIndex)], params{:});
-            line(ax, [boxCenter - whiskerCapWidth(gIndex) / 2, boxCenter + whiskerCapWidth(gIndex) / 2], ...
-                     [whiskerUpper{gIndex}(cIndex), whiskerUpper{gIndex}(cIndex)], params{:});
+            line(ax, [boxCenter - whiskerCapWidth / 2, boxCenter + whiskerCapWidth / 2], ...
+                     [whiskerLower(cIndex, gIndex), whiskerLower(cIndex, gIndex)], params{:});
+            line(ax, [boxCenter - whiskerCapWidth / 2, boxCenter + whiskerCapWidth / 2], ...
+                     [whiskerUpper(cIndex, gIndex), whiskerUpper(cIndex, gIndex)], params{:});
         end
 
         % plot group lines
-        if GroupLines && gIndex > 1
-            xline(gIndex - 0.5);
+        if GroupLines && cIndex > 1
+            xline(cIndex - 0.5);
         end
 
     end
 
 end
 
-if ~isempty(CategoryLegends)
+if ~all(cellfun(@isempty, GroupLegends))
     validHandles = isgraphics(legendHandles);
     legend(ax, legendHandles(validHandles), legendLabels(validHandles), ...
            'Location', 'best', 'AutoUpdate', 'off');
 end
 
-xlim(ax, [0.5, nGroup + 0.5]);
+xlim(ax, [0.5, nCategory + 0.5]);
 drawnow;
 labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels);
 
@@ -320,40 +335,28 @@ end
 
 function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
     % label positions
-    categoryCenters = cellfun(@(l, r) (l + r) / 2, boxEdgeLeft, boxEdgeRight, 'UniformOutput', false);
+    categoryCenters = (boxEdgeLeft + boxEdgeRight) / 2; % category-by-group
 
     % remove current xticklabels
-    set(ax, 'XTickLabel', [], 'XTick', cat(2, categoryCenters{:}));
+    set(ax, 'XTickLabel', [], 'XTick', sort(categoryCenters(:), "ascend"));
 
     % current axes positions
     pos = get(ax, "Position");
     labelAx = axes("Position", [pos(1), pos(2) - pos(4) * 0.15, pos(3), pos(4) * 0.15], "Visible", "off");
 
     % label position
-    labelPosY_category = 0.8;
+    labelPosY_group = 0.8;
     if ~all(cellfun(@isempty, CategoryLabels)) && ~all(cellfun(@isempty, GroupLabels))
-        labelPosY_group = 0.5;
-    elseif all(cellfun(@isempty, CategoryLabels)) && ~all(cellfun(@isempty, GroupLabels))
-        labelPosY_group = 0.8;
+        labelPosY_category = 0.5;
+    elseif ~all(cellfun(@isempty, CategoryLabels)) && all(cellfun(@isempty, GroupLabels))
+        labelPosY_category = 0.8;
     end
 
-    % group labels (secondary labels)
+    % group labels (primary labels)
     if ~all(cellfun(@isempty, GroupLabels)) && numel(GroupLabels) == nGroup
-        for g = 1:nGroup
-            text(labelAx, g, labelPosY_group, GroupLabels{g}, ...
-                 'HorizontalAlignment', 'center', ...
-                 'VerticalAlignment', 'middle', ...
-                 'FontWeight', 'bold', ...
-                 "FontName", "Arial", ...
-                 'FontSize', get(ax, 'FontSize'));
-        end
-    end
-    
-    % category labels (primary labels)
-    if ~all(cellfun(@isempty, CategoryLabels)) && numel(CategoryLabels) >= max(nCategory)
-        for g = 1:nGroup
-            for c = 1:nCategory(g)
-                text(labelAx, categoryCenters{g}(c), labelPosY_category, CategoryLabels{c}, ...
+        for gIndex = 1:nGroup
+            for cIndex = 1:nCategory
+                text(labelAx, categoryCenters(cIndex, gIndex), labelPosY_group, GroupLabels{gIndex}, ...
                      'HorizontalAlignment', 'center', ...
                      'VerticalAlignment', 'middle', ...
                      "FontName", "Arial", ...
@@ -361,8 +364,20 @@ function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRi
             end
         end
     end
+    
+    % category labels (secondary labels)
+    if ~all(cellfun(@isempty, CategoryLabels)) && numel(CategoryLabels) == nCategory
+        for cIndex = 1:nCategory
+            text(labelAx, cIndex, labelPosY_category, CategoryLabels{cIndex}, ...
+                 'HorizontalAlignment', 'center', ...
+                 'VerticalAlignment', 'middle', ...
+                 "FontName", "Arial", ...
+                 'FontWeight', 'bold', ...
+                 'FontSize', get(ax, 'FontSize'));
+        end
+    end
 
-    xlim(labelAx, [0.5, nGroup + 0.5]);
+    xlim(labelAx, [0.5, nCategory + 0.5]);
     ylim(labelAx, [0, 1]);
     return;
 end
