@@ -174,7 +174,7 @@ end
 
 % Colors
 if isnumeric(Colors) % single color for all boxes
-    Colors = repmat(validatecolor(Colors), nCategory, 1);
+    Colors = repmat({repmat(validatecolor(Colors), nCategory, 1)}, nGroup, 1);
 elseif iscell(Colors)
     if numel(Colors) ~= nGroup
         error("The number of colors should be equal to the number of groups.");
@@ -298,22 +298,17 @@ for cIndex = 1:nCategory
 
 end
 
-if ~all(cellfun(@isempty, GroupLegends))
-    validHandles = isgraphics(legendHandles);
-    legend(ax, legendHandles(validHandles), legendLabels(validHandles), ...
-           'Location', 'best', 'AutoUpdate', 'off');
-end
-
 xlim(ax, [0.5, nCategory + 0.5]);
 drawnow;
-labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels);
+setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels);
+
+if ~all(cellfun(@isempty, GroupLegends))
+    validHandles = isgraphics(legendHandles);
+    legend(ax, legendHandles(validHandles), legendLabels(validHandles), 'Location', 'best', 'AutoUpdate', 'off');
+end
 
 if nargout >= 1
     varargout{1} = ax;
-end
-
-if nargout == 2
-    varargout{2} = labelAx;
 end
 
 % redirect gca to ax
@@ -335,7 +330,7 @@ function A = getOrCellParameters(C, default)
     return;
 end
 
-function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
+function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels)
     hasGroupLabels = ~all(cellfun(@isempty, GroupLabels));
     hasCategoryLabels = ~all(cellfun(@isempty, CategoryLabels));
 
@@ -345,11 +340,9 @@ function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRi
     if hasGroupLabels && ~hasCategoryLabels
         set(ax, 'XTick', sort(categoryCenters(:), "ascend"), ...
                 'XTickLabel', repmat(GroupLabels(:)', 1, nCategory));
-        labelAx = [];
     elseif ~hasGroupLabels && hasCategoryLabels
         set(ax, 'XTick', 1:nCategory, ...
                 'XTickLabel', CategoryLabels);
-        labelAx = [];
     elseif hasGroupLabels && hasCategoryLabels
         % remove current xticklabels
         set(ax, 'XTick', sort(categoryCenters(:), "ascend"), 'XTickLabel', []);
@@ -385,6 +378,8 @@ function labelAx = setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRi
 
         xlim(labelAx, [0.5, nCategory + 0.5]);
         ylim(labelAx, [0, 1]);
+    else
+        set(ax, 'XTick', [], 'XTickLabel', []);
     end
 
     return;
