@@ -62,7 +62,7 @@ for nsection = 1:3
 
     % 绘制平滑后的线条
     plot(x_smooth, y_smooth, 'k.-', 'LineWidth', 6, "MarkerSize", 20);
-    setLayer(gca, h, "bottom");
+    uistack(h, "bottom");
 end
 
 % 显示最终结果

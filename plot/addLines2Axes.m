@@ -162,7 +162,7 @@ for lIndex = 1:length(lines)
             setLegendOff(h);
         end
 
-        setLayer(allAxes(aIndex), h, Layer);
+        uistack(h, Layer);
     end
 
 end
