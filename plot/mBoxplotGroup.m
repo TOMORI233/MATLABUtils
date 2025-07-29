@@ -23,6 +23,7 @@ function varargout = mBoxplotGroup(varargin)
 %
 %   BOX APPEARANCE:
 %     'BoxEdgeType'     - Box edge calculation: 'SE', 'STD', or [low,high] percentiles
+%     'Notch'           - Notch option, 'on' or 'off' (defualt: 'off')
 %     'Whisker'         - Whisker percentiles [low,high] (default: [10,90])
 %     'Colors'          - Color specification (single color, cell array, or colormap)
 %     'BoxParameters'   - Cell array of patch properties for boxes
@@ -176,11 +177,11 @@ boxEdgeRight = cat(1, boxEdgeRight{:}); % category-by-group
 
 % Compute box edge - top & bottom
 if strcmpi(BoxEdgeType, "se")
-    boxEdgeLower = cellfun(@(x) mean(x, 1) - SE(x, 1), X, "UniformOutput", false);
-    boxEdgeUpper = cellfun(@(x) mean(x, 1) + SE(x, 1), X, "UniformOutput", false);
+    boxEdgeLower = cellfun(@(x) mean(x, 1, "omitnan") - SE(x, 1, "omitnan"), X, "UniformOutput", false);
+    boxEdgeUpper = cellfun(@(x) mean(x, 1, "omitnan") + SE(x, 1, "omitnan"), X, "UniformOutput", false);
 elseif strcmpi(BoxEdgeType, "std")
-    boxEdgeLower = cellfun(@(x) mean(x, 1) - std(x, [], 1), X, "UniformOutput", false);
-    boxEdgeUpper = cellfun(@(x) mean(x, 1) + std(x, [], 1), X, "UniformOutput", false);
+    boxEdgeLower = cellfun(@(x) mean(x, 1, "omitnan") - std(x, [], 1, "omitnan"), X, "UniformOutput", false);
+    boxEdgeUpper = cellfun(@(x) mean(x, 1, "omitnan") + std(x, [], 1, "omitnan"), X, "UniformOutput", false);
 elseif isnumeric(BoxEdgeType) && numel(BoxEdgeType) == 2 && BoxEdgeType(2) > BoxEdgeType(1)
     boxEdgeLower = cellfun(@(x) prctile(x, BoxEdgeType(1), 1), X, "UniformOutput", false);
     boxEdgeUpper = cellfun(@(x) prctile(x, BoxEdgeType(2), 1), X, "UniformOutput", false);
@@ -312,9 +313,9 @@ for cIndex = 1:nCategory
         
         % plot center line
         if strcmpi(CenterLineType, 'Mean')
-            yCenterLine = mean(X{gIndex}(:, cIndex), 1);
+            yCenterLine = mean(X{gIndex}(:, cIndex), 1, "omitnan");
         elseif strcmpi(CenterLineType, 'Median')
-            yCenterLine = median(X{gIndex}(:, cIndex), 1);
+            yCenterLine = median(X{gIndex}(:, cIndex), 1, "omitnan");
         else
             error("Invalid center line type");
         end
