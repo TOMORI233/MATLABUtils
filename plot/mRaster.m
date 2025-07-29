@@ -5,10 +5,10 @@ function mAxe = mRaster(varargin)
 %     rasterData: raster dataset, struct vector
 %         - X: x data, cell vector
 %         - Y: y data (If not specified, plot trial by trial)
-%         - color: scatter color
+%         - color: scatter color (default="k")
 %         - marker: marker shape (default="o")
 %         - lines: lines to add to scatterplot (see addLines2Axes.m)
-%     sz: scatter size (default = 40)
+%     sz: scatter size (default=40)
 %     border: show borders between groups (default=false)
 % Example:
 %     data(1).X = {[1, 2, 3, 4, 5]; []; [1.5, 2.5]}; % three trials
