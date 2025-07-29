@@ -224,11 +224,11 @@ end
 
 - 2025/07/29 by XHX - Compatible
 
-  | Type | Target               | Content                                                      |
-  | ---- | -------------------- | ------------------------------------------------------------ |
-  | Add  | `mBoxplotGroup.m`    | 绘制分组箱型图，推荐优先于`boxplot`和`boxplotGroup`使用，细节控制更方便。缺点是没有统计的DataTip显示 |
-  | Add  | `exportFigure2PDF.m` | 将figure导出为指定大小的pdf文件以保证字体大小和线宽不变，可直接拖入coreldraw无需改动 |
-  | Add  | `kilosort4.m`, ``    |                                                              |
+  | Type | Target                                                       | Content                                                      |
+  | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+  | Add  | `mBoxplotGroup.m`                                            | 绘制分组箱型图，推荐优先于`boxplot`和`boxplotGroup`使用，细节控制更方便。缺点是没有统计的DataTip显示 |
+  | Add  | `exportFigure2PDF.m`                                         | 将figure导出为指定大小的pdf文件以保证字体大小和线宽不变，可直接拖入coreldraw无需改动 |
+  | Add  | `kilosort4.m`, `config_kilosort4.m`, `demo_kilosort4.m`, `kilosort4_wrapper.py` | kilosort4的MATLAB API，调用相应python脚本                    |
 
 - 2025/07/07 by XHX - Compatible
 
