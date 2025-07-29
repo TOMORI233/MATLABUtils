@@ -224,11 +224,11 @@ end
 
 - 2025/07/29 by XHX - Compatible
 
-  | Type | Target            | Content          |
-  | ---- | ----------------- | ---------------- |
-  | Add  | `mBoxplotGroup.m` | 自定义分组箱型图 |
-
-  
+  | Type | Target               | Content                                                      |
+  | ---- | -------------------- | ------------------------------------------------------------ |
+  | Add  | `mBoxplotGroup.m`    | 绘制分组箱型图，推荐优先于`boxplot`和`boxplotGroup`使用，细节控制更方便。缺点是没有统计的DataTip显示 |
+  | Add  | `exportFigure2PDF.m` | 将figure导出为指定大小的pdf文件以保证字体大小和线宽不变，可直接拖入coreldraw无需改动 |
+  | Add  | `kilosort4.m`, ``    |                                                              |
 
 - 2025/07/07 by XHX - Compatible
 
@@ -240,14 +240,14 @@ end
 
   | Type   | Target                                 | Content                                                      |
   | ------ | -------------------------------------- | ------------------------------------------------------------ |
-  | Modify | `mSubplot.m`                           | 增加`alignment_horizontal`、`alignment_vertical`和`divBox`可选参数输入。调整`alignment`逻辑，支持normalized位置（如水平距离左侧1/4、上下居中：'alignment', [1/4, 1/2]），`alignment`支持的字符输入现在为`horizontal-vertical`，即'left-center', 'right-top'等 |
-  | Modify | `mHistogram.m`                         | 增加`DistributionCurve`选项，开启时将绘制分布曲线（基于`fitdist`使用'Kernel'找分布，可以换成'Normal'，即正态分布） |
+  | Modify | `mSubplot.m`                           | 【新增】增加`alignment_horizontal`、`alignment_vertical`和`divBox`可选参数输入。<br />【潜在冲突】调整`alignment`逻辑，支持normalized位置（如水平距离左侧1/4、上下居中：'alignment', [1/4, 1/2]），`alignment`支持的字符输入现在为`horizontal-vertical`，即'left-center', 'right-top'等 |
+  | Modify | `mHistogram.m`                         | 【新增】增加`DistributionCurve`选项，开启时将绘制分布曲线（基于`fitdist`使用'Kernel'找分布，可以换成'Normal'，即正态分布） |
   | Debug  | `generateGradientColors.m`             | 现在可以使用任意颜色，生成其到白色的渐变色                   |
   | Add    | `copyaxes.m`                           | 将坐标区中的图线等内容复制到另一个坐标区中，两个坐标区大小可以不一样，仅复制内容 |
   | Add    | `addSpecialTicks.m`                    | 为坐标区在指定数值位置添加tick和tick label，默认为对应数值   |
   | Add    | `mRaster.m`                            | 添加`border`选项，绘制Trial间的分割线                        |
   | Add    | `mColorbar.m`                          | 在不改变目标坐标区大小的情况下添加colorbar                   |
-  | Add    | `scaleAxes.m`                          | 添加`autoTh`选项，[lower,upper]指定在`autoScale`开启时保留分布的区间，y 默认[0,1]，c 默认[0.01,0.99] |
+  | Modify | `scaleAxes.m`                          | 【新增】添加`autoTh`选项，[lower,upper]指定在`autoScale`开启时保留分布的区间，y 默认[0,1]，c 默认[0.01,0.99] |
   | Add    | `addBars2Axes.m`                       | 为指定x区间添加垂直透明的bar，一般用于高亮显著性区间         |
   | Add    | `addWaveErr.m`                         | 为线条添加shaded error bar，一般用于添加waveform的±SEM       |
   | Add    | `exportcolorbar.m`                     | 导出指定colormap和cLim的colorbar图片，默认600dpi             |
