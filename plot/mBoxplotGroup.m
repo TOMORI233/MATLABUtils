@@ -42,13 +42,18 @@ function varargout = mBoxplotGroup(varargin)
 %         'CategoryLabels', {'Method A','Method B','Method C'}, ...
 %         'Whisker', [5 95], ...
 %         'Colors', lines(2), ...
-%         'Notch', 'on');
+%         'Notch', 'on', ...
+%         'BoxParameters', {'FaceColor', 'auto'});
 %
 %   NOTES:
 %     - For different category numbers across groups, use NAN values to fill the columns
 %     - For box edges: 'SE' uses mean±SE, 'STD' uses mean±STD, or specify percentiles
 %     - Category legends only shown if 'CategoryLegends' specified
 %     - Default point size is 36 (in points^2)
+%     - Default line widths of center line, whisker, and whisker cap are 'auto', 
+%       which implements from [BoxParameters].
+%     - Default colors of center line, whisker, and whisker cap are 'auto',
+%       which uses [Colors] (of box edges).
 %
 % Copyright (c) 2025 HX Xu. All rights reserved.
 
@@ -62,7 +67,7 @@ end
 defaultBoxParameters = {"LineStyle", "-", ...
                         "LineWidth", 0.5, ...
                         "FaceColor", "none", ...
-                        "FaceAlpha", 1};
+                        "FaceAlpha", 0.5};
 defaultCenterLineParameters = {"Type", "Median", ...
                                "LineStyle", "-", ...
                                "LineWidth", "auto", ...
@@ -136,16 +141,18 @@ if ~isempty(Whisker)
     validateattributes(Whisker, 'numeric', {'numel', 2, 'increasing', 'positive', '<=', 100});
 end
 
-BoxLineWidth = getNameValue(BoxParameters, "LineWidth");
+boxLineWidth = getNameValue(BoxParameters, "LineWidth");
 if strcmpi(getNameValue(CenterLineParameters, "LineWidth"), "auto")
-    CenterLineParameters = changeNameValue(CenterLineParameters, "LineWidth", BoxLineWidth);
+    CenterLineParameters = changeNameValue(CenterLineParameters, "LineWidth", boxLineWidth);
 end
 if strcmpi(getNameValue(WhiskerParameters, "LineWidth"), "auto")
-    WhiskerParameters = changeNameValue(WhiskerParameters, "LineWidth", BoxLineWidth);
+    WhiskerParameters = changeNameValue(WhiskerParameters, "LineWidth", boxLineWidth);
 end
 if strcmpi(getNameValue(WhiskerCapParameters, "LineWidth"), "auto")
-    WhiskerCapParameters = changeNameValue(WhiskerCapParameters, "LineWidth", BoxLineWidth);
+    WhiskerCapParameters = changeNameValue(WhiskerCapParameters, "LineWidth", boxLineWidth);
 end
+
+boxFaceColor = getNameValue(BoxParameters, "FaceColor");
 
 % Compute quartiles and sample size for notch
 q1 = cellfun(@(x) prctile(x, 25, 1), X, 'UniformOutput', false);
@@ -265,6 +272,12 @@ for cIndex = 1:nCategory
         end
         
         % plot box
+        if strcmpi(boxFaceColor, "auto")
+            params = changeNameValue(BoxParameters, "FaceColor", Colors{gIndex}(cIndex, :));
+        else
+            params = BoxParameters;
+        end
+
         if strcmpi(Notch, "on")
             notchWidth = boxWidth * 0.3;
             top = q3(cIndex, gIndex);
@@ -300,7 +313,7 @@ for cIndex = 1:nCategory
             legendHandles(gIndex) = patch(ax, "XData", xBox, ...
                                               "YData", yBox, ...
                                               "EdgeColor", Colors{gIndex}(cIndex, :), ...
-                                              BoxParameters{:});
+                                              params{:});
             if ~isempty(GroupLegends) && numel(GroupLegends) >= gIndex
                 legendLabels{gIndex} = GroupLegends{gIndex};
             end
@@ -308,7 +321,7 @@ for cIndex = 1:nCategory
             patch(ax, "XData", xBox, ...
                       "YData", yBox, ...
                       "EdgeColor", Colors{gIndex}(cIndex, :), ...
-                      BoxParameters{:});
+                      params{:});
         end
         
         % plot center line
