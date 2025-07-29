@@ -222,6 +222,14 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2025/07/29 by XHX - Compatible
+
+  | Type | Target            | Content          |
+  | ---- | ----------------- | ---------------- |
+  | Add  | `mBoxplotGroup.m` | 自定义分组箱型图 |
+
+  
+
 - 2025/07/07 by XHX - Compatible
 
   | Type | Target          | Content                                                      |
