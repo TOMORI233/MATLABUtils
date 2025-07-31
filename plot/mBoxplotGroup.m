@@ -27,7 +27,7 @@ function varargout = mBoxplotGroup(varargin)
 %     'BoxEdgeType'          - Box edge calculation: 'SE', 'STD', or [low,high] percentiles
 %     'Notch'                - Notch option, 'on' or 'off' (defualt: 'off')
 %     'Whisker'              - Maximum whisker length W (see BOXPLOT) or 
-%                              whisker percentiles [low,high] (default: [10,90])
+%                              whisker percentiles [low,high] (default: 1.5)
 %     'Colors'               - Color specification (single color, cell array, or colormap)
 %     'BoxParameters'        - Cell array of patch properties for boxes
 %     'CenterLineParameters' - Properties for center lines (mean/median)
@@ -241,8 +241,9 @@ boxEdgeUpper = cat(1, boxEdgeUpper{:})'; % category-by-group
 
 % Compute whisker
 if isscalar(whisker) % whisker length * IQR
-    whiskerLower = q1 - whisker * iqr;  % category-by-group
-    whiskerUpper = q3 + whisker * iqr;  % category-by-group
+    temp = cat(3, X{:}); % sample_category_group
+    whiskerLower = max(q1 - whisker * iqr, squeeze(min(temp, [], 1)));  % category-by-group
+    whiskerUpper = min(q3 + whisker * iqr, squeeze(max(temp, [], 1)));  % category-by-group
 elseif numel(whisker) == 2 % percentile
     whiskerLower = cellfun(@(x) prctile(x, whisker(1), 1), X, "UniformOutput", false);
     whiskerUpper = cellfun(@(x) prctile(x, whisker(2), 1), X, "UniformOutput", false);
