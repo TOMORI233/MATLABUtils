@@ -1,4 +1,4 @@
-function setAxeStyle(varargin)
+function setAxesStyle(varargin)
 narginchk(0, inf);
 
 if nargin < 1 || isstring(varargin{1}) || ischar(varargin{1})
