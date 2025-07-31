@@ -22,17 +22,23 @@ function varargout = mBoxplotGroup(varargin)
 %     'GroupLines'      - Show vertical lines between groups (logical, default: false)
 %
 %   BOX APPEARANCE:
-%     'BoxEdgeType'     - Box edge calculation: 'SE', 'STD', or [low,high] percentiles
-%     'Notch'           - Notch option, 'on' or 'off' (defualt: 'off')
-%     'Whisker'         - Whisker percentiles [low,high] (default: [10,90])
-%     'Colors'          - Color specification (single color, cell array, or colormap)
-%     'BoxParameters'   - Cell array of patch properties for boxes
+%     'Positions'            - X-positions of category centers (default: 1:nCategory)
+%     'BoxEdgeType'          - Box edge calculation: 'SE', 'STD', or [low,high] percentiles
+%     'Notch'                - Notch option, 'on' or 'off' (defualt: 'off')
+%     'Whisker'              - Maximum whisker length W (see BOXPLOT) or 
+%                              whisker percentiles [low,high] (default: [10,90])
+%     'Colors'               - Color specification (single color, cell array, or colormap)
+%     'BoxParameters'        - Cell array of patch properties for boxes
 %     'CenterLineParameters' - Properties for center lines (mean/median)
+%     'WhiskerParameters'    - Properties for whisker lines
+%     'WhiskerCapParameters' - Properties for whisker caps 
 %
 %   DATA POINTS:
 %     'IndividualDataPoint' - 'show' or 'hide' individual points (default: 'show')
 %     'SymbolParameters'    - Properties for individual data points
-%     'Jitter'             - Amount of horizontal jitter (default: 0.1)
+%     'Jitter'              - Amount of horizontal jitter (default: 0.1)
+%     'Outlier'             - 'show' or 'hide' outliers (default: 'hide')
+%     'OutlierParameters'   - Properties for outliers
 %
 %   EXAMPLE:
 %     data = {randn(50,3), randn(60,3)}; % 2 groups, 3 categories each
@@ -88,10 +94,16 @@ defaultSymbolParameters = {"Marker", "o", ...
                            "MarkerFaceAlpha", 0.3, ...
                            "SizeData", 36, ...
                            "LineWidth", 0.1};
+defaultOutlierParameters = {"Marker", "+", ...
+                            "MarkerEdgeColor", "auto", ...
+                            "MarkerFaceColor", "auto", ...
+                            "SizeData", 36, ...
+                            "LineWidth", 0.5};
 
 mIp = inputParser;
 mIp.addRequired("ax", @(x) isgraphics(x, "axes"));
 mIp.addRequired("X", @(x) validateattributes(x, 'cell', {'vector'}));
+mIp.addParameter("Positions", [], @(x) validateattributes(x, 'numeric', {'vector', 'increasing'}));
 mIp.addParameter("GroupLabels", '');
 mIp.addParameter("GroupLegends", '');
 mIp.addParameter("GroupSpace", 0.1, @(x) validateattributes(x, 'numeric', {'scalar'}));
@@ -102,34 +114,39 @@ mIp.addParameter("Colors", [1, 0, 0]);
 mIp.addParameter("BoxEdgeType", [25, 75]);
 mIp.addParameter("Whisker", [5, 95]);
 mIp.addParameter("Notch", "off", @(x) any(validatestring(x, {'on', 'off'})));
-mIp.addParameter("BoxParameters", defaultBoxParameters, @(x) iscell(x));
-mIp.addParameter("CenterLineParameters", defaultCenterLineParameters, @(x) iscell(x));
-mIp.addParameter("WhiskerParameters", defaultWhiskerParameters, @(x) iscell(x));
-mIp.addParameter("WhiskerCapParameters", defaultWhiskerCapParameters, @(x) iscell(x));
+mIp.addParameter("BoxParameters", defaultBoxParameters, @iscell);
+mIp.addParameter("CenterLineParameters", defaultCenterLineParameters, @iscell);
+mIp.addParameter("WhiskerParameters", defaultWhiskerParameters, @iscell);
+mIp.addParameter("WhiskerCapParameters", defaultWhiskerCapParameters, @iscell);
 mIp.addParameter("IndividualDataPoint", "show", @(x) any(validatestring(x, {'show', 'hide'})));
-mIp.addParameter("SymbolParameters", defaultSymbolParameters, @(x) iscell(x));
+mIp.addParameter("SymbolParameters", defaultSymbolParameters, @iscell);
 mIp.addParameter("Jitter", 0.1, @(x) validateattributes(x, 'numeric', {'scalar'}));
+mIp.addParameter("Outlier", "hide", @(x) any(validatestring(x, {'show', 'hide'})));
+mIp.addParameter("OutlierParameters", defaultOutlierParameters, @iscell);
 
 mIp.parse(ax, varargin{:});
 
 X = mIp.Results.X;
-GroupLabels = cellstr(mIp.Results.GroupLabels);
-GroupSpace = mIp.Results.GroupSpace;
-GroupLines = mIp.Results.GroupLines;
-CategoryLabels = cellstr(mIp.Results.CategoryLabels);
-GroupLegends = cellstr(mIp.Results.GroupLegends);
-CategorySpace = mIp.Results.CategorySpace;
-Colors = mIp.Results.Colors;
-BoxEdgeType = mIp.Results.BoxEdgeType;
-Notch = mIp.Results.Notch;
-BoxParameters = getOrCellParameters(mIp.Results.BoxParameters, defaultBoxParameters);
-CenterLineParameters = getOrCellParameters(mIp.Results.CenterLineParameters, defaultCenterLineParameters);
-Whisker = mIp.Results.Whisker;
-WhiskerParameters = getOrCellParameters(mIp.Results.WhiskerParameters, defaultWhiskerParameters);
-WhiskerCapParameters = getOrCellParameters(mIp.Results.WhiskerCapParameters, defaultWhiskerCapParameters);
-IndividualDataPoint = mIp.Results.IndividualDataPoint;
-SymbolParameters = getOrCellParameters(mIp.Results.SymbolParameters, defaultSymbolParameters);
-Jitter = mIp.Results.Jitter;
+positions = mIp.Results.Positions;
+groupLabels = cellstr(mIp.Results.GroupLabels);
+groupSpace = mIp.Results.GroupSpace;
+groupLines = mIp.Results.GroupLines;
+categoryLabels = cellstr(mIp.Results.CategoryLabels);
+groupLegends = cellstr(mIp.Results.GroupLegends);
+categorySpace = mIp.Results.CategorySpace;
+colors = mIp.Results.Colors;
+boxEdgeType = mIp.Results.BoxEdgeType;
+notchOpt = mIp.Results.Notch;
+boxParameters = getOrCellParameters(mIp.Results.BoxParameters, defaultBoxParameters);
+centerLineParameters = getOrCellParameters(mIp.Results.CenterLineParameters, defaultCenterLineParameters);
+whisker = mIp.Results.Whisker;
+whiskerParameters = getOrCellParameters(mIp.Results.WhiskerParameters, defaultWhiskerParameters);
+whiskerCapParameters = getOrCellParameters(mIp.Results.WhiskerCapParameters, defaultWhiskerCapParameters);
+individualDataPoint = mIp.Results.IndividualDataPoint;
+symbolParameters = getOrCellParameters(mIp.Results.SymbolParameters, defaultSymbolParameters);
+jitterWidth = mIp.Results.Jitter;
+outlierOpt = mIp.Results.Outlier;
+outlierParameters = getOrCellParameters(mIp.Results.OutlierParameters, defaultOutlierParameters);
 
 % Validate
 X = X(:);
@@ -140,22 +157,31 @@ end
 nCategory = nCategory(1);
 nGroup = numel(X);
 
-if ~isempty(Whisker)
-    validateattributes(Whisker, 'numeric', {'numel', 2, 'increasing', 'positive', '<=', 100});
+if ~isempty(whisker)
+    if isscalar(whisker)
+        validateattributes(whisker, 'numeric', {'positive'});
+    elseif numel(whisker) == 2
+        validateattributes(whisker, 'numeric', {'numel', 2, 'increasing', 'positive', '<=', 100});
+    else
+        error("The input whisker percentiles should be an increasing 2-element vector (for percentile) or a scalar (for IQR).");
+    end
 end
 
-boxLineWidth = getNameValue(BoxParameters, "LineWidth");
-if strcmpi(getNameValue(CenterLineParameters, "LineWidth"), "auto")
-    CenterLineParameters = changeNameValue(CenterLineParameters, "LineWidth", boxLineWidth);
+boxLineWidth = getNameValue(boxParameters, "LineWidth");
+if strcmpi(getNameValue(centerLineParameters, "LineWidth"), "auto")
+    centerLineParameters = changeNameValue(centerLineParameters, "LineWidth", boxLineWidth);
 end
-if strcmpi(getNameValue(WhiskerParameters, "LineWidth"), "auto")
-    WhiskerParameters = changeNameValue(WhiskerParameters, "LineWidth", boxLineWidth);
+if strcmpi(getNameValue(whiskerParameters, "LineWidth"), "auto")
+    whiskerParameters = changeNameValue(whiskerParameters, "LineWidth", boxLineWidth);
 end
-if strcmpi(getNameValue(WhiskerCapParameters, "LineWidth"), "auto")
-    WhiskerCapParameters = changeNameValue(WhiskerCapParameters, "LineWidth", boxLineWidth);
+if strcmpi(getNameValue(whiskerCapParameters, "LineWidth"), "auto")
+    whiskerCapParameters = changeNameValue(whiskerCapParameters, "LineWidth", boxLineWidth);
 end
 
-boxFaceColor = getNameValue(BoxParameters, "FaceColor");
+boxFaceColor = getNameValue(boxParameters, "FaceColor");
+symbolMarkerFaceColor = getNameValue(symbolParameters, "MarkerFaceColor");
+outlierMarkerFaceColor = getNameValue(outlierParameters, "MarkerFaceColor");
+outlierMarkerEdgeColor = getNameValue(outlierParameters, "MarkerEdgeColor");
 
 % Compute quartiles and sample size for notch
 q1 = cellfun(@(x) prctile(x, 25, 1), X, 'UniformOutput', false);
@@ -163,9 +189,10 @@ q2 = cellfun(@(x) prctile(x, 50, 1), X, 'UniformOutput', false); % median
 q3 = cellfun(@(x) prctile(x, 75, 1), X, 'UniformOutput', false);
 nNonNaN = cellfun(@(x) sum(~isnan(x), 1), X, 'UniformOutput', false); % non-NaN counts
 
-q1 = cat(1, q1{:})';      % category-by-group
-q2 = cat(1, q2{:})';
-q3 = cat(1, q3{:})';
+q1 = cat(1, q1{:})'; % category-by-group
+q2 = cat(1, q2{:})'; % category-by-group
+q3 = cat(1, q3{:})'; % category-by-group
+iqr = q3 - q1; % category-by-group
 nNonNaN = cat(1, nNonNaN{:})';
 
 % Notch bounds
@@ -173,28 +200,38 @@ notchLower = q2 - 1.57 * (q3 - q1) ./ sqrt(nNonNaN);
 notchUpper = q2 + 1.57 * (q3 - q1) ./ sqrt(nNonNaN);
 
 % Compute group edge (left & right) for each group
-groupEdgeLeft  = (1:nCategory)' - 0.5 + CategorySpace / 2;
-groupEdgeRight = (1:nCategory)' + 0.5 - CategorySpace / 2;
+if isempty(positions)
+    positions = (1:nCategory)';
+else
+    positions = positions(:);
+    if numel(positions) ~= nCategory
+        error("The number of Positions should be equal to the number of categories.");
+    end
+end
+categoryEdgeLeft = positions - min(diff(positions));
+categoryWidthHalf = min(diff(positions)) * (1 - categorySpace) / 2;
+groupEdgeLeft  = positions - categoryWidthHalf;
+groupEdgeRight = positions + categoryWidthHalf;
 
 % Compute box width
-boxWidth = (1 - (nGroup - 1) * GroupSpace) / nGroup * (groupEdgeRight(1) - groupEdgeLeft(1));
+boxWidth = (1 - (nGroup - 1) * groupSpace) / nGroup * categoryWidthHalf * 2;
 
 % Compute box edge (left & right) for each category
-boxEdgeLeft  = arrayfun(@(x, y) x:boxWidth + GroupSpace * (groupEdgeRight(1) - groupEdgeLeft(1)):y, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
-boxEdgeRight = arrayfun(@(x, y) x + boxWidth:boxWidth + GroupSpace * (groupEdgeRight(1) - groupEdgeLeft(1)):y + boxWidth, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
+boxEdgeLeft  = arrayfun(@(x, y) x:boxWidth + groupSpace * categoryWidthHalf * 2:y, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
+boxEdgeRight = arrayfun(@(x, y) x + boxWidth:boxWidth + groupSpace * categoryWidthHalf * 2:y + boxWidth, groupEdgeLeft, groupEdgeRight, "UniformOutput", false);
 boxEdgeLeft  = cat(1, boxEdgeLeft {:}); % category-by-group
 boxEdgeRight = cat(1, boxEdgeRight{:}); % category-by-group
 
 % Compute box edge - top & bottom
-if strcmpi(BoxEdgeType, "se")
+if strcmpi(boxEdgeType, "se")
     boxEdgeLower = cellfun(@(x) mean(x, 1, "omitnan") - SE(x, 1, "omitnan"), X, "UniformOutput", false);
     boxEdgeUpper = cellfun(@(x) mean(x, 1, "omitnan") + SE(x, 1, "omitnan"), X, "UniformOutput", false);
-elseif strcmpi(BoxEdgeType, "std")
+elseif strcmpi(boxEdgeType, "std")
     boxEdgeLower = cellfun(@(x) mean(x, 1, "omitnan") - std(x, [], 1, "omitnan"), X, "UniformOutput", false);
     boxEdgeUpper = cellfun(@(x) mean(x, 1, "omitnan") + std(x, [], 1, "omitnan"), X, "UniformOutput", false);
-elseif isnumeric(BoxEdgeType) && numel(BoxEdgeType) == 2 && BoxEdgeType(2) > BoxEdgeType(1)
-    boxEdgeLower = cellfun(@(x) prctile(x, BoxEdgeType(1), 1), X, "UniformOutput", false);
-    boxEdgeUpper = cellfun(@(x) prctile(x, BoxEdgeType(2), 1), X, "UniformOutput", false);
+elseif isnumeric(boxEdgeType) && numel(boxEdgeType) == 2 && boxEdgeType(2) > boxEdgeType(1)
+    boxEdgeLower = cellfun(@(x) prctile(x, boxEdgeType(1), 1), X, "UniformOutput", false);
+    boxEdgeUpper = cellfun(@(x) prctile(x, boxEdgeType(2), 1), X, "UniformOutput", false);
 else
     error("[BoxEdgeType] should be 'SE', 'STD', or a 2-element percentile vector (default=[25,75])");
 end
@@ -202,38 +239,56 @@ boxEdgeLower = cat(1, boxEdgeLower{:})'; % category-by-group
 boxEdgeUpper = cat(1, boxEdgeUpper{:})'; % category-by-group
 
 % Compute whisker
-whiskerLower = cellfun(@(x) prctile(x, Whisker(1), 1), X, "UniformOutput", false);
-whiskerUpper = cellfun(@(x) prctile(x, Whisker(2), 1), X, "UniformOutput", false);
-whiskerLower = cat(1, whiskerLower{:})'; % category-by-group
-whiskerUpper = cat(1, whiskerUpper{:})'; % category-by-group
-WhiskerCapWidth = getNameValue(WhiskerCapParameters, "Width") * boxWidth;
-WhiskerCapParameters = removeNameValue(WhiskerCapParameters, "Width");
-WhiskerColor = getNameValue(WhiskerParameters, "Color");
-WhiskerCapColor = getNameValue(WhiskerCapParameters, "Color");
+if isscalar(whisker) % whisker length * IQR
+    whiskerLower = q1 - whisker * iqr;  % category-by-group
+    whiskerUpper = q3 + whisker * iqr;  % category-by-group
+elseif numel(whisker) == 2 % percentile
+    whiskerLower = cellfun(@(x) prctile(x, whisker(1), 1), X, "UniformOutput", false);
+    whiskerUpper = cellfun(@(x) prctile(x, whisker(2), 1), X, "UniformOutput", false);
+    whiskerLower = cat(1, whiskerLower{:})'; % category-by-group
+    whiskerUpper = cat(1, whiskerUpper{:})'; % category-by-group
+else % empty
+    % do not show whisker
+end
+whiskerCapWidth = getNameValue(whiskerCapParameters, "Width") * boxWidth;
+whiskerCapParameters = removeNameValue(whiskerCapParameters, "Width");
+whiskerColor = getNameValue(whiskerParameters, "Color");
+whiskerCapColor = getNameValue(whiskerCapParameters, "Color");
+
+% Compute outliers
+if strcmpi(outlierOpt, "show")
+    outliers = cell(nCategory, nGroup);
+    for cIndex = 1:nCategory
+        for gIndex = 1:nGroup
+            idx = X{gIndex}(:, cIndex) < whiskerLower(cIndex, gIndex) | X{gIndex}(:, cIndex) > whiskerUpper(cIndex, gIndex);
+            outliers{cIndex, gIndex} = X{gIndex}(idx, cIndex);
+        end
+    end
+end
 
 % Colors
-if isnumeric(Colors) % single color for all boxes
-    if size(Colors, 1) == 1
-        Colors = repmat({repmat(validatecolor(Colors), nCategory, 1)}, nGroup, 1);
-    elseif size(Colors, 1) == nGroup
-        Colors = rowFcn(@(x) repmat(validatecolor(x), nCategory, 1), Colors, "UniformOutput", false);
-    elseif size(Colors, 1) == nCategory * nGroup
-        Colors = mat2cell(validatecolor(Colors, 'multiple'), repmat(nCategory, nGroup, 1), 3);
+if isnumeric(colors) % single color for all boxes
+    if size(colors, 1) == 1
+        colors = repmat({repmat(validatecolor(colors), nCategory, 1)}, nGroup, 1);
+    elseif size(colors, 1) == nGroup
+        colors = rowFcn(@(x) repmat(validatecolor(x), nCategory, 1), colors, "UniformOutput", false);
+    elseif size(colors, 1) == nCategory * nGroup
+        colors = mat2cell(validatecolor(colors, 'multiple'), repmat(nCategory, nGroup, 1), 3);
         warning("Group legends may not work if colors are specified for each category");
     else
         error("The number of colors should either be 1, group number, or category number*group number");
     end
-elseif iscell(Colors)
-    if numel(Colors) ~= nGroup
+elseif iscell(colors)
+    if numel(colors) ~= nGroup
         error("The number of colors should be equal to the number of groups.");
     end
-    Colors = cellfun(@(x) validatecolor(x, 'multiple'), Colors(:), "UniformOutput", false);
+    colors = cellfun(@(x) validatecolor(x, 'multiple'), colors(:), "UniformOutput", false);
 
     % specifies colors for each category in each group
-    nColor = cellfun(@(x) size(x, 1), Colors);
+    nColor = cellfun(@(x) size(x, 1), colors);
     for cIndex = 1:nGroup
         if nColor == 1
-            Colors{cIndex} = repmat(Colors{cIndex}, nCategory, 1);
+            colors{cIndex} = repmat(colors{cIndex}, nCategory, 1);
         elseif nColor(cIndex) ~= nCategory
             error("The number of colors should be equal to the number of categories.");
         end
@@ -242,12 +297,12 @@ elseif iscell(Colors)
 end
 
 % Center lines
-CenterLineType = getNameValue(CenterLineParameters, "Type");
+CenterLineType = getNameValue(centerLineParameters, "Type");
 if isempty(CenterLineType)
     CenterLineType = 'Mean';
 end
-CenterLineColor = getNameValue(CenterLineParameters, "Color");
-CenterLineParameters = removeNameValue(CenterLineParameters, "Type");
+CenterLineColor = getNameValue(centerLineParameters, "Color");
+centerLineParameters = removeNameValue(centerLineParameters, "Type");
 
 % Boxplot
 legendHandles = gobjects(1, nGroup);
@@ -260,28 +315,40 @@ for cIndex = 1:nCategory
         right = boxEdgeRight(cIndex, gIndex);
         mid = (left + right) / 2;
 
-        % plot individual data points
-        if strcmpi(IndividualDataPoint, "show")
-            SymbolMarkerFaceColor = getNameValue(SymbolParameters, "MarkerFaceColor");
+        data = X{gIndex}(:, cIndex);
 
-            if strcmpi(SymbolMarkerFaceColor, "auto")
-                params = changeNameValue(SymbolParameters, "MarkerFaceColor", Colors{gIndex}(cIndex, :));
-            else
-                params = SymbolParameters;
+        % plot outliers
+        params = outlierParameters;
+        if strcmpi(outlierMarkerEdgeColor, "auto")
+            params = changeNameValue(params, "MarkerEdgeColor", colors{gIndex}(cIndex, :));
+        end
+        if strcmpi(outlierMarkerFaceColor, "auto")
+            params = changeNameValue(params, "MarkerFaceColor", colors{gIndex}(cIndex, :));
+        end
+
+        if strcmpi(outlierOpt, "show") && ~isempty(outliers{cIndex, gIndex})
+            data = data(~ismember(data, outliers{cIndex, gIndex}));
+            scatter(mid * ones(numel(outliers{cIndex, gIndex}), 1), outliers{cIndex, gIndex}, params{:});
+        end
+
+        % plot individual data points
+        if strcmpi(individualDataPoint, "show")
+            params = symbolParameters;
+            if strcmpi(symbolMarkerFaceColor, "auto")
+                params = changeNameValue(params, "MarkerFaceColor", colors{gIndex}(cIndex, :));
             end
 
-            swarmchart(mid * ones(numel(X{gIndex}(:, cIndex)), 1), X{gIndex}(:, cIndex), ...
-                       "XJitterWidth", Jitter, params{:});
+            swarmchart(mid * ones(numel(data), 1), data, ...
+                       "XJitterWidth", jitterWidth * min(diff(positions)), params{:});
         end
         
         % plot box
+        params = boxParameters;
         if strcmpi(boxFaceColor, "auto")
-            params = changeNameValue(BoxParameters, "FaceColor", Colors{gIndex}(cIndex, :));
-        else
-            params = BoxParameters;
+            params = changeNameValue(params, "FaceColor", colors{gIndex}(cIndex, :));
         end
 
-        if strcmpi(Notch, "on")
+        if strcmpi(notchOpt, "on")
             notchWidth = boxWidth * 0.3;
             top = q3(cIndex, gIndex);
             bottom = q1(cIndex, gIndex);
@@ -315,77 +382,99 @@ for cIndex = 1:nCategory
             % set legends
             legendHandles(gIndex) = patch(ax, "XData", xBox, ...
                                               "YData", yBox, ...
-                                              "EdgeColor", Colors{gIndex}(cIndex, :), ...
+                                              "EdgeColor", colors{gIndex}(cIndex, :), ...
                                               params{:});
-            if ~isempty(GroupLegends) && numel(GroupLegends) >= gIndex
-                legendLabels{gIndex} = GroupLegends{gIndex};
+            if ~isempty(groupLegends) && numel(groupLegends) >= gIndex
+                legendLabels{gIndex} = groupLegends{gIndex};
             end
         else
             patch(ax, "XData", xBox, ...
                       "YData", yBox, ...
-                      "EdgeColor", Colors{gIndex}(cIndex, :), ...
+                      "EdgeColor", colors{gIndex}(cIndex, :), ...
                       params{:});
         end
         
         % plot center line
-        if strcmpi(CenterLineType, 'Mean')
+        params = centerLineParameters;
+        if strcmpi(CenterLineColor, "auto")
+            params = changeNameValue(params, "Color", colors{gIndex}(cIndex, :));
+        end
+
+        if strcmpi(CenterLineType, 'mean')
             yCenterLine = mean(X{gIndex}(:, cIndex), 1, "omitnan");
-        elseif strcmpi(CenterLineType, 'Median')
+        elseif strcmpi(CenterLineType, 'median')
             yCenterLine = median(X{gIndex}(:, cIndex), 1, "omitnan");
         else
             error("Invalid center line type");
         end
-
-        if strcmpi(CenterLineColor, "auto")
-            params = changeNameValue(CenterLineParameters, "Color", Colors{gIndex}(cIndex, :));
-        else
-            params = CenterLineParameters;
-        end
         line(ax, centerLineX, [yCenterLine, yCenterLine], params{:});
 
         % plot whisker
-        if ~isempty(Whisker)
+        if ~isempty(whisker)
             % whisker
-            if strcmpi(WhiskerColor, "auto")
-                params = changeNameValue(WhiskerParameters, "Color", Colors{gIndex}(cIndex, :));
-            else
-                params = WhiskerParameters;
+            params = whiskerParameters;
+            if strcmpi(whiskerColor, "auto")
+                params = changeNameValue(params, "Color", colors{gIndex}(cIndex, :));
             end
             line(ax, [mid, mid], [bottom, whiskerLower(cIndex, gIndex)], params{:});
             line(ax, [mid, mid], [top,    whiskerUpper(cIndex, gIndex)], params{:});
             
             % whisker cap
-            if strcmpi(WhiskerCapColor, "auto")
-                params = changeNameValue(WhiskerCapParameters, "Color", Colors{gIndex}(cIndex, :));
-            else
-                params = WhiskerCapParameters;
+            params = whiskerCapParameters;
+            if strcmpi(whiskerCapColor, "auto")
+                params = changeNameValue(params, "Color", colors{gIndex}(cIndex, :));
             end
-            line(ax, [mid - WhiskerCapWidth / 2, mid + WhiskerCapWidth / 2], ...
+            line(ax, [mid - whiskerCapWidth / 2, mid + whiskerCapWidth / 2], ...
                      [whiskerLower(cIndex, gIndex), whiskerLower(cIndex, gIndex)], params{:});
-            line(ax, [mid - WhiskerCapWidth / 2, mid + WhiskerCapWidth / 2], ...
+            line(ax, [mid - whiskerCapWidth / 2, mid + whiskerCapWidth / 2], ...
                      [whiskerUpper(cIndex, gIndex), whiskerUpper(cIndex, gIndex)], params{:});
         end
 
         % plot group lines
-        if GroupLines && cIndex > 1
-            xline(cIndex - 0.5);
+        if groupLines && cIndex > 1
+            xline(categoryEdgeLeft(cIndex));
         end
 
     end
 
 end
 
-xlim(ax, [0.5, nCategory + 0.5]);
+if isempty(positions)
+    xlim(ax, [0.5, nCategory + 0.5]);
+end
 drawnow;
-setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, GroupLabels, CategoryLabels);
+setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, groupLabels, categoryLabels);
 
-if ~all(cellfun(@isempty, GroupLegends))
+if ~all(cellfun(@isempty, groupLegends))
     validHandles = isgraphics(legendHandles);
     legend(ax, legendHandles(validHandles), legendLabels(validHandles), 'Location', 'best', 'AutoUpdate', 'off');
 end
 
 if nargout >= 1
     varargout{1} = ax;
+end
+
+if nargout == 2
+    res = [];
+
+    % Box edges: category-by-group
+    res.boxEdgeLeft = boxEdgeLeft;
+    res.boxEdgeRight = boxEdgeRight;
+    res.boxCenters = (boxEdgeLeft + boxEdgeRight) / 2;
+    res.boxEdgeLower = boxEdgeLower;
+    res.boxEdgeUpper = boxEdgeUpper;
+    res.q1 = q1;
+    res.q3 = q3;
+    res.median = q2;
+    res.whiskerLower = whiskerLower;
+    res.whiskerUpper = whiskerUpper;
+    res.dimord = 'category_group';
+
+    res.whisker = whisker;
+    res.Positions = positions;
+    res.centerLineType = CenterLineType;
+
+    varargout{2} = res;
 end
 
 % redirect gca to ax
@@ -462,17 +551,17 @@ function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, Group
     hasCategoryLabels = ~all(cellfun(@isempty, CategoryLabels));
 
     % label positions
-    categoryCenters = (boxEdgeLeft + boxEdgeRight) / 2; % category-by-group
+    boxCenters = (boxEdgeLeft + boxEdgeRight) / 2; % category-by-group
 
     if hasGroupLabels && ~hasCategoryLabels
-        set(ax, 'XTick', sort(categoryCenters(:), "ascend"), ...
+        set(ax, 'XTick', sort(boxCenters(:), "ascend"), ...
                 'XTickLabel', repmat(GroupLabels(:)', 1, nCategory));
     elseif ~hasGroupLabels && hasCategoryLabels
-        set(ax, 'XTick', 1:nCategory, ...
+        set(ax, 'XTick', mean(boxCenters, 2), ...
                 'XTickLabel', CategoryLabels);
     elseif hasGroupLabels && hasCategoryLabels
         % remove current xticklabels
-        set(ax, 'XTick', sort(categoryCenters(:), "ascend"), 'XTickLabel', []);
+        set(ax, 'XTick', sort(boxCenters(:), "ascend"), 'XTickLabel', []);
 
         % current axes positions
         pos = get(ax, "Position");
@@ -485,7 +574,7 @@ function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, Group
         % group labels (primary labels)
         for gIndex = 1:nGroup
             for cIndex = 1:nCategory
-                text(labelAx, categoryCenters(cIndex, gIndex), labelPosY_group, GroupLabels{gIndex}, ...
+                text(labelAx, boxCenters(cIndex, gIndex), labelPosY_group, GroupLabels{gIndex}, ...
                      'HorizontalAlignment', 'center', ...
                      'VerticalAlignment', 'middle', ...
                      "FontName", "Arial", ...
@@ -503,7 +592,7 @@ function setupAxisLabels(ax, nGroup, nCategory, boxEdgeLeft, boxEdgeRight, Group
                  'FontSize', get(ax, 'FontSize'));
         end
 
-        xlim(labelAx, [0.5, nCategory + 0.5]);
+        linkaxes([ax, labelAx], 'x');
         ylim(labelAx, [0, 1]);
     else
         set(ax, 'XTick', [], 'XTickLabel', []);

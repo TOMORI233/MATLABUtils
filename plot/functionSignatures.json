@@ -348,6 +348,7 @@
                     {"name": "X", "kind": "required", "type": ["cell"], "purpose": "Each column is a category"}
                 ]
             ]},
+            {"name": "Positions", "kind": "namevalue", "type": ["numeric", "vector"]},
             {"name": "Colors", "kind": "namevalue", "type": [["numeric"], ["cell"]]},
             {"name": "Notch", "kind": "namevalue", "type": ["choices = {'on', 'off'}"]},
             {"name": "BoxEdgeType", "kind": "namevalue", "type": [["choices = {'SE', 'STD'}"], ["numeric", "numel=2"]], "purpose": "default:[25,75]"},
@@ -362,11 +363,13 @@
             {"name": "GroupSpace", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.1"},
             {"name": "CategoryLabels", "kind": "namevalue", "type": [["cell"], ["char"], ["string"]]},
             {"name": "CategorySpace", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.4"},
-            {"name": "IndividualDataPoint", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"]},
+            {"name": "IndividualDataPoint", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "default:'show'"},
             {"name": "SymbolParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'Marker','o','SizeData',36,'MarkerEdgeColor','w','MarkerFaceColor','auto','MarkerFaceAlpha',0.3,'LineWidth',0.1}"},
-            {"name": "Jitter", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.1"}
-        ]
-        
+            {"name": "Jitter", "kind": "namevalue", "type": ["numeric", "scalar"], "purpose": "default: 0.1"},
+            {"name": "Outlier", "kind": "namevalue", "type": ["choices = {'show', 'hide'}"], "purpose": "default:'hide'"},
+            {"name": "OutlierParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'Marker','+','MarkerEdgeColor','auto','MarkerFaceColor','auto','SizeData',36,'LineWidth',0.5"}
+        ],
+        "description": "绘制分组箱型图"
     }
 
 }
