@@ -1,8 +1,11 @@
-function setAxeStyle(target, varargin)
+function setAxeStyle(varargin)
 narginchk(0, inf);
 
-if nargin < 1
+if nargin < 1 || isstring(varargin{1}) || ischar(varargin{1})
     target = gca;
+else
+    target = varargin{1};
+    varargin(1) = [];
 end
 
 if strcmp(class(target), "matlab.ui.Figure") || strcmp(class(target), "matlab.graphics.Graphics")

@@ -1,9 +1,10 @@
 function varargout = mBoxplotGroup(varargin)
 % MBOXPLOTGROUP Custom grouped boxplot visualization with advanced styling options
 %
-%   ax = mBoxplotGroup(X) creates a grouped boxplot of the data in cell array X,
+%   [ax, res] = mBoxplotGroup(X) creates a grouped boxplot of the data in cell array X,
 %   where each cell contains a matrix representing one group (columns = categories).
-%   Returns the handle to the axes object.
+%   Returns the handle to the axes object and a struct containing the box coordinates 
+%   and parameters.
 %
 %   ax = mBoxplotGroup(ax, X) plots into specified axes handle.
 %
