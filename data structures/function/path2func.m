@@ -1,5 +1,5 @@
 function fcn = path2func(P)
-    % Description: get function handle from full path of a M function file
+    % Description: get function handle from full path of an M file
     
     if ~(isStringScalar(P) || (ischar(P) && isStringScalar(string(P))))
         error("path2func(): input should be full path of a M function file");

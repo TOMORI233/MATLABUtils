@@ -12,7 +12,7 @@ mIp.addRequired("ax", @(x) isgraphics(x, "axes"));
 mIp.addRequired("t", @(x) validateattributes(x, 'numeric', {'vector', 'increasing'}));
 mIp.addRequired("Y", @(x) validateattributes(x, 'numeric', {'vector', 'real'}));
 mIp.addRequired("E", @(x) validateattributes(x, 'numeric', {'vector', 'real'}));
-mIp.addOptional("C", "k", @(x) true);
+mIp.addOptional("C", "k");
 mIp.parse(ax, varargin{:});
 
 t = mIp.Results.t;
