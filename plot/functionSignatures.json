@@ -25,7 +25,7 @@
                     {"name": "E", "kind": "required", "type": ["numeric", "vector"]}
                 ]
             ]},
-            {"name": "C", "kind": "optional", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]}
+            {"name": "C", "kind": "ordered", "type": [["choices = {'r', 'g', 'b', 'y', 'm', 'k', 'w'}"], ["numeric", "vector"]]}
         ]
     },
 
@@ -354,7 +354,7 @@
             {"name": "BoxEdgeType", "kind": "namevalue", "type": [["choices = {'SE', 'STD'}"], ["numeric", "numel=2"]], "purpose": "default:[25,75]"},
             {"name": "BoxParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth',0.5,'FaceColor','none','FaceAlpha',0.5}"},
             {"name": "CenterLineParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'Type','Median','LineStyle','-','LineWidth','auto','Color','auto'}"},
-            {"name": "Whisker", "kind": "namevalue", "type": ["numeric", "numel=2"], "purpose": "default: [5, 95]"},
+            {"name": "Whisker", "kind": "namevalue", "type": ["numeric", ["numel=1"], ["numel=2"]], "purpose": "default: 1.5"},
             {"name": "WhiskerParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth','auto','Color','auto'}"},
             {"name": "WhiskerCapParameters", "kind": "namevalue", "type": ["cell"], "purpose": "default:{'LineStyle','-','LineWidth','auto','Color','auto','Width',0.4}"},
             {"name": "GroupLabels", "kind": "namevalue", "type": [["cell"], ["char"], ["string"]]},

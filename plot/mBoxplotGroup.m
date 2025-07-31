@@ -113,7 +113,7 @@ mIp.addParameter("CategoryLabels", '');
 mIp.addParameter("CategorySpace", 0.4, @(x) validateattributes(x, 'numeric', {'scalar'}));
 mIp.addParameter("Colors", [1, 0, 0]);
 mIp.addParameter("BoxEdgeType", [25, 75]);
-mIp.addParameter("Whisker", [5, 95]);
+mIp.addParameter("Whisker", 1.5);
 mIp.addParameter("Notch", "off", @(x) any(validatestring(x, {'on', 'off'})));
 mIp.addParameter("BoxParameters", defaultBoxParameters, @iscell);
 mIp.addParameter("CenterLineParameters", defaultCenterLineParameters, @iscell);
