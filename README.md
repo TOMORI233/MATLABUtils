@@ -222,6 +222,13 @@ end
 
 请将每次大更新内容**置顶**写在这里，标注日期、修改者和兼容性（Incompatible/Compatible），对每条修改请标注修改类型（Add/Modify/Delete/Debug）。若为Incompatible，请给出修改方案。
 
+- 2025/07/31 by XHX - Compatible
+
+  | Type   | Target            | Content                                                      |
+  | ------ | ----------------- | ------------------------------------------------------------ |
+  | Modify | `mBoxplotGroup.m` | 【新增】当whisker作为标量输入时为IQR系数W，以计算[Q1-W\*IQR, Q3+W\*IQR]外的离群值，其中IQR=Q3-Q1。<br />【新增】可以绘制Outlier，默认表示为'+'，outliers由whisker范围决定 |
+  | Add    | `setAxesStyle.m`  | 设置axes的风格，可以指定name-value输入，默认设置为：字体7pt加粗Arial，线宽0.75，所有坐标轴设置为RGB的黑色而不是CMYK的黑色，坐标轴tick向外 |
+
 - 2025/07/29 by XHX - Compatible
 
   | Type | Target                                                       | Content                                                      |
